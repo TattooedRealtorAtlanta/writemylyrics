@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WriteMyLyrics — AI Songwriting Studio</title>
+<meta name="description" content="Write professional song lyrics in seconds with AI. Generate verses, choruses, bridges and complete songs in any genre. Free to start.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#07060a;
+  --surface:#0e0d12;
+  --surface2:#151419;
+  --surface3:#1c1b22;
+  --gold:#c9943a;
+  --gold2:#e8b84b;
+  --gold-dim:rgba(201,148,58,.15);
+  --gold-border:rgba(201,148,58,.25);
+  --text:#ede8df;
+  --text2:#9b9490;
+  --text3:#524e4a;
+  --red:#e05555;
+  --green:#4ec994;
+  --border:rgba(255,255,255,.06);
+  --r:8px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden}
+
+/* ── NOISE OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(7,6,10,.85);backdrop-filter:blur(20px)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.02em;cursor:pointer}
+.nav-logo span{color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-link{background:none;border:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;padding:6px 12px;border-radius:6px;transition:color .2s}
+.nav-link:hover{color:var(--text)}
+.nav-cta{background:var(--gold);color:#07060a;border:none;border-radius:6px;padding:8px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.nav-cta:hover{background:var(--gold2);transform:translateY(-1px)}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+
+/* ══════════════════════════════════════
+   LANDING PAGE
+══════════════════════════════════════ */
+#page-landing{padding-top:64px}
+
+/* Hero */
+.hero{min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 40px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;top:20%;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(201,148,58,.12) 0%,transparent 70%);pointer-events:none}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:40px;padding:6px 16px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:32px;animation:fadeUp .6s ease both}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,8vw,100px);font-weight:700;line-height:.95;letter-spacing:-.03em;color:var(--text);margin-bottom:28px;animation:fadeUp .6s .1s ease both}
+.hero-h1 em{color:var(--gold);font-style:italic}
+.hero-sub{font-size:18px;color:var(--text2);max-width:520px;line-height:1.7;margin-bottom:44px;animation:fadeUp .6s .2s ease both}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;animation:fadeUp .6s .3s ease both}
+.btn-primary{background:var(--gold);color:#07060a;border:none;border-radius:var(--r);padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.02em}
+.btn-primary:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,148,58,.3)}
+.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:var(--r);padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;transition:all .2s}
+.btn-secondary:hover{border-color:var(--gold-border);color:var(--gold)}
+.hero-note{font-size:12px;color:var(--text3);margin-top:20px;animation:fadeUp .6s .4s ease both}
+
+/* Demo preview */
+.demo-preview{margin:0 auto;max-width:800px;padding:0 40px 80px;animation:fadeUp .8s .5s ease both}
+.demo-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.5)}
+.demo-bar{background:var(--surface2);padding:12px 20px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.demo-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.1)}
+.demo-dot:first-child{background:#e05555}.demo-dot:nth-child(2){background:#e8b84b}.demo-dot:nth-child(3){background:#4ec994}
+.demo-url{margin-left:8px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)}
+.demo-body{padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:24px;min-height:280px}
+.demo-left{display:flex;flex-direction:column;gap:12px}
+.demo-field{background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:10px 14px}
+.demo-field-label{font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:var(--gold);margin-bottom:4px}
+.demo-field-val{font-size:13px;color:var(--text2)}
+.demo-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.demo-chip{background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--gold)}
+.demo-right{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:20px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);line-height:1.8;position:relative;overflow:hidden}
+.demo-right::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 27px,rgba(255,255,255,.02) 27px,rgba(255,255,255,.02) 28px);pointer-events:none}
+.demo-section{color:var(--text3);font-size:10px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-top:12px;margin-bottom:2px}
+.demo-section:first-child{margin-top:0}
+.demo-line{color:var(--text);font-size:12.5px;display:block}
+.demo-cursor{display:inline-block;width:2px;height:14px;background:var(--gold);animation:blink 1s infinite;vertical-align:middle}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* Features */
+.features{padding:80px 40px;max-width:1100px;margin:0 auto}
+.section-tag{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--gold);margin-bottom:16px}
+.section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,56px);font-weight:700;line-height:1.05;letter-spacing:-.02em;margin-bottom:16px}
+.section-sub{font-size:16px;color:var(--text2);max-width:480px;line-height:1.7;margin-bottom:60px}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.feat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px;transition:border-color .3s,transform .3s}
+.feat-card:hover{border-color:var(--gold-border);transform:translateY(-4px)}
+.feat-icon{width:44px;height:44px;background:var(--gold-dim);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:20px}
+.feat-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;margin-bottom:10px}
+.feat-desc{font-size:14px;color:var(--text2);line-height:1.7}
+
+/* Genres */
+.genres{padding:60px 40px;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.genres-inner{max-width:1100px;margin:0 auto}
+.genres-label{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--text3);margin-bottom:24px;text-align:center}
+.genre-tags{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.genre-tag{background:var(--surface2);border:1px solid var(--border);border-radius:40px;padding:8px 20px;font-size:13px;color:var(--text2);transition:all .2s;cursor:default}
+.genre-tag:hover{border-color:var(--gold-border);color:var(--gold)}
+
+/* Pricing */
+.pricing{padding:100px 40px;max-width:1000px;margin:0 auto;text-align:center}
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:60px;text-align:left}
+.price-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;position:relative}
+.price-card.featured{border-color:var(--gold-border);background:linear-gradient(135deg,var(--surface) 0%,rgba(201,148,58,.05) 100%)}
+.price-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#07060a;border-radius:20px;padding:4px 16px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.price-plan{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);margin-bottom:12px}
+.price-amount{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:700;line-height:1;color:var(--text);margin-bottom:6px}
+.price-amount span{font-size:20px;color:var(--text2);font-family:'DM Sans',sans-serif;font-weight:400}
+.price-period{font-size:13px;color:var(--text3);margin-bottom:28px}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:36px}
+.price-features li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text2)}
+.price-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.price-features li.no{color:var(--text3)}
+.price-features li.no::before{content:'✕';color:var(--text3)}
+.price-btn{width:100%;padding:13px;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+.price-btn.outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.price-btn.outline:hover{border-color:var(--gold-border);color:var(--gold)}
+.price-btn.solid{background:var(--gold);color:#07060a}
+.price-btn.solid:hover{background:var(--gold2)}
+
+/* CTA bottom */
+.cta-bottom{padding:100px 40px;text-align:center;position:relative;overflow:hidden}
+.cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:300px;background:radial-gradient(ellipse,rgba(201,148,58,.1) 0%,transparent 70%);pointer-events:none}
+
+/* Footer */
+footer{padding:40px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.foot-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text2)}
+.foot-logo span{color:var(--gold)}
+.foot-copy{font-size:13px;color:var(--text3)}
+
+/* ══════════════════════════════════════
+   AUTH PAGE
+══════════════════════════════════════ */
+#page-auth{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:40px}
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:48px;width:100%;max-width:440px}
+.auth-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;margin-bottom:8px;text-align:center}
+.auth-logo span{color:var(--gold)}
+.auth-sub{font-size:14px;color:var(--text2);text-align:center;margin-bottom:36px}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--surface2);border-radius:8px;padding:4px;margin-bottom:28px}
+.auth-tab{background:none;border:none;padding:9px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text2);cursor:pointer;transition:all .2s}
+.auth-tab.active{background:var(--surface3);color:var(--text)}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:8px;letter-spacing:.04em}
+.form-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;transition:border-color .2s}
+.form-input:focus{outline:none;border-color:var(--gold-border)}
+.form-input::placeholder{color:var(--text3)}
+.form-btn{width:100%;background:var(--gold);color:#07060a;border:none;border-radius:var(--r);padding:13px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:8px}
+.form-btn:hover{background:var(--gold2)}
+.form-btn:disabled{opacity:.5;cursor:not-allowed}
+.auth-divider{text-align:center;font-size:12px;color:var(--text3);margin:20px 0;position:relative}
+.auth-divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border)}
+.auth-divider span{background:var(--surface);position:relative;padding:0 12px}
+.auth-error{background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.3);border-radius:6px;padding:10px 14px;font-size:13px;color:#e08080;margin-bottom:16px;display:none}
+.auth-error.on{display:block}
+.plan-select{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.plan-opt{border:1px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;transition:all .2s;text-align:center}
+.plan-opt:hover{border-color:var(--gold-border)}
+.plan-opt.selected{border-color:var(--gold);background:var(--gold-dim)}
+.plan-opt-name{font-weight:600;font-size:14px;margin-bottom:4px}
+.plan-opt-price{font-size:12px;color:var(--text3)}
+.plan-opt-price b{color:var(--gold)}
+
+/* ══════════════════════════════════════
+   APP / DASHBOARD
+══════════════════════════════════════ */
+#page-app{padding-top:64px;min-height:100vh;display:none}
+#page-app.active{display:block}
+.app-layout{display:flex;height:calc(100vh - 64px)}
+
+/* Sidebar */
+.sidebar{width:72px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:16px 0;flex-shrink:0}
+.sb-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all .2s;color:var(--text3);margin-bottom:4px}
+.sb-icon:hover{background:var(--surface2);color:var(--text)}
+.sb-icon.active{background:var(--gold-dim);color:var(--gold)}
+.sb-divider{width:32px;height:1px;background:var(--border);margin:8px 0}
+.sb-spacer{flex:1}
+.sb-avatar{width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#07060a;cursor:pointer}
+
+/* Left panel */
+.left-panel{width:380px;min-width:380px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.lp-head{padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.lp-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700}
+.lp-title em{color:var(--gold);font-style:italic}
+.lp-sub{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);margin-top:2px}
+.usage-bar-wrap{margin-top:12px}
+.usage-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:6px}
+.usage-bar{height:3px;background:var(--surface3);border-radius:2px;overflow:hidden}
+.usage-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .5s}
+.upgrade-prompt{font-size:11px;color:var(--gold);cursor:pointer;text-decoration:underline}
+.lp-scroll{flex:1;overflow-y:auto;padding:16px 22px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.field{margin-bottom:20px}
+.field-label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--gold);font-weight:600;margin-bottom:8px}
+.field-label span{color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;font-size:11px}
+textarea,input[type=text],input[type=number],select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13.5px;padding:10px 12px;transition:border-color .2s;resize:none}
+textarea:focus,input:focus,select:focus{outline:none;border-color:var(--gold-border)}
+textarea::placeholder,input::placeholder{color:var(--text3);font-style:italic}
+select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23524e4a' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+select option{background:var(--surface3)}
+.genre-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pick-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 4px;font-size:11px;font-family:'DM Sans',sans-serif;color:var(--text2);cursor:pointer;text-align:center;transition:all .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pick-btn:hover{border-color:var(--gold-border);color:var(--text)}
+.pick-btn.on{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);font-weight:600}
+.mood-wrap{display:flex;flex-wrap:wrap;gap:6px}
+.mood-chip{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text2);cursor:pointer;transition:all .15s}
+.mood-chip:hover{border-color:var(--gold-border);color:var(--text)}
+.mood-chip.on{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);font-weight:500}
+.tempo-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.lp-footer{padding:16px 22px 20px;flex-shrink:0;border-top:1px solid var(--border)}
+.gen-btn{width:100%;background:linear-gradient(135deg,#a06820 0%,#c9943a 45%,#a87828 100%);border:none;border-radius:var(--r);padding:14px;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;letter-spacing:.1em;color:#07060a;cursor:pointer;transition:transform .15s,box-shadow .2s;box-shadow:0 4px 20px rgba(201,148,58,.2);position:relative;overflow:hidden}
+.gen-btn:hover{transform:translateY(-1px);box-shadow:0 8px 32px rgba(201,148,58,.35)}
+.gen-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.gen-btn::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -10%,rgba(255,255,255,.2) 0%,transparent 65%);animation:sheen 3s ease-in-out infinite}
+@keyframes sheen{0%,100%{opacity:.3}50%{opacity:1}}
+.gen-btn:disabled::after{display:none}
+.btn-norm{display:block;position:relative;z-index:1}
+.btn-spin{display:none;align-items:center;justify-content:center;gap:8px;position:relative;z-index:1}
+.gen-btn.loading .btn-norm{display:none}
+.gen-btn.loading .btn-spin{display:flex}
+.spinner{width:14px;height:14px;border:2px solid rgba(0,0,0,.2);border-top-color:rgba(0,0,0,.7);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Right output panel */
+.right-panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.rp-head{padding:16px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;min-height:56px}
+.rp-label{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--text2)}
+.rp-actions{display:flex;gap:8px;flex-wrap:wrap}
+.act-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.act-btn:hover{border-color:var(--gold-border);color:var(--text)}
+.act-btn.gold{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold)}
+.act-btn.gold:hover{background:rgba(201,148,58,.25)}
+.rp-scroll{flex:1;overflow-y:auto;padding:32px 36px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+
+/* Empty state */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:60px}
+.empty-icon{font-size:56px;opacity:.12;margin-bottom:24px}
+.empty-h{font-family:'Cormorant Garamond',serif;font-size:32px;font-style:italic;color:var(--text3);margin-bottom:12px}
+.empty-p{font-size:14px;color:var(--text3);max-width:320px;line-height:1.8}
+
+/* Loading state */
+.loading-state{display:none;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:60px}
+.loading-state.on{display:flex}
+.waveform{display:flex;align-items:flex-end;gap:5px;height:48px;margin-bottom:32px}
+.wb{width:5px;background:var(--gold);border-radius:3px;animation:wave 1.4s ease-in-out infinite}
+.wb:nth-child(1){animation-delay:0s}.wb:nth-child(2){animation-delay:.1s}.wb:nth-child(3){animation-delay:.2s}.wb:nth-child(4){animation-delay:.3s}.wb:nth-child(5){animation-delay:.4s}.wb:nth-child(6){animation-delay:.3s}.wb:nth-child(7){animation-delay:.2s}.wb:nth-child(8){animation-delay:.1s}
+@keyframes wave{0%,100%{height:6px;opacity:.3}50%{height:44px;opacity:1}}
+.load-msg{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--text2)}
+.load-sub{font-size:12px;color:var(--text3);margin-top:8px}
+
+/* Title chips */
+.title-area{margin-bottom:24px}
+.title-area-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);margin-bottom:10px}
+.title-chips{display:flex;flex-wrap:wrap;gap:8px}
+.t-chip{background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:24px;padding:7px 18px;font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:var(--gold);cursor:pointer;transition:all .15s}
+.t-chip:hover{background:rgba(201,148,58,.2);border-color:var(--gold)}
+
+/* Notebook */
+.notebook{background:#f0e8d4;border-radius:12px;padding:40px 52px 48px 68px;position:relative;box-shadow:0 28px 80px rgba(0,0,0,.5);min-height:300px;overflow:hidden}
+.notebook::before{content:'';position:absolute;inset:0;border-radius:12px;background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(160,140,100,.2) 31px,rgba(160,140,100,.2) 32px);background-position:0 76px;pointer-events:none}
+.notebook::after{content:'';position:absolute;left:52px;top:0;bottom:0;width:1px;background:rgba(210,140,130,.3);pointer-events:none}
+.lyrics-out{font-family:'DM Sans',sans-serif;font-size:15px;line-height:2;color:#1a140e;position:relative;z-index:1;white-space:pre-wrap;word-break:break-word}
+.sec-label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.2em;color:#6a5020;font-weight:600;opacity:.5;margin-top:24px;margin-bottom:0;line-height:2}
+.sec-label:first-child{margin-top:0}
+.stats-row{display:flex;gap:20px;padding-top:14px;margin-bottom:24px}
+.stat{font-size:11px;color:var(--text3)}
+.stat b{color:var(--text2);font-weight:500}
+
+/* Chord block */
+.chord-block{background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.chord-head{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.chord-title{font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:var(--gold);font-weight:600}
+.chord-body{padding:16px 20px}
+.chord-row{display:flex;align-items:baseline;gap:16px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.03)}
+.chord-row:last-child{border-bottom:none}
+.chord-sect{font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);min-width:90px;flex-shrink:0}
+.chord-prog{font-family:'DM Mono',monospace;font-size:15px;color:var(--gold2);letter-spacing:.04em}
+
+/* Toast */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--surface3);border:1px solid var(--gold-border);border-radius:8px;padding:12px 20px;font-size:13px;color:var(--gold);z-index:1000;transform:translateY(60px);opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.on{transform:translateY(0);opacity:1}
+
+/* Upgrade modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;align-items:center;justify-content:center}
+.modal-bg.on{display:flex}
+.modal{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:480px;box-shadow:0 40px 80px rgba(0,0,0,.6)}
+.modal-h{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;margin-bottom:8px}
+.modal-p{font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.7}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+.m-cancel{background:none;border:1px solid var(--border);border-radius:6px;padding:10px 20px;color:var(--text2);font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
+.m-cancel:hover{border-color:var(--text3);color:var(--text)}
+.m-confirm{background:var(--gold);border:none;border-radius:6px;padding:10px 24px;color:#07060a;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;transition:all .15s}
+.m-confirm:hover{background:var(--gold2)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* Responsive */
+@media(max-width:768px){
+  .pricing-grid{grid-template-columns:1fr}
+  .demo-body{grid-template-columns:1fr}
+  .left-panel{width:100%;min-width:unset}
+  nav{padding:0 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo" onclick="showPage('landing')">Write<span>My</span>Lyrics</div>
+  <div class="nav-right" id="navRight">
+    <button class="nav-link" onclick="showPage('auth')">Sign In</button>
+    <button class="nav-cta" onclick="showAuthTab('signup')">Start Free</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     LANDING PAGE
+══════════════════════════════════════ -->
+<div class="page active" id="page-landing">
+
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-tag">🎵 AI-Powered Songwriting</div>
+    <h1 class="hero-h1">Write songs that<br><em>actually sound real.</em></h1>
+    <p class="hero-sub">Professional lyrics in any genre in seconds. Country, hip hop, rock, pop, R&B — complete verses, choruses, bridges, chord progressions and more.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showAuthTab('signup')">Write My First Song — Free</button>
+      <button class="btn-secondary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+    </div>
+    <p class="hero-note">5 free songs per month. No credit card required.</p>
+  </div>
+
+  <div class="demo-preview">
+    <div class="demo-card">
+      <div class="demo-bar">
+        <div class="demo-dot"></div><div class="demo-dot"></div><div class="demo-dot"></div>
+        <span class="demo-url">writemylyrics.com/studio</span>
+      </div>
+      <div class="demo-body">
+        <div class="demo-left">
+          <div class="demo-field">
+            <div class="demo-field-label">Topic</div>
+            <div class="demo-field-val">Coming home after 20 years in the military</div>
+          </div>
+          <div class="demo-field">
+            <div class="demo-field-label">Genre</div>
+            <div class="demo-chips"><span class="demo-chip">Country</span></div>
+          </div>
+          <div class="demo-field">
+            <div class="demo-field-label">Mood</div>
+            <div class="demo-chips"><span class="demo-chip">Nostalgic</span><span class="demo-chip">Hopeful</span><span class="demo-chip">Reflective</span></div>
+          </div>
+          <div class="demo-field">
+            <div class="demo-field-label">Structure</div>
+            <div class="demo-field-val">Verse / Chorus / Verse / Chorus / Bridge / Chorus</div>
+          </div>
+        </div>
+        <div class="demo-right">
+          <span class="demo-section">Verse 1</span>
+          <span class="demo-line">The gravel road looks just the same</span>
+          <span class="demo-line">Mama's porch light burning through the rain</span>
+          <span class="demo-line">Twenty years of deserts, sand and cold</span>
+          <span class="demo-line">I traded youth for stories to be told</span>
+          <span class="demo-section">Chorus</span>
+          <span class="demo-line">I'm coming home with a different kind of tired</span>
+          <span class="demo-line">A heart full of honor and a soul that's still on fire</span>
+          <span class="demo-line">The uniform is folded, but the soldier never leaves</span>
+          <span class="demo-line">I'm coming home<span class="demo-cursor"></span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="features" id="features">
+    <div class="section-tag">Everything you need</div>
+    <h2 class="section-h">More than just lyrics.</h2>
+    <p class="section-sub">WriteMyLyrics generates complete songs — lyrics, chord progressions, song titles, and Suno-ready exports.</p>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon">✍️</div>
+        <div class="feat-title">Complete Lyrics</div>
+        <div class="feat-desc">Full verses, choruses, bridges, and pre-choruses. Labeled, structured, and ready to sing. Every section sounds like a real song, not a prompt response.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎸</div>
+        <div class="feat-title">Chord Progressions</div>
+        <div class="feat-desc">Automatically generates chord progressions matched to your genre, mood, and tempo. Includes key, strumming pattern, and per-section breakdown.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎯</div>
+        <div class="feat-title">13 Genres</div>
+        <div class="feat-desc">Country, hip hop, pop, rock, R&B, blues, folk, gospel, Americana, outlaw country, trap, military/patriotic, and singer-songwriter.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎤</div>
+        <div class="feat-title">Karaoke Mode</div>
+        <div class="feat-desc">Scroll-along karaoke view with your generated lyrics. Add a backing track, record your vocals, and download the mix.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🚀</div>
+        <div class="feat-title">Suno Integration</div>
+        <div class="feat-desc">One click exports your lyrics and style prompt formatted perfectly for Suno AI. Go from lyrics to a full produced song in minutes.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔄</div>
+        <div class="feat-title">Tweak & Refine</div>
+        <div class="feat-desc">Not quite right? Tell the AI what to change — "make the chorus more hopeful" or "tighten the rhymes" — and it rewrites instantly.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="genres">
+    <div class="genres-inner">
+      <div class="genres-label">Works for every genre</div>
+      <div class="genre-tags">
+        <span class="genre-tag">Country</span><span class="genre-tag">Hip Hop</span><span class="genre-tag">Pop</span><span class="genre-tag">Rock</span><span class="genre-tag">R&B</span><span class="genre-tag">Blues</span><span class="genre-tag">Folk</span><span class="genre-tag">Gospel</span><span class="genre-tag">Americana</span><span class="genre-tag">Outlaw Country</span><span class="genre-tag">Trap</span><span class="genre-tag">Military / Patriotic</span><span class="genre-tag">Singer-Songwriter</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pricing" id="pricing">
+    <div class="section-tag">Simple pricing</div>
+    <h2 class="section-h">Start free. Upgrade when ready.</h2>
+    <p class="section-sub" style="margin:0 auto 0">No credit card required to get started.</p>
+    <div class="pricing-grid" style="grid-template-columns:1fr 1fr 1fr">
+      <div class="price-card">
+        <div class="price-plan">Free</div>
+        <div class="price-amount">$0</div>
+        <div class="price-period">forever</div>
+        <ul class="price-features">
+          <li>5 songs per month</li>
+          <li>All 13 genres</li>
+          <li>Chord progressions</li>
+          <li>Song title suggestions</li>
+          <li class="no">Karaoke Mode</li>
+          <li class="no">Suno export</li>
+          <li class="no">Song history</li>
+          <li class="no">Tweak & refine</li>
+        </ul>
+        <button class="price-btn outline" onclick="showAuthTab('signup')">Get Started Free</button>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Most Popular</div>
+        <div class="price-plan">Pro</div>
+        <div class="price-amount">$9<span>/mo</span></div>
+        <div class="price-period">billed monthly</div>
+        <ul class="price-features">
+          <li>100 songs per month</li>
+          <li>All 13 genres</li>
+          <li>Chord progressions</li>
+          <li>Song title suggestions</li>
+          <li>Karaoke Mode</li>
+          <li>Suno export</li>
+          <li>Full song history</li>
+          <li>Tweak & refine</li>
+        </ul>
+        <button class="price-btn solid" onclick="showAuthTab('signup')">Start Pro — $9/mo</button>
+      </div>
+      <div class="price-card">
+        <div class="price-plan">Unlimited</div>
+        <div class="price-amount">$19<span>/mo</span></div>
+        <div class="price-period">billed monthly</div>
+        <ul class="price-features">
+          <li>Unlimited songs</li>
+          <li>All 13 genres</li>
+          <li>Chord progressions</li>
+          <li>Song title suggestions</li>
+          <li>Karaoke Mode</li>
+          <li>Suno export</li>
+          <li>Full song history</li>
+          <li>Tweak & refine</li>
+          <li>Priority generation</li>
+          <li>Commercial use license</li>
+        </ul>
+        <button class="price-btn outline" onclick="showAuthTab('signup')">Go Unlimited — $19/mo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-bottom">
+    <div class="cta-glow"></div>
+    <div class="section-tag">Ready?</div>
+    <h2 class="section-h" style="margin-bottom:20px">Your song is waiting.</h2>
+    <p style="color:var(--text2);font-size:16px;margin-bottom:36px;max-width:400px;margin-left:auto;margin-right:auto">Join thousands of songwriters, musicians, and creators using AI to unlock their best work.</p>
+    <button class="btn-primary" onclick="showAuthTab('signup')">Write My First Song — Free</button>
+  </div>
+
+  <footer>
+    <div class="foot-logo">Write<span>My</span>Lyrics</div>
+    <div class="foot-copy">© 2026 WriteMyLyrics. All rights reserved.</div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     AUTH PAGE
+══════════════════════════════════════ -->
+<div class="page" id="page-auth">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:40px">
+    <div class="auth-card">
+      <div class="auth-logo">Write<span>My</span>Lyrics</div>
+      <div class="auth-sub" id="authSubText">Sign in to your account</div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab" id="tab-signin" onclick="switchTab('signin')">Sign In</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Create Account</button>
+      </div>
+
+      <div class="auth-error" id="authError"></div>
+
+      <!-- Sign In Form -->
+      <div id="signin-form">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="text" class="form-input" id="si-email" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="si-password" placeholder="••••••••">
+        </div>
+        <button class="form-btn" onclick="signIn()">Sign In</button>
+        <div class="auth-divider"><span>Don't have an account?</span></div>
+        <button class="form-btn" style="background:var(--surface3);color:var(--text);border:1px solid var(--border)" onclick="switchTab('signup')">Create Free Account</button>
+      </div>
+
+      <!-- Sign Up Form -->
+      <div id="signup-form" style="display:none">
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input type="text" class="form-input" id="su-name" placeholder="First name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="text" class="form-input" id="su-email" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="su-password" placeholder="Choose a password">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Choose Your Plan</label>
+          <div class="plan-select" style="grid-template-columns:1fr 1fr 1fr">
+            <div class="plan-opt selected" id="plan-free" onclick="selectPlan('free')">
+              <div class="plan-opt-name">Free</div>
+              <div class="plan-opt-price">5 songs/mo</div>
+            </div>
+            <div class="plan-opt" id="plan-pro" onclick="selectPlan('pro')">
+              <div class="plan-opt-name">Pro</div>
+              <div class="plan-opt-price"><b>$9</b>/month</div>
+            </div>
+            <div class="plan-opt" id="plan-unlimited" onclick="selectPlan('unlimited')">
+              <div class="plan-opt-name">Unlimited</div>
+              <div class="plan-opt-price"><b>$19</b>/month</div>
+            </div>
+          </div>
+        </div>
+        <button class="form-btn" onclick="signUp()">Create Account</button>
+        <div class="auth-divider"><span>Already have an account?</span></div>
+        <button class="form-btn" style="background:var(--surface3);color:var(--text);border:1px solid var(--border)" onclick="switchTab('signin')">Sign In</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     APP PAGE
+══════════════════════════════════════ -->
+<div class="page" id="page-app">
+  <div class="app-layout">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sb-icon active" title="Studio" onclick="toast('Studio')">✍️</div>
+      <div class="sb-icon" title="History" onclick="toast('Song history — coming soon!')">🕐</div>
+      <div class="sb-divider"></div>
+      <div class="sb-spacer"></div>
+      <div class="sb-icon" title="Settings" onclick="toast('Settings — coming soon!')">⚙️</div>
+      <div class="sb-avatar" id="sbAvatar" onclick="showLogout()" title="Account">S</div>
+    </div>
+
+    <!-- Left Panel -->
+    <div class="left-panel">
+      <div class="lp-head">
+        <div class="lp-title">Song<em>Writer</em></div>
+        <div class="lp-sub">AI Lyrics Studio</div>
+        <div class="usage-bar-wrap" id="usageWrap">
+          <div class="usage-label">
+            <span id="usageLabel">0 / 5 songs used this month</span>
+            <span class="upgrade-prompt" onclick="showUpgrade()">Upgrade</span>
+          </div>
+          <div class="usage-bar"><div class="usage-fill" id="usageFill" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <div class="lp-scroll">
+        <div class="field">
+          <label class="field-label">Topic / Concept</label>
+          <textarea id="topic" rows="4" placeholder="What is this song about? A person, a feeling, a moment — describe it in your own words."></textarea>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Genre</label>
+          <div class="genre-grid" id="genreGrid">
+            <button class="pick-btn" data-v="Country">Country</button>
+            <button class="pick-btn" data-v="Hip Hop">Hip Hop</button>
+            <button class="pick-btn" data-v="Pop">Pop</button>
+            <button class="pick-btn" data-v="Rock">Rock</button>
+            <button class="pick-btn" data-v="R&B">R&B</button>
+            <button class="pick-btn" data-v="Blues">Blues</button>
+            <button class="pick-btn" data-v="Folk">Folk</button>
+            <button class="pick-btn" data-v="Military / Patriotic">Military</button>
+            <button class="pick-btn" data-v="Gospel">Gospel</button>
+            <button class="pick-btn" data-v="Americana">Americana</button>
+            <button class="pick-btn" data-v="Outlaw Country">Outlaw</button>
+            <button class="pick-btn" data-v="Trap">Trap</button>
+            <button class="pick-btn" data-v="Singer-Songwriter">S-S-W</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Mood <span>(select multiple)</span></label>
+          <div class="mood-wrap" id="moodGrid">
+            <button class="mood-chip" data-v="Happy">Happy</button>
+            <button class="mood-chip" data-v="Sad">Sad</button>
+            <button class="mood-chip" data-v="Angry">Angry</button>
+            <button class="mood-chip" data-v="Nostalgic">Nostalgic</button>
+            <button class="mood-chip" data-v="Hopeful">Hopeful</button>
+            <button class="mood-chip" data-v="Heartbroken">Heartbroken</button>
+            <button class="mood-chip" data-v="Defiant">Defiant</button>
+            <button class="mood-chip" data-v="Celebratory">Celebratory</button>
+            <button class="mood-chip" data-v="Melancholy">Melancholy</button>
+            <button class="mood-chip" data-v="Reflective">Reflective</button>
+            <button class="mood-chip" data-v="Raw">Raw</button>
+            <button class="mood-chip" data-v="Tender">Tender</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Song Structure</label>
+          <select id="structure">
+            <option value="Verse / Chorus / Verse / Chorus / Bridge / Chorus">Verse / Chorus / Verse / Chorus / Bridge / Chorus</option>
+            <option value="Verse / Chorus / Verse / Chorus">Verse / Chorus / Verse / Chorus (short)</option>
+            <option value="Verse / Verse / Chorus / Verse / Chorus">Verse / Verse / Chorus / Verse / Chorus</option>
+            <option value="Intro / Verse / Pre-Chorus / Chorus / Verse / Pre-Chorus / Chorus / Bridge / Chorus">Full Production</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Tempo</label>
+          <div class="tempo-grid" id="tempoGrid">
+            <button class="pick-btn" data-v="Slow ballad">Slow Ballad</button>
+            <button class="pick-btn on" data-v="Mid tempo">Mid Tempo</button>
+            <button class="pick-btn" data-v="Uptempo">Uptempo</button>
+            <button class="pick-btn" data-v="Driving fast">Driving Fast</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Rhyme Scheme</label>
+          <select id="rhyme">
+            <option value="AABB couplets">AABB — Couplets</option>
+            <option value="ABAB alternating">ABAB — Alternating</option>
+            <option value="ABCB ballad style">ABCB — Ballad</option>
+            <option value="Free verse, no forced rhyme">Free Verse</option>
+            <option value="Mixed, rhyme where it feels natural">Mixed</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Point of View</label>
+          <select id="pov">
+            <option value="First person (I / me / my)">First person — I / me / my</option>
+            <option value="Second person (you / your)">Second person — you / your</option>
+            <option value="Third person (he / she / they)">Third person</option>
+            <option value="Shifting perspective">Shifting perspective</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Words to Include <span>(optional)</span></label>
+          <input type="text" id="words" placeholder="Phrases, names, lines — comma separated">
+        </div>
+
+        <div class="field">
+          <label class="field-label">Style Notes <span>(optional)</span></label>
+          <textarea id="tone" rows="2" placeholder="Raw and honest, poetic, conversational, storytelling..."></textarea>
+        </div>
+      </div>
+
+      <div class="lp-footer">
+        <button class="gen-btn" id="genBtn" onclick="generate()">
+          <span class="btn-norm">✍ WRITE THIS SONG</span>
+          <span class="btn-spin"><span class="spinner"></span><span id="btnMsg">Finding the words...</span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+      <div class="rp-head">
+        <div class="rp-label" id="rpLabel">Your lyrics will appear here</div>
+        <div class="rp-actions" id="rpActions" style="display:none">
+          <button class="act-btn gold" onclick="regenerate()">↺ Regenerate</button>
+          <button class="act-btn" onclick="copyLyrics()">Copy</button>
+          <button class="act-btn" onclick="exportLyrics()">↓ Export</button>
+          <button class="act-btn" onclick="startOver()">Clear</button>
+        </div>
+      </div>
+
+      <div class="rp-scroll" id="rpScroll">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">♪</div>
+          <div class="empty-h">The page is blank.</div>
+          <div class="empty-p">Fill in the details on the left and press Write This Song to generate your lyrics.</div>
+        </div>
+
+        <div class="loading-state" id="loadState">
+          <div class="waveform">
+            <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
+            <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
+          </div>
+          <div class="load-msg" id="loadMsg">Finding the words...</div>
+          <div class="load-sub">Writing your song...</div>
+        </div>
+
+        <div id="outContent" style="display:none">
+          <div class="title-area" id="titleArea" style="display:none">
+            <div class="title-area-label">Suggested Titles — click to copy</div>
+            <div class="title-chips" id="titleChips"></div>
+          </div>
+
+          <div class="notebook">
+            <div class="lyrics-out" id="lyricsOut"></div>
+          </div>
+
+          <div class="stats-row">
+            <span class="stat">Words: <b id="wc">—</b></span>
+            <span class="stat">Lines: <b id="lc">—</b></span>
+            <span class="stat">Est. length: <b id="el">—</b></span>
+          </div>
+
+          <div id="chordsArea" style="display:none">
+            <div class="chord-block">
+              <div class="chord-head">
+                <span class="chord-title">Chord Progression</span>
+                <span style="font-size:11px;color:var(--text3);font-style:italic" id="chordLoadMsg">Generating...</span>
+              </div>
+              <div class="chord-body" id="chordsDisplay"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Upgrade Modal -->
+<div class="modal-bg" id="upgradeBg" onclick="bgClose(event,'upgradeBg')">
+  <div class="modal">
+    <div class="modal-h">Upgrade to Pro ✨</div>
+    <div class="modal-p">You've used all your songs this month. Upgrade to Pro for 100 songs/month at $9, or go Unlimited for $19/month — perfect for professional songwriters.</div>
+    <div class="modal-btns">
+      <button class="m-cancel" onclick="closeModal('upgradeBg')">Maybe later</button>
+      <button class="m-confirm" onclick="toast('Stripe integration coming soon!');closeModal('upgradeBg')">Upgrade — $9/mo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Logout Modal -->
+<div class="modal-bg" id="logoutBg" onclick="bgClose(event,'logoutBg')">
+  <div class="modal">
+    <div class="modal-h">Account</div>
+    <div class="modal-p" id="accountInfo">Signed in as your account.</div>
+    <div class="modal-btns">
+      <button class="m-cancel" onclick="closeModal('logoutBg')">Close</button>
+      <button class="m-confirm" style="background:var(--red);color:#fff" onclick="signOut()">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──
+const APP = {
+  user: null,
+  plan: 'free',
+  usage: 0,
+  limit: 5,
+  genre: '',
+  moods: [],
+  tempo: 'Mid tempo',
+  lyrics: '',
+  busy: false
+};
+
+const LOAD_MSGS = ['Finding the words...','Setting the scene...','Building the hook...','Tuning the melody...','Searching for the chorus...','Laying down the verse...','Getting into the groove...','Almost there...'];
+let loadTick = null, loadIdx = 0;
+let selectedPlan = 'free';
+
+// ── SIMPLE LOCAL AUTH (replace with real backend) ──
+function getUsers() { return JSON.parse(localStorage.getItem('wml_users') || '{}'); }
+function saveUsers(u) { localStorage.setItem('wml_users', JSON.stringify(u)); }
+function getCurrentUser() { return JSON.parse(sessionStorage.getItem('wml_user') || 'null'); }
+function setCurrentUser(u) { sessionStorage.setItem('wml_user', JSON.stringify(u)); }
+function clearCurrentUser() { sessionStorage.removeItem('wml_user'); }
+
+// ── PAGE ROUTING ──
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('page-' + page);
+  if(el) el.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function showAuthTab(tab) {
+  showPage('auth');
+  switchTab(tab);
+}
+
+function switchTab(tab) {
+  document.getElementById('signin-form').style.display = tab === 'signin' ? 'block' : 'none';
+  document.getElementById('signup-form').style.display = tab === 'signup' ? 'block' : 'none';
+  document.getElementById('tab-signin').classList.toggle('active', tab === 'signin');
+  document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+  document.getElementById('authSubText').textContent = tab === 'signin' ? 'Sign in to your account' : 'Create your free account';
+  hideError();
+}
+
+// ── AUTH ──
+function selectPlan(plan) {
+  selectedPlan = plan;
+  document.getElementById('plan-free').classList.toggle('selected', plan === 'free');
+  document.getElementById('plan-pro').classList.toggle('selected', plan === 'pro');
+  document.getElementById('plan-unlimited').classList.toggle('selected', plan === 'unlimited');
+}
+
+function showError(msg) {
+  const el = document.getElementById('authError');
+  el.textContent = msg;
+  el.classList.add('on');
+}
+function hideError() { document.getElementById('authError').classList.remove('on'); }
+
+function signUp() {
+  const name = document.getElementById('su-name').value.trim();
+  const email = document.getElementById('su-email').value.trim().toLowerCase();
+  const pass = document.getElementById('su-password').value;
+  if(!name || !email || !pass) return showError('Please fill in all fields.');
+  if(pass.length < 6) return showError('Password must be at least 6 characters.');
+  const users = getUsers();
+  if(users[email]) return showError('An account with this email already exists.');
+  users[email] = { name, email, pass, plan: selectedPlan, usage: 0, createdAt: Date.now() };
+  saveUsers(users);
+  const user = users[email];
+  setCurrentUser(user);
+  enterApp(user);
+}
+
+function signIn() {
+  const email = document.getElementById('si-email').value.trim().toLowerCase();
+  const pass = document.getElementById('si-password').value;
+  if(!email || !pass) return showError('Please enter your email and password.');
+  const users = getUsers();
+  if(!users[email] || users[email].pass !== pass) return showError('Invalid email or password.');
+  const user = users[email];
+  setCurrentUser(user);
+  enterApp(user);
+}
+
+function signOut() {
+  clearCurrentUser();
+  closeModal('logoutBg');
+  APP.user = null;
+  document.getElementById('navRight').innerHTML = `
+    <button class="nav-link" onclick="showPage('auth')">Sign In</button>
+    <button class="nav-cta" onclick="showAuthTab('signup')">Start Free</button>
+  `;
+  showPage('landing');
+}
+
+function enterApp(user) {
+  APP.user = user;
+  APP.plan = user.plan || 'free';
+  APP.usage = user.usage || 0;
+  APP.limit = APP.plan === "unlimited" ? Infinity : APP.plan === "pro" ? 100 : 5;
+
+  // Update nav
+  document.getElementById('navRight').innerHTML = `
+    <button class="nav-link" onclick="showPage('app')">Studio</button>
+    <button class="nav-cta" onclick="showPage('app')">Open Studio</button>
+  `;
+
+  // Update avatar
+  const av = document.getElementById('sbAvatar');
+  if(av) av.textContent = user.name.charAt(0).toUpperCase();
+
+  // Update account info
+  const ai = document.getElementById('accountInfo');
+  if(ai) ai.textContent = `Signed in as ${user.name} (${user.email}) — ${APP.plan.toUpperCase()} plan`;
+
+  updateUsage();
+  showPage('app');
+}
+
+function updateUsage() {
+  const fill = document.getElementById('usageFill');
+  const label = document.getElementById('usageLabel');
+  const wrap = document.getElementById('usageWrap');
+  if(APP.plan === 'unlimited') {
+    if(wrap) wrap.style.display = 'none';
+  } else {
+    const pct = Math.min(100, (APP.usage / APP.limit) * 100);
+    if(fill) fill.style.width = pct + '%';
+    if(label) label.textContent = `${APP.usage} / ${APP.limit} songs used this month`;
+    if(fill) fill.style.background = pct >= 80 ? 'var(--red)' : 'var(--gold)';
+  }
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  // Check existing session
+  const user = getCurrentUser();
+  if(user) {
+    // Re-fetch fresh user data
+    const users = getUsers();
+    const fresh = users[user.email] || user;
+    enterApp(fresh);
+  } else {
+    showPage('landing');
+  }
+
+  // Genre buttons
+  document.querySelectorAll('#genreGrid .pick-btn').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#genreGrid .pick-btn').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    APP.genre = b.dataset.v;
+  }));
+
+  // Mood chips
+  document.querySelectorAll('#moodGrid .mood-chip').forEach(b => b.addEventListener('click', () => {
+    b.classList.toggle('on');
+    APP.moods = [...document.querySelectorAll('#moodGrid .mood-chip.on')].map(x => x.dataset.v);
+  }));
+
+  // Tempo buttons
+  document.querySelectorAll('#tempoGrid .pick-btn').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#tempoGrid .pick-btn').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    APP.tempo = b.dataset.v;
+  }));
+
+  // Auth tabs default
+  switchTab('signin');
+});
+
+// ── API KEY ──
+function getApiKey() {
+  // In production this would be server-side
+  // For the demo, prompt for key
+  let key = sessionStorage.getItem('wml_apikey') || '';
+  if(!key) {
+    key = prompt('Enter your Anthropic API key to use the studio:\n(In production this is handled server-side)') || '';
+    if(key) sessionStorage.setItem('wml_apikey', key);
+  }
+  return key;
+}
+
+// ── GENERATE ──
+async function generate() {
+  if(APP.busy) return;
+
+  if(APP.plan === 'free' && APP.usage >= APP.limit) {
+    showUpgrade();
+    return;
+  }
+
+  const topic = document.getElementById('topic').value.trim();
+  if(!topic) { toast('Please describe what your song is about.'); return; }
+
+  const key = getApiKey();
+  if(!key) { toast('API key required.'); return; }
+
+  APP.busy = true;
+  setLoading(true);
+
+  try {
+    const struct = document.getElementById('structure').value;
+    const sys = `You are an expert songwriter with deep knowledge of multiple genres. You write authentic, emotionally resonant lyrics that sound like they came from a real artist. You understand meter, rhyme, imagery, and storytelling. Always label each section clearly — VERSE 1, CHORUS, BRIDGE etc. Never add explanation or commentary — just the lyrics.`;
+    const usr = `Write complete song lyrics:\n\nTopic: ${topic}\nGenre: ${APP.genre || 'Unspecified'}\nMood: ${APP.moods.join(', ') || 'Unspecified'}\nStructure: ${struct}\nTempo: ${APP.tempo}\nRhyme scheme: ${document.getElementById('rhyme').value}\nPoint of view: ${document.getElementById('pov').value}\nWords to include: ${document.getElementById('words').value || 'None'}\nStyle notes: ${document.getElementById('tone').value || 'None'}\n\nWrite the complete lyrics now. Label every section. Make it authentic.`;
+
+    tickLoader();
+    const lyrics = await claude(key, sys, usr, 2200);
+    APP.lyrics = lyrics;
+
+    // Increment usage
+    APP.usage++;
+    const users = getUsers();
+    if(APP.user && users[APP.user.email]) {
+      users[APP.user.email].usage = APP.usage;
+      saveUsers(users);
+      const updated = users[APP.user.email];
+      setCurrentUser(updated);
+    }
+    updateUsage();
+
+    renderLyrics(lyrics);
+
+    // Generate titles and chords in background
+    getTitles(key, lyrics);
+    getChords(key);
+
+  } catch(e) {
+    toast('Error: ' + e.message);
+    setLoading(false);
+    APP.busy = false;
+  }
+}
+
+async function claude(key, sys, usr, maxTok) {
+  const res = await fetch('/api/messages', {
+    method: 'POST',
+    headers: { 'x-api-key': key, 'content-type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: maxTok,
+      system: sys,
+      messages: [{ role: 'user', content: usr }]
+    })
+  });
+  if(!res.ok) {
+    const e = await res.json().catch(() => ({}));
+    throw new Error(e.error?.message || `API error ${res.status}`);
+  }
+  const data = await res.json();
+  return data.content[0].text;
+}
+
+async function getTitles(key, lyrics) {
+  try {
+    const raw = await claude(key, 'You are a music title expert. Respond with ONLY a JSON array of exactly 3 title strings. No prose, no backticks.', `Suggest 3 song titles for these lyrics:\n\n${lyrics}`, 200);
+    const m = raw.match(/\[[\s\S]*?\]/);
+    if(m) {
+      const titles = JSON.parse(m[0]);
+      renderTitles(titles);
+    }
+  } catch(e) {}
+}
+
+async function getChords(key) {
+  try {
+    document.getElementById('chordsArea').style.display = 'block';
+    document.getElementById('chordLoadMsg').textContent = 'Generating...';
+    const struct = document.getElementById('structure').value;
+    const sys = 'You are a music theorist. Suggest chord progressions that real musicians use. Respond in EXACTLY the format requested — nothing else.';
+    const usr = `Chord progression for:\nGenre: ${APP.genre || 'Unspecified'}\nMood: ${APP.moods.join(', ') || 'Unspecified'}\nTempo: ${APP.tempo}\nStructure: ${struct}\n\nRespond EXACTLY:\nKEY: [key]\nSTRUMMING: [pattern]\n\n[section]: [chords with em dashes]\n(one line per section)`;
+    const raw = await claude(key, sys, usr, 400);
+    renderChords(raw);
+    document.getElementById('chordLoadMsg').textContent = '';
+  } catch(e) {
+    document.getElementById('chordsArea').style.display = 'none';
+  }
+}
+
+// ── RENDER ──
+function renderLyrics(text) {
+  stopLoader();
+  APP.busy = false;
+
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('loadState').classList.remove('on');
+  document.getElementById('outContent').style.display = 'block';
+  document.getElementById('rpActions').style.display = 'flex';
+
+  const topic = document.getElementById('topic').value.trim();
+  document.getElementById('rpLabel').textContent = topic || 'Your lyrics';
+
+  const out = document.getElementById('lyricsOut');
+  out.innerHTML = '';
+  const lines = text.split('\n');
+  lines.forEach(line => {
+    const trimmed = line.trim();
+    if(!trimmed) { out.appendChild(document.createTextNode('\n')); return; }
+    const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(trimmed);
+    if(isLabel) {
+      const span = document.createElement('span');
+      span.className = 'sec-label';
+      span.textContent = trimmed;
+      out.appendChild(span);
+    } else {
+      out.appendChild(document.createTextNode(line + '\n'));
+    }
+  });
+
+  // Stats
+  const words = text.replace(/[^\w\s]/g,'').split(/\s+/).filter(Boolean).length;
+  const lyricLines = lines.filter(l => l.trim() && !/^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO)/i.test(l.trim())).length;
+  document.getElementById('wc').textContent = words;
+  document.getElementById('lc').textContent = lyricLines;
+  document.getElementById('el').textContent = Math.round(lyricLines * 2.5 / 60 * 10) / 10 + ' min';
+
+  document.getElementById('rpScroll').scrollTop = 0;
+}
+
+function renderTitles(titles) {
+  const area = document.getElementById('titleArea');
+  const chips = document.getElementById('titleChips');
+  chips.innerHTML = '';
+  titles.forEach(t => {
+    const chip = document.createElement('button');
+    chip.className = 't-chip';
+    chip.textContent = t;
+    chip.onclick = () => { navigator.clipboard.writeText(t); toast('Title copied!'); };
+    chips.appendChild(chip);
+  });
+  area.style.display = 'block';
+}
+
+function renderChords(raw) {
+  const disp = document.getElementById('chordsDisplay');
+  disp.innerHTML = '';
+  const lines = raw.split('\n').filter(l => l.trim());
+  lines.forEach(line => {
+    if(line.startsWith('KEY:') || line.startsWith('STRUMMING:')) {
+      const info = document.createElement('div');
+      info.style.cssText = 'font-size:12px;color:var(--text2);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)';
+      info.textContent = line;
+      disp.appendChild(info);
+    } else if(line.includes(':')) {
+      const row = document.createElement('div');
+      row.className = 'chord-row';
+      const [sect, ...rest] = line.split(':');
+      const prog = rest.join(':').trim();
+      row.innerHTML = `<span class="chord-sect">${sect.trim()}</span><span class="chord-prog">${prog}</span>`;
+      disp.appendChild(row);
+    }
+  });
+}
+
+// ── UI HELPERS ──
+function setLoading(on) {
+  document.getElementById('emptyState').style.display = on ? 'none' : 'flex';
+  document.getElementById('loadState').classList.toggle('on', on);
+  document.getElementById('outContent').style.display = 'none';
+  const btn = document.getElementById('genBtn');
+  btn.classList.toggle('loading', on);
+  btn.disabled = on;
+}
+
+function tickLoader() {
+  loadIdx = 0;
+  clearInterval(loadTick);
+  loadTick = setInterval(() => {
+    loadIdx = (loadIdx + 1) % LOAD_MSGS.length;
+    const el = document.getElementById('loadMsg');
+    if(el) el.textContent = LOAD_MSGS[loadIdx];
+    const bm = document.getElementById('btnMsg');
+    if(bm) bm.textContent = LOAD_MSGS[loadIdx];
+  }, 2200);
+}
+
+function stopLoader() { clearInterval(loadTick); }
+
+function regenerate() { generate(); }
+function startOver() {
+  APP.lyrics = '';
+  document.getElementById('outContent').style.display = 'none';
+  document.getElementById('rpActions').style.display = 'none';
+  document.getElementById('emptyState').style.display = 'flex';
+  document.getElementById('rpLabel').textContent = 'Your lyrics will appear here';
+  document.getElementById('loadState').classList.remove('on');
+}
+
+function copyLyrics() {
+  navigator.clipboard.writeText(APP.lyrics);
+  toast('Lyrics copied to clipboard!');
+}
+
+function exportLyrics() {
+  const blob = new Blob([APP.lyrics], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'lyrics.txt';
+  a.click();
+  toast('Lyrics downloaded!');
+}
+
+function showUpgrade() {
+  document.getElementById('upgradeBg').classList.add('on');
+}
+
+function showLogout() {
+  document.getElementById('logoutBg').classList.add('on');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('on');
+}
+
+function bgClose(e, id) {
+  if(e.target.id === id) closeModal(id);
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('on'), 3000);
+}
+</script>
+</body>
+</html>
