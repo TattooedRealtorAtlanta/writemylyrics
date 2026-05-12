@@ -41,7 +41,7 @@ module.exports = async function handler(req, res) {
     }
 
     const body = await getJsonBody(req);
-    const { title, lyrics, genre, moods, tempo, structure, rhyme, pov, topic, style_notes, chords, suno_prompt } = body;
+    const { title, lyrics, genre, moods, tempo, structure, rhyme, pov, topic, style_notes, chords, suno_prompt, artist_style } = body;
 
     if (!lyrics) return res.status(400).json({ error: 'lyrics is required' });
 
@@ -60,7 +60,8 @@ module.exports = async function handler(req, res) {
         topic: topic || null,
         style_notes: style_notes || null,
         chords: chords || null,
-        suno_prompt: suno_prompt || null
+        suno_prompt: suno_prompt || null,
+        artist_style: artist_style || null
       })
       .select()
       .single();

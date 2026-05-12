@@ -448,6 +448,43 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 .ver-empty{padding:40px 20px;text-align:center;color:var(--text3);font-size:13px;line-height:1.7}
 .ver-loading{padding:40px 20px;text-align:center;color:var(--text3);font-size:13px}
 
+/* ── SYLLABLE COUNTER ── */
+.lyrics-out.syl-on{white-space:normal}
+.lyric-line-row{display:flex;align-items:baseline;gap:10px;line-height:2;min-height:1.6em}
+.lyric-line-text{flex:1;color:#1a140e}
+.syl-count{font-size:10px;color:rgba(100,80,30,.35);font-weight:500;min-width:20px;text-align:right;font-family:'DM Mono',monospace;flex-shrink:0;line-height:2}
+
+/* ── RHYME ASSISTANT ── */
+.rhyme-body{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:4px}
+.rhyme-input-row{display:flex;gap:8px;margin-bottom:10px}
+.rhyme-input-row input{flex:1}
+.rhyme-find-btn{background:var(--gold);border:none;border-radius:6px;padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#07060a;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .2s}
+.rhyme-find-btn:hover{background:var(--gold2)}
+.rhyme-find-btn:disabled{opacity:.5;cursor:not-allowed}
+.rhyme-category{margin-bottom:10px}
+.rhyme-category:last-child{margin-bottom:0}
+.rhyme-cat-label{font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);font-weight:600;margin-bottom:6px;display:block}
+.rhyme-words{display:flex;flex-wrap:wrap;gap:5px}
+.rhyme-word{background:var(--surface3);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;font-family:'DM Mono',monospace;color:var(--text2);cursor:pointer;transition:all .15s}
+.rhyme-word:hover{border-color:var(--gold-border);color:var(--gold)}
+.rhyme-empty{font-size:12px;color:var(--text3);font-style:italic;padding:2px 0}
+
+/* ── SONG TEMPLATES ── */
+.tmpl-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text2);cursor:pointer;transition:all .2s;width:100%;text-align:left;margin-top:10px}
+.tmpl-btn:hover{border-color:var(--gold-border);color:var(--gold)}
+.tmpl-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:900;align-items:flex-start;justify-content:center;padding:80px 20px 40px;overflow-y:auto}
+.tmpl-bg.on{display:flex}
+.tmpl-modal{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:32px;width:100%;max-width:560px;position:relative}
+.tmpl-modal-h{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;margin-bottom:6px}
+.tmpl-modal-sub{font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.5}
+.tmpl-close-btn{position:absolute;top:20px;right:20px;background:none;border:1px solid var(--border);border-radius:6px;padding:6px 12px;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .2s}
+.tmpl-close-btn:hover{border-color:var(--text3);color:var(--text)}
+.tmpl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tmpl-card{background:var(--surface3);border:1px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .2s;text-align:left;width:100%;font-family:inherit}
+.tmpl-card:hover{border-color:var(--gold-border);background:var(--gold-dim);transform:translateY(-2px)}
+.tmpl-card-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.tmpl-card-meta{font-size:11px;color:var(--text3);line-height:1.5}
+
 /* ── LANGUAGE CONTROLS ── */
 .mix-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer;user-select:none}
 .mix-toggle-row:hover .mix-toggle-label{color:var(--text)}
@@ -734,6 +771,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
       <div class="lp-head">
         <div class="lp-title">Song<em>Writer</em></div>
         <div class="lp-sub">AI Lyrics Studio</div>
+        <button class="tmpl-btn" onclick="openTemplates()">📋 Start from a Template</button>
         <div class="usage-bar-wrap" id="usageWrap">
           <div class="usage-label">
             <span id="usageLabel">0 / 5 songs used this month</span>
@@ -838,6 +876,11 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
 
         <div class="field">
+          <label class="field-label">Write in the style of <span>(optional)</span></label>
+          <input type="text" id="artistStyleInput" placeholder="e.g. Morgan Wallen, Eminem, Taylor Swift...">
+        </div>
+
+        <div class="field">
           <label class="field-label">Language</label>
           <select id="languageSel" onchange="onLanguageChange()">
             <option value="English">English</option>
@@ -862,6 +905,20 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
             <span class="mix-switch" id="mixSwitch"></span>
           </div>
           <div id="sectionLangGrid" class="section-lang-grid" style="display:none"></div>
+        </div>
+
+        <div class="field">
+          <button class="refine-toggle" id="rhymeToggle" onclick="toggleRhymeAssist()">
+            <span class="refine-toggle-icon">▶</span>
+            <span>Rhyme Assistant</span>
+          </button>
+          <div class="rhyme-body" id="rhymeBody" style="display:none">
+            <div class="rhyme-input-row">
+              <input type="text" id="rhymeWord" placeholder="Type a word..." onkeydown="if(event.key==='Enter')submitRhyme()">
+              <button class="rhyme-find-btn" id="rhymeFindBtn" onclick="submitRhyme()">Find</button>
+            </div>
+            <div id="rhymeResults"></div>
+          </div>
         </div>
       </div>
 
@@ -896,7 +953,9 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
           <button class="act-btn" onclick="copyLyrics()">Copy</button>
           <button class="act-btn" onclick="exportToSuno()">⚡ Suno</button>
           <button class="act-btn" id="versionsBtn" onclick="openVersionHistory(APP.currentSongId)" style="display:none">↩ Versions</button>
-          <button class="act-btn" onclick="exportLyrics()">↓ Export</button>
+          <button class="act-btn" id="syllableBtn" onclick="toggleSyllables()">Syllables</button>
+          <button class="act-btn" onclick="exportLyrics()">↓ TXT</button>
+          <button class="act-btn" onclick="downloadPDF()">↓ PDF</button>
           <button class="act-btn" onclick="startOver()">Clear</button>
         </div>
       </div>
@@ -999,6 +1058,16 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
   </div>
 </div>
 
+<!-- Templates Modal -->
+<div class="tmpl-bg" id="tmplBg" onclick="bgCloseTmpl(event)">
+  <div class="tmpl-modal">
+    <button class="tmpl-close-btn" onclick="closeTemplates()">✕ Close</button>
+    <div class="tmpl-modal-h">Start from a Template</div>
+    <div class="tmpl-modal-sub">Pick a template to pre-fill the studio. You can edit everything before generating.</div>
+    <div class="tmpl-grid" id="tmplGrid"></div>
+  </div>
+</div>
+
 <!-- Upgrade Modal -->
 <div class="modal-bg" id="upgradeBg" onclick="bgClose(event,'upgradeBg')">
   <div class="modal">
@@ -1081,6 +1150,8 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 
 <div class="toast" id="toast"></div>
 
+<!-- jsPDF (client-side PDF generation) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <!-- Supabase JS (CDN) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
@@ -1112,6 +1183,8 @@ const APP = {
   language: 'English',
   mixLanguages: false,
   sectionLanguages: {},
+  artistStyle: '',
+  showSyllables: false,
   busy: false
 };
 
@@ -1361,13 +1434,15 @@ async function generate() {
         styleNotes: document.getElementById('tone').value,
         language: APP.language,
         mixLanguages: APP.mixLanguages,
-        sectionLanguages: APP.mixLanguages ? APP.sectionLanguages : {}
+        sectionLanguages: APP.mixLanguages ? APP.sectionLanguages : {},
+        artistStyle: document.getElementById('artistStyleInput')?.value.trim() || ''
       })
     });
 
     APP.lyrics = result.lyrics;
     APP.originalLyrics = result.lyrics;
     APP.currentSongId = null;
+    APP.artistStyle = document.getElementById('artistStyleInput')?.value.trim() || '';
     APP.usage = result.usage;
     APP.limit = result.limit;
     APP.plan = result.plan;
@@ -1419,16 +1494,38 @@ function renderLyrics(text) {
 
   const out = document.getElementById('lyricsOut');
   out.innerHTML = '';
+  out.classList.toggle('syl-on', !!APP.showSyllables);
   const lines = text.split('\n');
   lines.forEach(line => {
     const trimmed = line.trim();
-    if (!trimmed) { out.appendChild(document.createTextNode('\n')); return; }
+    if (!trimmed) {
+      if (APP.showSyllables) {
+        const spacer = document.createElement('div');
+        spacer.className = 'lyric-line-row spacer';
+        out.appendChild(spacer);
+      } else {
+        out.appendChild(document.createTextNode('\n'));
+      }
+      return;
+    }
     const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(trimmed);
     if (isLabel) {
       const span = document.createElement('span');
       span.className = 'sec-label';
       span.textContent = trimmed;
       out.appendChild(span);
+    } else if (APP.showSyllables) {
+      const row = document.createElement('div');
+      row.className = 'lyric-line-row';
+      const txt = document.createElement('span');
+      txt.className = 'lyric-line-text';
+      txt.textContent = line;
+      const cnt = document.createElement('span');
+      cnt.className = 'syl-count';
+      cnt.textContent = countLineSyllables(line);
+      row.appendChild(txt);
+      row.appendChild(cnt);
+      out.appendChild(row);
     } else {
       out.appendChild(document.createTextNode(line + '\n'));
     }
@@ -1552,6 +1649,261 @@ function toast(msg) {
   t.classList.add('on');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('on'), 3000);
+}
+
+// ── TEMPLATES ──
+const TEMPLATES = [
+  { name:'Classic Country Ballad', emoji:'🤠', genre:'Country', moods:['Nostalgic','Melancholy','Tender'], tempo:'Slow ballad', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'ABCB ballad style', pov:'First person (I / me / my)', styleNotes:'Storytelling, vivid small-town imagery, plain honest language, earned emotion' },
+  { name:'Trap Anthem', emoji:'🔥', genre:'Trap', moods:['Defiant','Raw'], tempo:'Driving fast', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'AABB couplets', pov:'First person (I / me / my)', styleNotes:'Short punchy lines, internal rhyme, repetition in hook, hustle and ambition themes' },
+  { name:'Worship Song', emoji:'🙏', genre:'Gospel', moods:['Hopeful','Tender'], tempo:'Mid tempo', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'ABAB alternating', pov:'First person (I / me / my)', styleNotes:'Reverent tone, scripture-adjacent imagery, repetitive and singable chorus, sincere' },
+  { name:'Pop Love Song', emoji:'💛', genre:'Pop', moods:['Happy','Tender','Hopeful'], tempo:'Uptempo', structure:'Intro / Verse / Pre-Chorus / Chorus / Verse / Pre-Chorus / Chorus / Bridge / Chorus', rhyme:'AABB couplets', pov:'First person (I / me / my)', styleNotes:'Catchy and radio-friendly, universal emotion, strong pre-chorus build' },
+  { name:'Breakup Song', emoji:'💔', genre:'Pop', moods:['Heartbroken','Sad','Reflective'], tempo:'Slow ballad', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'ABAB alternating', pov:'First person (I / me / my)', styleNotes:'Emotional and specific, honest and a little raw, avoiding clichés' },
+  { name:'Road Trip Anthem', emoji:'🛣️', genre:'Country', moods:['Happy','Celebratory','Hopeful'], tempo:'Uptempo', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'AABB couplets', pov:'First person (I / me / my)', styleNotes:'Windows-down energy, highway imagery, carefree and celebratory, sing-along chorus' },
+  { name:'Military / Patriotic', emoji:'🎖️', genre:'Military / Patriotic', moods:['Defiant','Reflective','Nostalgic'], tempo:'Mid tempo', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'ABAB alternating', pov:'First person (I / me / my)', styleNotes:'Respectful and earned, grounded in real sacrifice and service, not clichéd flag-waving' },
+  { name:'Blues Standard', emoji:'🎸', genre:'Blues', moods:['Sad','Raw','Melancholy'], tempo:'Slow ballad', structure:'Verse / Verse / Chorus / Verse / Chorus', rhyme:'AABB couplets', pov:'First person (I / me / my)', styleNotes:'Call and response feel, repeated lines with variation, world-weariness, understated emotion' },
+  { name:'Hip Hop Battle Rap', emoji:'🎤', genre:'Hip Hop', moods:['Defiant','Angry','Raw'], tempo:'Driving fast', structure:'Verse / Chorus / Verse / Chorus', rhyme:'AABB couplets', pov:'First person (I / me / my)', styleNotes:'Aggressive wordplay, dense rhyme schemes, technical skill on display, multisyllabic rhymes' },
+  { name:'Singer-Songwriter Confessional', emoji:'✍️', genre:'Singer-Songwriter', moods:['Reflective','Melancholy','Raw'], tempo:'Slow ballad', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'Mixed, rhyme where it feels natural', pov:'First person (I / me / my)', styleNotes:'Intimate and personal, conversational, specific details over general statements' }
+];
+
+function openTemplates() {
+  const grid = document.getElementById('tmplGrid');
+  grid.innerHTML = '';
+  TEMPLATES.forEach((t, i) => {
+    const card = document.createElement('button');
+    card.className = 'tmpl-card';
+    const moodStr = t.moods.slice(0, 2).join(', ');
+    card.innerHTML = `<div class="tmpl-card-name">${t.emoji} ${escHtml(t.name)}</div><div class="tmpl-card-meta">${escHtml(t.genre)} · ${escHtml(t.tempo)}<br>${escHtml(moodStr)}</div>`;
+    card.onclick = () => applyTemplate(i);
+    grid.appendChild(card);
+  });
+  document.getElementById('tmplBg').classList.add('on');
+}
+
+function closeTemplates() {
+  document.getElementById('tmplBg').classList.remove('on');
+}
+
+function bgCloseTmpl(e) {
+  if (e.target.id === 'tmplBg') closeTemplates();
+}
+
+function applyTemplate(idx) {
+  const t = TEMPLATES[idx];
+
+  // Genre
+  document.querySelectorAll('#genreGrid .pick-btn').forEach(b => b.classList.toggle('on', b.dataset.v === t.genre));
+  APP.genre = t.genre;
+
+  // Moods
+  document.querySelectorAll('#moodGrid .mood-chip').forEach(b => b.classList.toggle('on', t.moods.includes(b.dataset.v)));
+  APP.moods = [...t.moods];
+
+  // Tempo
+  document.querySelectorAll('#tempoGrid .pick-btn').forEach(b => b.classList.toggle('on', b.dataset.v === t.tempo));
+  APP.tempo = t.tempo;
+
+  // Selects
+  const trySet = (id, val) => { const el = document.getElementById(id); if (el) { for (const o of el.options) { if (o.value === val) { el.value = val; break; } } } };
+  trySet('structure', t.structure);
+  trySet('rhyme', t.rhyme);
+  trySet('pov', t.pov);
+
+  // Style notes
+  document.getElementById('tone').value = t.styleNotes;
+
+  closeTemplates();
+  toast(`Template applied: ${t.name}`);
+}
+
+// ── RHYME ASSISTANT ──
+function toggleRhymeAssist() {
+  const toggle = document.getElementById('rhymeToggle');
+  const body   = document.getElementById('rhymeBody');
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  toggle.classList.toggle('open', !isOpen);
+  if (!isOpen) document.getElementById('rhymeWord').focus();
+}
+
+async function submitRhyme() {
+  const word = document.getElementById('rhymeWord').value.trim();
+  if (!word) return;
+  const btn = document.getElementById('rhymeFindBtn');
+  btn.disabled = true;
+  btn.textContent = '...';
+  document.getElementById('rhymeResults').innerHTML = '<div class="rhyme-empty">Finding rhymes...</div>';
+  try {
+    const data = await authFetch('/api/rhyme', { method: 'POST', body: JSON.stringify({ word }) });
+    renderRhymes(data, word);
+  } catch (e) {
+    document.getElementById('rhymeResults').innerHTML = `<div class="rhyme-empty">Error: ${escHtml(e.message)}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Find';
+  }
+}
+
+function renderRhymes(data, word) {
+  const container = document.getElementById('rhymeResults');
+  container.innerHTML = '';
+  const cats = [
+    { key: 'perfect', label: 'Perfect Rhymes' },
+    { key: 'near',    label: 'Near Rhymes' },
+    { key: 'slant',   label: 'Slant Rhymes' }
+  ];
+  let anyResults = false;
+  cats.forEach(({ key, label }) => {
+    const words = data[key] || [];
+    if (!words.length) return;
+    anyResults = true;
+    const cat = document.createElement('div');
+    cat.className = 'rhyme-category';
+    const lbl = document.createElement('span');
+    lbl.className = 'rhyme-cat-label';
+    lbl.textContent = label;
+    cat.appendChild(lbl);
+    const ww = document.createElement('div');
+    ww.className = 'rhyme-words';
+    words.forEach(w => {
+      const btn = document.createElement('button');
+      btn.className = 'rhyme-word';
+      btn.textContent = w;
+      btn.onclick = () => { navigator.clipboard.writeText(w); toast(`"${w}" copied!`); };
+      ww.appendChild(btn);
+    });
+    cat.appendChild(ww);
+    container.appendChild(cat);
+  });
+  if (!anyResults) container.innerHTML = `<div class="rhyme-empty">No rhymes found for "${escHtml(word)}"</div>`;
+}
+
+// ── SYLLABLE COUNTER ──
+function countSyllables(word) {
+  word = word.toLowerCase().replace(/[^a-z]/g, '');
+  if (!word) return 0;
+  if (word.length <= 3) return 1;
+  // Remove trailing silent e (not le)
+  word = word.replace(/([^aeiou])e$/, '$1');
+  const matches = word.match(/[aeiouy]+/g);
+  return Math.max(1, matches ? matches.length : 1);
+}
+
+function countLineSyllables(line) {
+  return line.split(/\s+/).filter(Boolean).reduce((sum, w) => sum + countSyllables(w), 0);
+}
+
+function toggleSyllables() {
+  APP.showSyllables = !APP.showSyllables;
+  document.getElementById('syllableBtn').classList.toggle('gold', APP.showSyllables);
+  if (APP.lyrics) renderLyrics(APP.lyrics);
+}
+
+// ── PDF EXPORT ──
+function downloadPDF() {
+  if (!APP.lyrics) { toast('Generate a song first.'); return; }
+  if (!window.jspdf) { toast('PDF library not loaded — please refresh the page.'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  const ML = 20, MR = 20, MT = 20;
+  const PW = 210, PH = 297;
+  const CW = PW - ML - MR;
+  let y = MT;
+
+  const newPage = () => { doc.addPage(); y = MT; };
+  const checkY = (need) => { if (y + need > PH - 18) newPage(); };
+
+  // Title
+  const titleText = document.getElementById('rpLabel').textContent || 'Untitled';
+  doc.setFont('times', 'bold');
+  doc.setFontSize(26);
+  doc.setTextColor(20, 10, 5);
+  doc.text(titleText, ML, y);
+  y += 10;
+
+  // Metadata
+  const metaParts = [APP.genre, APP.moods.join(', '), APP.tempo, APP.language !== 'English' ? APP.language : ''].filter(Boolean);
+  if (APP.artistStyle) metaParts.push(`Style: ${APP.artistStyle}`);
+  if (metaParts.length) {
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(110, 90, 60);
+    doc.text(metaParts.join('  ·  '), ML, y);
+    y += 5;
+  }
+
+  // Divider
+  y += 3;
+  doc.setDrawColor(200, 170, 110);
+  doc.line(ML, y, PW - MR, y);
+  y += 8;
+  doc.setTextColor(20, 10, 5);
+
+  // Lyrics
+  APP.lyrics.split('\n').forEach(line => {
+    const t = line.trim();
+    if (!t) { y += 3; return; }
+    const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(t);
+    if (isLabel) {
+      checkY(10);
+      y += 3;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(130, 90, 20);
+      doc.text(t.toUpperCase(), ML, y);
+      doc.setTextColor(20, 10, 5);
+      y += 6;
+    } else {
+      const wrapped = doc.splitTextToSize(line, CW);
+      wrapped.forEach(wl => {
+        checkY(6);
+        doc.setFont('courier', 'normal');
+        doc.setFontSize(11);
+        doc.text(wl, ML, y);
+        y += 5.8;
+      });
+    }
+  });
+
+  // Chords
+  const chordsEl = document.getElementById('chordsArea');
+  if (chordsEl && chordsEl.style.display !== 'none') {
+    checkY(20);
+    y += 6;
+    doc.setDrawColor(200, 170, 110);
+    doc.line(ML, y, PW - MR, y);
+    y += 8;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.setTextColor(130, 90, 20);
+    doc.text('CHORD PROGRESSION', ML, y);
+    doc.setTextColor(20, 10, 5);
+    y += 6;
+    document.getElementById('chordsDisplay').childNodes.forEach(el => {
+      const txt = el.textContent?.trim();
+      if (!txt) return;
+      checkY(6);
+      doc.setFont('courier', 'normal');
+      doc.setFontSize(10);
+      doc.text(txt, ML, y);
+      y += 5.5;
+    });
+  }
+
+  // Footer on every page
+  const total = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= total; i++) {
+    doc.setPage(i);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(160);
+    doc.text('writemylyrics.ai', ML, PH - 10);
+    if (total > 1) doc.text(`${i} / ${total}`, PW - MR, PH - 10, { align: 'right' });
+  }
+
+  const slug = (titleText.replace(/[^a-z0-9\s]/gi, '').trim() || 'lyrics').replace(/\s+/g, '-').toLowerCase();
+  doc.save(`${slug}.pdf`);
+  toast('PDF downloaded!');
 }
 
 // ── NOTES ──
@@ -1968,6 +2320,10 @@ function reloadSong(idx) {
   }
   document.getElementById('tone').value = song.style_notes || '';
 
+  const artistStyleInput = document.getElementById('artistStyleInput');
+  if (artistStyleInput) artistStyleInput.value = song.artist_style || '';
+  APP.artistStyle = song.artist_style || '';
+
   APP.lyrics = song.lyrics;
   APP.originalLyrics = song.lyrics;
   APP.currentSongId = song.id;
@@ -2022,7 +2378,8 @@ async function saveSongToHistory(result) {
         topic: topic || null,
         style_notes: document.getElementById('tone').value || null,
         chords: result.chords || null,
-        suno_prompt: sunoPrompt
+        suno_prompt: sunoPrompt,
+        artist_style: APP.artistStyle || null
       })
     });
     APP.currentSongId = song.id;

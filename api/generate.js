@@ -51,7 +51,7 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid JSON body' });
   }
 
-  const { topic, genre, moods, structure, tempo, rhyme, pov, words, styleNotes, language, mixLanguages, sectionLanguages } = body;
+  const { topic, genre, moods, structure, tempo, rhyme, pov, words, styleNotes, language, mixLanguages, sectionLanguages, artistStyle } = body;
   if (!topic) return res.status(400).json({ error: 'topic is required' });
 
   const moodStr = Array.isArray(moods) ? moods.join(', ') : (moods || 'Unspecified');
@@ -83,7 +83,7 @@ Point of view: ${pov || 'First person (I / me / my)'}
 Words to include: ${words || 'None'}
 Style notes: ${styleNotes || 'None'}${langInstruction}
 
-Write the complete lyrics now. Label every section. Make it authentic.`;
+Write the complete lyrics now. Label every section. Make it authentic.${artistStyle ? `\n\nARTIST STYLE: Write in the distinct lyrical style of ${artistStyle} — their characteristic vocabulary, rhyme patterns, phrasing, themes, and flow. The lyrics should sound like they could genuinely be from that artist.` : ''}`;
 
   const titlesSys = `You are a music title expert. Respond with ONLY a JSON array of exactly 3 title strings. No prose, no backticks, no markdown.`;
   const titlesUsr = `Suggest 3 song titles for a ${genre || 'general'} song about: ${topic}${primaryLang !== 'English' ? `. Titles should be in ${primaryLang} or blend ${primaryLang} and English naturally.` : ''}`;
