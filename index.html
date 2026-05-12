@@ -1781,7 +1781,7 @@ function openSongDetail(song) {
   (song.lyrics || '').split('\n').forEach(line => {
     const t = line.trim();
     if (!t) { lyricsEl.appendChild(document.createTextNode('\n')); return; }
-    const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(t);
+    const isLabel = /^\[?(?:VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(t);
     if (isLabel) {
       const span = document.createElement('span');
       span.className = 'sec-label';
@@ -2482,7 +2482,7 @@ function downloadPDF() {
   APP.lyrics.split('\n').forEach(line => {
     const t = line.trim();
     if (!t) { y += 3; return; }
-    const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(t);
+    const isLabel = /^\[?(?:VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(t);
     if (isLabel) {
       checkY(10);
       y += 3;
@@ -3145,18 +3145,33 @@ function matchLyricsToTimestamps(lines, segments, words) {
 
   console.log('[kar] Whisper words received:', wds.length, wds.map(w => `"${w.word}"@${w.start.toFixed(2)}`));
 
+  // Regex that identifies a line that IS a section label (entire line = label)
+  const LABEL_LINE_RE = /^\s*\[?(?:VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)[^\]]*\]?\s*$/i;
+  // Regex that strips a section-label prefix from the start of a line
+  const LABEL_PREFIX_RE = /^\s*\[?(?:VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)[^\]]*\]?\s*/i;
+
   if (wds.length > 0) {
     let wPtr = 0;
     lyricLines.forEach(line => {
+      // Skip lines that are purely section labels — Whisper won't transcribe them,
+      // so attempting to match wastes the search budget and can collide with real lyrics.
+      if (LABEL_LINE_RE.test(line.text)) {
+        console.log(`[kar] line ${line.i} "${line.text}" → SKIPPED (section label)`);
+        return;
+      }
+
       const lw = line.text
-        .replace(/^\s*\[?(?:VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)[^\]]*\]?\s*/i, '')
+        .replace(LABEL_PREFIX_RE, '')
         .toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+
+      // Nothing left after stripping — treat as a label and skip without touching wPtr
       if (!lw.length) return;
 
-      const lSet = new Set(lw);
-      const searchLimit = Math.min(wds.length, wPtr + lw.length * 4 + 15);
+      // Larger window so repeated sections (chorus appearing 3× in a song) can be
+      // found well ahead of the current pointer
+      const searchLimit = Math.min(wds.length, wPtr + lw.length * 8 + 30);
 
-      let bestScore = 0.15;
+      let bestScore = 0.10;   // lowered from 0.15 — near-matches now accepted
       let bestPos   = -1;
 
       for (let s = wPtr; s < searchLimit; s++) {
@@ -3196,7 +3211,13 @@ function matchLyricsToTimestamps(lines, segments, words) {
 
         wPtr = bestPos + Math.max(1, lw.length - 1);
       } else {
-        console.log(`[kar] line ${line.i} "${line.text.substring(0,40)}" → NO MATCH (wPtr=${wPtr} searchLimit=${Math.min(wds.length, wPtr + lw.length * 4 + 15)})`);
+        // ── Critical: always advance wPtr even on no-match ───────────────
+        // Without this, wPtr stays frozen and the next occurrence of a
+        // repeated section (chorus, bridge) searches the same region of the
+        // Whisper word array, producing duplicate timestamps.
+        const prevPtr = wPtr;
+        wPtr += Math.max(1, lw.length);
+        console.log(`[kar] line ${line.i} "${line.text.substring(0,40)}" → NO MATCH (wPtr ${prevPtr}→${wPtr}, searchLimit=${searchLimit})`);
       }
     });
   } else {
@@ -3337,7 +3358,7 @@ function openKaraoke(lyrics, songId) {
   lyrics.split('\n').forEach(line => {
     const t = line.trim();
     if (!t) return;
-    const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(t);
+    const isLabel = /^\[?(?:VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(t);
     KAR.lines.push({ text: t, isLabel, timestamp: null });
   });
 
