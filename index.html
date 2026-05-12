@@ -3127,42 +3127,83 @@ function matchLyricsToTimestamps(lines, segments, words) {
   const lyricLines = lines.map((l, i) => ({ ...l, i })).filter(l => !l.isLabel);
   if (!lyricLines.length) return timestamps;
 
-  const segs = segments?.length ? segments : buildSegmentsFromWords(words);
-  if (!segs?.length) return timestamps;
+  const normWord = s => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
-  const norm = s => (s || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+  // ── Word-level matching (preferred) ──────────────────────────────────────
+  // Whisper word timestamps are precise per-word; segment timestamps are coarse
+  // (many lyric lines map to the same segment → pointer stalls on line 1).
+  // Instead, for each lyric line find the window of Whisper words that best
+  // overlaps the line's words, and use the first word's start time.
+  const wds = (words || [])
+    .map(w => ({ ...w, n: normWord(w.word) }))
+    .filter(w => w.n.length > 0);
 
-  function similarity(a, b) {
-    const wa = norm(a);
-    const wb = new Set(norm(b));
-    if (!wa.length || !wb.size) return 0;
-    const hits = wa.filter(w => wb.has(w)).length;
-    return hits / Math.max(wa.length, wb.size);
+  if (wds.length > 0) {
+    let wPtr = 0;
+    lyricLines.forEach(line => {
+      // Strip section labels / formatting from the lyric line before matching
+      const lw = line.text
+        .replace(/^\s*\[?(?:VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)[^\]]*\]?\s*/i, '')
+        .toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+      if (!lw.length) return;
+
+      const lSet = new Set(lw);
+      // Search up to 4× the lyric line's word count ahead of wPtr
+      const searchLimit = Math.min(wds.length, wPtr + lw.length * 4 + 15);
+
+      let bestScore = 0.15; // minimum Jaccard threshold
+      let bestPos   = -1;
+
+      for (let s = wPtr; s < searchLimit; s++) {
+        // Window = same number of words as the lyric line (±3 for Whisper drift)
+        const winEnd = Math.min(wds.length, s + lw.length + 3);
+        const win    = wds.slice(s, winEnd);
+        const winSet = new Set(win.map(w => w.n));
+        const hits   = lw.filter(w => winSet.has(w)).length;
+        const score  = hits / Math.max(lw.length, win.length);
+        if (score > bestScore) { bestScore = score; bestPos = s; }
+      }
+
+      if (bestPos >= 0) {
+        timestamps[line.i] = wds[bestPos].start;
+        // Advance pointer by ~the lyric line's word count so next line
+        // starts searching just after this one's match (conservative -1 to
+        // absorb small Whisper omissions without overshooting)
+        wPtr = bestPos + Math.max(1, lw.length - 1);
+      }
+    });
+  } else {
+    // ── Segment-level fallback (no word timestamps available) ────────────
+    const segs = segments?.length ? segments : buildSegmentsFromWords(words);
+    if (!segs?.length) return timestamps;
+
+    const norm = s => (s || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+    const similarity = (a, b) => {
+      const wa = norm(a), wb = new Set(norm(b));
+      if (!wa.length || !wb.size) return 0;
+      return wa.filter(w => wb.has(w)).length / Math.max(wa.length, wb.size);
+    };
+
+    let segPtr = 0;
+    lyricLines.forEach(line => {
+      let bestScore = 0.08, bestIdx = -1;
+      const end = Math.min(segs.length, segPtr + 10);
+      for (let j = segPtr; j < end; j++) {
+        const score = similarity(line.text, segs[j].text);
+        if (score > bestScore) { bestScore = score; bestIdx = j; }
+      }
+      if (bestIdx >= 0) { timestamps[line.i] = segs[bestIdx].start; segPtr = bestIdx + 1; }
+    });
   }
 
-  let segPtr = 0;
-  lyricLines.forEach(line => {
-    let bestScore = 0.08; // minimum match threshold
-    let bestIdx = -1;
-    const end = Math.min(segs.length, segPtr + 10);
-    for (let j = segPtr; j < end; j++) {
-      const score = similarity(line.text, segs[j].text);
-      if (score > bestScore) { bestScore = score; bestIdx = j; }
-    }
-    if (bestIdx >= 0) {
-      timestamps[line.i] = segs[bestIdx].start;
-      segPtr = bestIdx + 1;
-    }
-  });
-
-  // Fill any gaps: lines with no match get interpolated between neighbours
+  // ── Gap interpolation: unmatched lines get a time between their neighbours ─
   for (let i = 0; i < timestamps.length; i++) {
     if (timestamps[i] !== null || lines[i].isLabel) continue;
     const prev = timestamps.slice(0, i).reverse().find(t => t !== null);
     const next = timestamps.slice(i + 1).find(t => t !== null);
     if (prev != null && next != null) timestamps[i] = (prev + next) / 2;
-    else if (prev != null) timestamps[i] = prev + 2;
-    else if (next != null) timestamps[i] = Math.max(0, next - 2);
+    else if (prev != null)            timestamps[i] = prev + 2;
+    else if (next != null)            timestamps[i] = Math.max(0, next - 2);
   }
 
   return timestamps;
