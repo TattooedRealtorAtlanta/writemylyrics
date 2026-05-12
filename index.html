@@ -294,11 +294,13 @@ select option{background:var(--surface3)}
 .modal{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:480px;box-shadow:0 40px 80px rgba(0,0,0,.6)}
 .modal-h{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;margin-bottom:8px}
 .modal-p{font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.7}
-.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .m-cancel{background:none;border:1px solid var(--border);border-radius:6px;padding:10px 20px;color:var(--text2);font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
 .m-cancel:hover{border-color:var(--text3);color:var(--text)}
 .m-confirm{background:var(--gold);border:none;border-radius:6px;padding:10px 24px;color:#07060a;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;transition:all .15s}
 .m-confirm:hover{background:var(--gold2)}
+.m-confirm-2{background:var(--surface3);border:1px solid var(--gold-border);border-radius:6px;padding:10px 24px;color:var(--gold);font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;transition:all .15s}
+.m-confirm-2:hover{background:var(--gold-dim)}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
@@ -331,7 +333,7 @@ select option{background:var(--surface3)}
     <div class="hero-glow"></div>
     <div class="hero-tag">🎵 AI-Powered Songwriting</div>
     <h1 class="hero-h1">Write songs that<br><em>actually sound real.</em></h1>
-    <p class="hero-sub">Professional lyrics in any genre in seconds. Country, hip hop, rock, pop, R&B — complete verses, choruses, bridges, chord progressions and more.</p>
+    <p class="hero-sub">Professional lyrics in any genre in seconds. Country, hip hop, rock, pop, R&amp;B — complete verses, choruses, bridges, chord progressions and more.</p>
     <div class="hero-btns">
       <button class="btn-primary" onclick="showAuthTab('signup')">Write My First Song — Free</button>
       <button class="btn-secondary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">See How It Works</button>
@@ -343,7 +345,7 @@ select option{background:var(--surface3)}
     <div class="demo-card">
       <div class="demo-bar">
         <div class="demo-dot"></div><div class="demo-dot"></div><div class="demo-dot"></div>
-        <span class="demo-url">writemylyrics.com/studio</span>
+        <span class="demo-url">writemylyrics.ai/studio</span>
       </div>
       <div class="demo-body">
         <div class="demo-left">
@@ -398,7 +400,7 @@ select option{background:var(--surface3)}
       <div class="feat-card">
         <div class="feat-icon">🎯</div>
         <div class="feat-title">13 Genres</div>
-        <div class="feat-desc">Country, hip hop, pop, rock, R&B, blues, folk, gospel, Americana, outlaw country, trap, military/patriotic, and singer-songwriter.</div>
+        <div class="feat-desc">Country, hip hop, pop, rock, R&amp;B, blues, folk, gospel, Americana, outlaw country, trap, military/patriotic, and singer-songwriter.</div>
       </div>
       <div class="feat-card">
         <div class="feat-icon">🎤</div>
@@ -412,7 +414,7 @@ select option{background:var(--surface3)}
       </div>
       <div class="feat-card">
         <div class="feat-icon">🔄</div>
-        <div class="feat-title">Tweak & Refine</div>
+        <div class="feat-title">Tweak &amp; Refine</div>
         <div class="feat-desc">Not quite right? Tell the AI what to change — "make the chorus more hopeful" or "tighten the rhymes" — and it rewrites instantly.</div>
       </div>
     </div>
@@ -422,7 +424,7 @@ select option{background:var(--surface3)}
     <div class="genres-inner">
       <div class="genres-label">Works for every genre</div>
       <div class="genre-tags">
-        <span class="genre-tag">Country</span><span class="genre-tag">Hip Hop</span><span class="genre-tag">Pop</span><span class="genre-tag">Rock</span><span class="genre-tag">R&B</span><span class="genre-tag">Blues</span><span class="genre-tag">Folk</span><span class="genre-tag">Gospel</span><span class="genre-tag">Americana</span><span class="genre-tag">Outlaw Country</span><span class="genre-tag">Trap</span><span class="genre-tag">Military / Patriotic</span><span class="genre-tag">Singer-Songwriter</span>
+        <span class="genre-tag">Country</span><span class="genre-tag">Hip Hop</span><span class="genre-tag">Pop</span><span class="genre-tag">Rock</span><span class="genre-tag">R&amp;B</span><span class="genre-tag">Blues</span><span class="genre-tag">Folk</span><span class="genre-tag">Gospel</span><span class="genre-tag">Americana</span><span class="genre-tag">Outlaw Country</span><span class="genre-tag">Trap</span><span class="genre-tag">Military / Patriotic</span><span class="genre-tag">Singer-Songwriter</span>
       </div>
     </div>
   </div>
@@ -444,7 +446,7 @@ select option{background:var(--surface3)}
           <li class="no">Karaoke Mode</li>
           <li class="no">Suno export</li>
           <li class="no">Song history</li>
-          <li class="no">Tweak & refine</li>
+          <li class="no">Tweak &amp; refine</li>
         </ul>
         <button class="price-btn outline" onclick="showAuthTab('signup')">Get Started Free</button>
       </div>
@@ -461,9 +463,9 @@ select option{background:var(--surface3)}
           <li>Karaoke Mode</li>
           <li>Suno export</li>
           <li>Full song history</li>
-          <li>Tweak & refine</li>
+          <li>Tweak &amp; refine</li>
         </ul>
-        <button class="price-btn solid" onclick="showAuthTab('signup')">Start Pro — $9/mo</button>
+        <button class="price-btn solid" onclick="startCheckout('pro')">Start Pro — $9/mo</button>
       </div>
       <div class="price-card">
         <div class="price-plan">Unlimited</div>
@@ -477,11 +479,11 @@ select option{background:var(--surface3)}
           <li>Karaoke Mode</li>
           <li>Suno export</li>
           <li>Full song history</li>
-          <li>Tweak & refine</li>
+          <li>Tweak &amp; refine</li>
           <li>Priority generation</li>
           <li>Commercial use license</li>
         </ul>
-        <button class="price-btn outline" onclick="showAuthTab('signup')">Go Unlimited — $19/mo</button>
+        <button class="price-btn outline" onclick="startCheckout('unlimited')">Go Unlimited — $19/mo</button>
       </div>
     </div>
   </div>
@@ -526,7 +528,7 @@ select option{background:var(--surface3)}
           <label class="form-label">Password</label>
           <input type="password" class="form-input" id="si-password" placeholder="••••••••">
         </div>
-        <button class="form-btn" onclick="signIn()">Sign In</button>
+        <button class="form-btn" id="signinBtn" onclick="signIn()">Sign In</button>
         <div class="auth-divider"><span>Don't have an account?</span></div>
         <button class="form-btn" style="background:var(--surface3);color:var(--text);border:1px solid var(--border)" onclick="switchTab('signup')">Create Free Account</button>
       </div>
@@ -545,24 +547,7 @@ select option{background:var(--surface3)}
           <label class="form-label">Password</label>
           <input type="password" class="form-input" id="su-password" placeholder="Choose a password">
         </div>
-        <div class="form-group">
-          <label class="form-label">Choose Your Plan</label>
-          <div class="plan-select" style="grid-template-columns:1fr 1fr 1fr">
-            <div class="plan-opt selected" id="plan-free" onclick="selectPlan('free')">
-              <div class="plan-opt-name">Free</div>
-              <div class="plan-opt-price">5 songs/mo</div>
-            </div>
-            <div class="plan-opt" id="plan-pro" onclick="selectPlan('pro')">
-              <div class="plan-opt-name">Pro</div>
-              <div class="plan-opt-price"><b>$9</b>/month</div>
-            </div>
-            <div class="plan-opt" id="plan-unlimited" onclick="selectPlan('unlimited')">
-              <div class="plan-opt-name">Unlimited</div>
-              <div class="plan-opt-price"><b>$19</b>/month</div>
-            </div>
-          </div>
-        </div>
-        <button class="form-btn" onclick="signUp()">Create Account</button>
+        <button class="form-btn" id="signupBtn" onclick="signUp()">Create Account</button>
         <div class="auth-divider"><span>Already have an account?</span></div>
         <button class="form-btn" style="background:var(--surface3);color:var(--text);border:1px solid var(--border)" onclick="switchTab('signin')">Sign In</button>
       </div>
@@ -578,7 +563,7 @@ select option{background:var(--surface3)}
 
     <!-- Sidebar -->
     <div class="sidebar">
-      <div class="sb-icon active" title="Studio" onclick="toast('Studio')">✍️</div>
+      <div class="sb-icon active" title="Studio">✍️</div>
       <div class="sb-icon" title="History" onclick="toast('Song history — coming soon!')">🕐</div>
       <div class="sb-divider"></div>
       <div class="sb-spacer"></div>
@@ -613,7 +598,7 @@ select option{background:var(--surface3)}
             <button class="pick-btn" data-v="Hip Hop">Hip Hop</button>
             <button class="pick-btn" data-v="Pop">Pop</button>
             <button class="pick-btn" data-v="Rock">Rock</button>
-            <button class="pick-btn" data-v="R&B">R&B</button>
+            <button class="pick-btn" data-v="R&B">R&amp;B</button>
             <button class="pick-btn" data-v="Blues">Blues</button>
             <button class="pick-btn" data-v="Folk">Folk</button>
             <button class="pick-btn" data-v="Military / Patriotic">Military</button>
@@ -708,7 +693,7 @@ select option{background:var(--surface3)}
       <div class="rp-head">
         <div class="rp-label" id="rpLabel">Your lyrics will appear here</div>
         <div class="rp-actions" id="rpActions" style="display:none">
-          <button class="act-btn gold" onclick="regenerate()">↺ Regenerate</button>
+          <button class="act-btn gold" onclick="generate()">↺ Regenerate</button>
           <button class="act-btn" onclick="copyLyrics()">Copy</button>
           <button class="act-btn" onclick="exportLyrics()">↓ Export</button>
           <button class="act-btn" onclick="startOver()">Clear</button>
@@ -751,7 +736,6 @@ select option{background:var(--surface3)}
             <div class="chord-block">
               <div class="chord-head">
                 <span class="chord-title">Chord Progression</span>
-                <span style="font-size:11px;color:var(--text3);font-style:italic" id="chordLoadMsg">Generating...</span>
               </div>
               <div class="chord-body" id="chordsDisplay"></div>
             </div>
@@ -765,11 +749,12 @@ select option{background:var(--surface3)}
 <!-- Upgrade Modal -->
 <div class="modal-bg" id="upgradeBg" onclick="bgClose(event,'upgradeBg')">
   <div class="modal">
-    <div class="modal-h">Upgrade to Pro ✨</div>
+    <div class="modal-h">Upgrade Your Plan ✨</div>
     <div class="modal-p">You've used all your songs this month. Upgrade to Pro for 100 songs/month at $9, or go Unlimited for $19/month — perfect for professional songwriters.</div>
     <div class="modal-btns">
       <button class="m-cancel" onclick="closeModal('upgradeBg')">Maybe later</button>
-      <button class="m-confirm" onclick="toast('Stripe integration coming soon!');closeModal('upgradeBg')">Upgrade — $9/mo</button>
+      <button class="m-confirm-2" onclick="closeModal('upgradeBg');startCheckout('unlimited')">Unlimited — $19/mo</button>
+      <button class="m-confirm" onclick="closeModal('upgradeBg');startCheckout('pro')">Pro — $9/mo</button>
     </div>
   </div>
 </div>
@@ -778,7 +763,7 @@ select option{background:var(--surface3)}
 <div class="modal-bg" id="logoutBg" onclick="bgClose(event,'logoutBg')">
   <div class="modal">
     <div class="modal-h">Account</div>
-    <div class="modal-p" id="accountInfo">Signed in as your account.</div>
+    <div class="modal-p" id="accountInfo">Signed in to your account.</div>
     <div class="modal-btns">
       <button class="m-cancel" onclick="closeModal('logoutBg')">Close</button>
       <button class="m-confirm" style="background:var(--red);color:#fff" onclick="signOut()">Sign Out</button>
@@ -788,10 +773,19 @@ select option{background:var(--surface3)}
 
 <div class="toast" id="toast"></div>
 
+<!-- Supabase JS (CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
 <script>
+// ── SUPABASE INIT ──
+const SUPABASE_URL = 'https://vlxjmkojunrmpomhuxyg.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_5XqQ-CLL9ggr62obfkAdwA_IWFMVLr1';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 // ── STATE ──
 const APP = {
   user: null,
+  profile: null,
   plan: 'free',
   usage: 0,
   limit: 5,
@@ -802,23 +796,47 @@ const APP = {
   busy: false
 };
 
-const LOAD_MSGS = ['Finding the words...','Setting the scene...','Building the hook...','Tuning the melody...','Searching for the chorus...','Laying down the verse...','Getting into the groove...','Almost there...'];
+const LOAD_MSGS = [
+  'Finding the words...','Setting the scene...','Building the hook...',
+  'Tuning the melody...','Searching for the chorus...','Laying down the verse...',
+  'Getting into the groove...','Almost there...'
+];
 let loadTick = null, loadIdx = 0;
-let selectedPlan = 'free';
 
-// ── SIMPLE LOCAL AUTH (replace with real backend) ──
-function getUsers() { return JSON.parse(localStorage.getItem('wml_users') || '{}'); }
-function saveUsers(u) { localStorage.setItem('wml_users', JSON.stringify(u)); }
-function getCurrentUser() { return JSON.parse(sessionStorage.getItem('wml_user') || 'null'); }
-function setCurrentUser(u) { sessionStorage.setItem('wml_user', JSON.stringify(u)); }
-function clearCurrentUser() { sessionStorage.removeItem('wml_user'); }
+// ── AUTH HELPERS ──
+async function getToken() {
+  const { data: { session } } = await sb.auth.getSession();
+  return session?.access_token || null;
+}
+
+async function authFetch(path, options = {}) {
+  const token = await getToken();
+  if (!token) throw new Error('Not signed in');
+  const res = await fetch(path, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      ...(options.headers || {})
+    }
+  });
+  if (res.status === 429) {
+    showUpgrade();
+    throw new Error('Monthly limit reached');
+  }
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `Request failed (${res.status})`);
+  }
+  return res.json();
+}
 
 // ── PAGE ROUTING ──
 function showPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const el = document.getElementById('page-' + page);
-  if(el) el.classList.add('active');
-  window.scrollTo(0,0);
+  if (el) el.classList.add('active');
+  window.scrollTo(0, 0);
 }
 
 function showAuthTab(tab) {
@@ -831,18 +849,12 @@ function switchTab(tab) {
   document.getElementById('signup-form').style.display = tab === 'signup' ? 'block' : 'none';
   document.getElementById('tab-signin').classList.toggle('active', tab === 'signin');
   document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
-  document.getElementById('authSubText').textContent = tab === 'signin' ? 'Sign in to your account' : 'Create your free account';
+  document.getElementById('authSubText').textContent =
+    tab === 'signin' ? 'Sign in to your account' : 'Create your free account';
   hideError();
 }
 
 // ── AUTH ──
-function selectPlan(plan) {
-  selectedPlan = plan;
-  document.getElementById('plan-free').classList.toggle('selected', plan === 'free');
-  document.getElementById('plan-pro').classList.toggle('selected', plan === 'pro');
-  document.getElementById('plan-unlimited').classList.toggle('selected', plan === 'unlimited');
-}
-
 function showError(msg) {
   const el = document.getElementById('authError');
   el.textContent = msg;
@@ -850,223 +862,185 @@ function showError(msg) {
 }
 function hideError() { document.getElementById('authError').classList.remove('on'); }
 
-function signUp() {
+async function signUp() {
   const name = document.getElementById('su-name').value.trim();
   const email = document.getElementById('su-email').value.trim().toLowerCase();
   const pass = document.getElementById('su-password').value;
-  if(!name || !email || !pass) return showError('Please fill in all fields.');
-  if(pass.length < 6) return showError('Password must be at least 6 characters.');
-  const users = getUsers();
-  if(users[email]) return showError('An account with this email already exists.');
-  users[email] = { name, email, pass, plan: selectedPlan, usage: 0, createdAt: Date.now() };
-  saveUsers(users);
-  const user = users[email];
-  setCurrentUser(user);
-  enterApp(user);
+  if (!name || !email || !pass) return showError('Please fill in all fields.');
+  if (pass.length < 6) return showError('Password must be at least 6 characters.');
+
+  const btn = document.getElementById('signupBtn');
+  btn.disabled = true;
+  btn.textContent = 'Creating account...';
+  hideError();
+
+  const { data, error } = await sb.auth.signUp({
+    email,
+    password: pass,
+    options: { data: { name } }
+  });
+
+  btn.disabled = false;
+  btn.textContent = 'Create Account';
+
+  if (error) return showError(error.message);
+  if (data.user) {
+    await loadProfile(data.user);
+  }
 }
 
-function signIn() {
+async function signIn() {
   const email = document.getElementById('si-email').value.trim().toLowerCase();
   const pass = document.getElementById('si-password').value;
-  if(!email || !pass) return showError('Please enter your email and password.');
-  const users = getUsers();
-  if(!users[email] || users[email].pass !== pass) return showError('Invalid email or password.');
-  const user = users[email];
-  setCurrentUser(user);
-  enterApp(user);
+  if (!email || !pass) return showError('Please enter your email and password.');
+
+  const btn = document.getElementById('signinBtn');
+  btn.disabled = true;
+  btn.textContent = 'Signing in...';
+  hideError();
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+
+  btn.disabled = false;
+  btn.textContent = 'Sign In';
+
+  if (error) return showError(error.message);
+  if (data.user) {
+    await loadProfile(data.user);
+  }
 }
 
-function signOut() {
-  clearCurrentUser();
-  closeModal('logoutBg');
+async function signOut() {
+  await sb.auth.signOut();
   APP.user = null;
-  document.getElementById('navRight').innerHTML = `
-    <button class="nav-link" onclick="showPage('auth')">Sign In</button>
-    <button class="nav-cta" onclick="showAuthTab('signup')">Start Free</button>
-  `;
+  APP.profile = null;
+  closeModal('logoutBg');
+  setNavLoggedOut();
   showPage('landing');
 }
 
-function enterApp(user) {
+async function loadProfile(user) {
   APP.user = user;
-  APP.plan = user.plan || 'free';
-  APP.usage = user.usage || 0;
-  APP.limit = APP.plan === "unlimited" ? Infinity : APP.plan === "pro" ? 100 : 5;
+  try {
+    const profile = await authFetch('/api/user');
+    APP.profile = profile;
+    APP.plan = profile.plan;
+    APP.usage = profile.usage;
+    APP.limit = profile.limit;
+    enterApp(profile);
+  } catch (e) {
+    showError('Could not load profile. Please try again.');
+  }
+}
 
-  // Update nav
+function enterApp(profile) {
+  const av = document.getElementById('sbAvatar');
+  if (av) av.textContent = (profile.name || 'U').charAt(0).toUpperCase();
+
+  const ai = document.getElementById('accountInfo');
+  if (ai) ai.textContent = `Signed in as ${profile.name} (${profile.email}) — ${profile.plan.toUpperCase()} plan`;
+
+  setNavLoggedIn();
+  updateUsage();
+  showPage('app');
+}
+
+function setNavLoggedIn() {
   document.getElementById('navRight').innerHTML = `
     <button class="nav-link" onclick="showPage('app')">Studio</button>
     <button class="nav-cta" onclick="showPage('app')">Open Studio</button>
   `;
-
-  // Update avatar
-  const av = document.getElementById('sbAvatar');
-  if(av) av.textContent = user.name.charAt(0).toUpperCase();
-
-  // Update account info
-  const ai = document.getElementById('accountInfo');
-  if(ai) ai.textContent = `Signed in as ${user.name} (${user.email}) — ${APP.plan.toUpperCase()} plan`;
-
-  updateUsage();
-  showPage('app');
+}
+function setNavLoggedOut() {
+  document.getElementById('navRight').innerHTML = `
+    <button class="nav-link" onclick="showPage('auth')">Sign In</button>
+    <button class="nav-cta" onclick="showAuthTab('signup')">Start Free</button>
+  `;
 }
 
 function updateUsage() {
   const fill = document.getElementById('usageFill');
   const label = document.getElementById('usageLabel');
   const wrap = document.getElementById('usageWrap');
-  if(APP.plan === 'unlimited') {
-    if(wrap) wrap.style.display = 'none';
+  if (APP.plan === 'unlimited') {
+    if (wrap) wrap.style.display = 'none';
   } else {
     const pct = Math.min(100, (APP.usage / APP.limit) * 100);
-    if(fill) fill.style.width = pct + '%';
-    if(label) label.textContent = `${APP.usage} / ${APP.limit} songs used this month`;
-    if(fill) fill.style.background = pct >= 80 ? 'var(--red)' : 'var(--gold)';
+    if (fill) fill.style.width = pct + '%';
+    if (label) label.textContent = `${APP.usage} / ${APP.limit} songs used this month`;
+    if (fill) fill.style.background = pct >= 80 ? 'var(--red)' : 'var(--gold)';
+    if (wrap) wrap.style.display = 'block';
   }
 }
 
-// ── INIT ──
-document.addEventListener('DOMContentLoaded', () => {
-  // Check existing session
-  const user = getCurrentUser();
-  if(user) {
-    // Re-fetch fresh user data
-    const users = getUsers();
-    const fresh = users[user.email] || user;
-    enterApp(fresh);
-  } else {
-    showPage('landing');
+// ── STRIPE CHECKOUT ──
+async function startCheckout(plan) {
+  const token = await getToken();
+  if (!token) {
+    showAuthTab('signup');
+    return;
   }
-
-  // Genre buttons
-  document.querySelectorAll('#genreGrid .pick-btn').forEach(b => b.addEventListener('click', () => {
-    document.querySelectorAll('#genreGrid .pick-btn').forEach(x => x.classList.remove('on'));
-    b.classList.add('on');
-    APP.genre = b.dataset.v;
-  }));
-
-  // Mood chips
-  document.querySelectorAll('#moodGrid .mood-chip').forEach(b => b.addEventListener('click', () => {
-    b.classList.toggle('on');
-    APP.moods = [...document.querySelectorAll('#moodGrid .mood-chip.on')].map(x => x.dataset.v);
-  }));
-
-  // Tempo buttons
-  document.querySelectorAll('#tempoGrid .pick-btn').forEach(b => b.addEventListener('click', () => {
-    document.querySelectorAll('#tempoGrid .pick-btn').forEach(x => x.classList.remove('on'));
-    b.classList.add('on');
-    APP.tempo = b.dataset.v;
-  }));
-
-  // Auth tabs default
-  switchTab('signin');
-});
-
-// ── API KEY ──
-function getApiKey() {
-  // In production this would be server-side
-  // For the demo, prompt for key
-  let key = sessionStorage.getItem('wml_apikey') || '';
-  if(!key) {
-    key = prompt('Enter your Anthropic API key to use the studio:\n(In production this is handled server-side)') || '';
-    if(key) sessionStorage.setItem('wml_apikey', key);
+  toast('Redirecting to checkout...');
+  try {
+    const { url } = await authFetch('/api/checkout', {
+      method: 'POST',
+      body: JSON.stringify({ plan })
+    });
+    window.location.href = url;
+  } catch (e) {
+    toast('Checkout error: ' + e.message);
   }
-  return key;
 }
 
 // ── GENERATE ──
 async function generate() {
-  if(APP.busy) return;
-
-  if(APP.plan === 'free' && APP.usage >= APP.limit) {
-    showUpgrade();
-    return;
-  }
+  if (APP.busy) return;
 
   const topic = document.getElementById('topic').value.trim();
-  if(!topic) { toast('Please describe what your song is about.'); return; }
+  if (!topic) { toast('Please describe what your song is about.'); return; }
 
-  const key = getApiKey();
-  if(!key) { toast('API key required.'); return; }
+  const token = await getToken();
+  if (!token) { showAuthTab('signin'); return; }
 
   APP.busy = true;
   setLoading(true);
+  tickLoader();
 
   try {
-    const struct = document.getElementById('structure').value;
-    const sys = `You are an expert songwriter with deep knowledge of multiple genres. You write authentic, emotionally resonant lyrics that sound like they came from a real artist. You understand meter, rhyme, imagery, and storytelling. Always label each section clearly — VERSE 1, CHORUS, BRIDGE etc. Never add explanation or commentary — just the lyrics.`;
-    const usr = `Write complete song lyrics:\n\nTopic: ${topic}\nGenre: ${APP.genre || 'Unspecified'}\nMood: ${APP.moods.join(', ') || 'Unspecified'}\nStructure: ${struct}\nTempo: ${APP.tempo}\nRhyme scheme: ${document.getElementById('rhyme').value}\nPoint of view: ${document.getElementById('pov').value}\nWords to include: ${document.getElementById('words').value || 'None'}\nStyle notes: ${document.getElementById('tone').value || 'None'}\n\nWrite the complete lyrics now. Label every section. Make it authentic.`;
+    const result = await authFetch('/api/generate', {
+      method: 'POST',
+      body: JSON.stringify({
+        topic,
+        genre: APP.genre || '',
+        moods: APP.moods,
+        structure: document.getElementById('structure').value,
+        tempo: APP.tempo,
+        rhyme: document.getElementById('rhyme').value,
+        pov: document.getElementById('pov').value,
+        words: document.getElementById('words').value,
+        styleNotes: document.getElementById('tone').value
+      })
+    });
 
-    tickLoader();
-    const lyrics = await claude(key, sys, usr, 2200);
-    APP.lyrics = lyrics;
-
-    // Increment usage
-    APP.usage++;
-    const users = getUsers();
-    if(APP.user && users[APP.user.email]) {
-      users[APP.user.email].usage = APP.usage;
-      saveUsers(users);
-      const updated = users[APP.user.email];
-      setCurrentUser(updated);
-    }
+    APP.lyrics = result.lyrics;
+    APP.usage = result.usage;
+    APP.limit = result.limit;
+    APP.plan = result.plan;
     updateUsage();
 
-    renderLyrics(lyrics);
+    renderLyrics(result.lyrics);
 
-    // Generate titles and chords in background
-    getTitles(key, lyrics);
-    getChords(key);
+    if (result.titles?.length) renderTitles(result.titles);
+    if (result.chords) renderChords(result.chords);
 
-  } catch(e) {
-    toast('Error: ' + e.message);
-    setLoading(false);
-    APP.busy = false;
-  }
-}
-
-async function claude(key, sys, usr, maxTok) {
-  const res = await fetch('/api/messages', {
-    method: 'POST',
-    headers: { 'x-api-key': key, 'content-type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: maxTok,
-      system: sys,
-      messages: [{ role: 'user', content: usr }]
-    })
-  });
-  if(!res.ok) {
-    const e = await res.json().catch(() => ({}));
-    throw new Error(e.error?.message || `API error ${res.status}`);
-  }
-  const data = await res.json();
-  return data.content[0].text;
-}
-
-async function getTitles(key, lyrics) {
-  try {
-    const raw = await claude(key, 'You are a music title expert. Respond with ONLY a JSON array of exactly 3 title strings. No prose, no backticks.', `Suggest 3 song titles for these lyrics:\n\n${lyrics}`, 200);
-    const m = raw.match(/\[[\s\S]*?\]/);
-    if(m) {
-      const titles = JSON.parse(m[0]);
-      renderTitles(titles);
+  } catch (e) {
+    if (e.message !== 'Monthly limit reached') {
+      toast('Error: ' + e.message);
     }
-  } catch(e) {}
-}
-
-async function getChords(key) {
-  try {
-    document.getElementById('chordsArea').style.display = 'block';
-    document.getElementById('chordLoadMsg').textContent = 'Generating...';
-    const struct = document.getElementById('structure').value;
-    const sys = 'You are a music theorist. Suggest chord progressions that real musicians use. Respond in EXACTLY the format requested — nothing else.';
-    const usr = `Chord progression for:\nGenre: ${APP.genre || 'Unspecified'}\nMood: ${APP.moods.join(', ') || 'Unspecified'}\nTempo: ${APP.tempo}\nStructure: ${struct}\n\nRespond EXACTLY:\nKEY: [key]\nSTRUMMING: [pattern]\n\n[section]: [chords with em dashes]\n(one line per section)`;
-    const raw = await claude(key, sys, usr, 400);
-    renderChords(raw);
-    document.getElementById('chordLoadMsg').textContent = '';
-  } catch(e) {
-    document.getElementById('chordsArea').style.display = 'none';
+    setLoading(false);
+  } finally {
+    stopLoader();
+    APP.busy = false;
   }
 }
 
@@ -1088,9 +1062,9 @@ function renderLyrics(text) {
   const lines = text.split('\n');
   lines.forEach(line => {
     const trimmed = line.trim();
-    if(!trimmed) { out.appendChild(document.createTextNode('\n')); return; }
+    if (!trimmed) { out.appendChild(document.createTextNode('\n')); return; }
     const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(trimmed);
-    if(isLabel) {
+    if (isLabel) {
       const span = document.createElement('span');
       span.className = 'sec-label';
       span.textContent = trimmed;
@@ -1101,7 +1075,7 @@ function renderLyrics(text) {
   });
 
   // Stats
-  const words = text.replace(/[^\w\s]/g,'').split(/\s+/).filter(Boolean).length;
+  const words = text.replace(/[^\w\s]/g, '').split(/\s+/).filter(Boolean).length;
   const lyricLines = lines.filter(l => l.trim() && !/^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO)/i.test(l.trim())).length;
   document.getElementById('wc').textContent = words;
   document.getElementById('lc').textContent = lyricLines;
@@ -1125,16 +1099,17 @@ function renderTitles(titles) {
 }
 
 function renderChords(raw) {
+  const area = document.getElementById('chordsArea');
   const disp = document.getElementById('chordsDisplay');
   disp.innerHTML = '';
   const lines = raw.split('\n').filter(l => l.trim());
   lines.forEach(line => {
-    if(line.startsWith('KEY:') || line.startsWith('STRUMMING:')) {
+    if (line.startsWith('KEY:') || line.startsWith('STRUMMING:')) {
       const info = document.createElement('div');
       info.style.cssText = 'font-size:12px;color:var(--text2);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)';
       info.textContent = line;
       disp.appendChild(info);
-    } else if(line.includes(':')) {
+    } else if (line.includes(':')) {
       const row = document.createElement('div');
       row.className = 'chord-row';
       const [sect, ...rest] = line.split(':');
@@ -1143,6 +1118,7 @@ function renderChords(raw) {
       disp.appendChild(row);
     }
   });
+  if (disp.children.length) area.style.display = 'block';
 }
 
 // ── UI HELPERS ──
@@ -1150,6 +1126,7 @@ function setLoading(on) {
   document.getElementById('emptyState').style.display = on ? 'none' : 'flex';
   document.getElementById('loadState').classList.toggle('on', on);
   document.getElementById('outContent').style.display = 'none';
+  document.getElementById('rpActions').style.display = 'none';
   const btn = document.getElementById('genBtn');
   btn.classList.toggle('loading', on);
   btn.disabled = on;
@@ -1161,15 +1138,14 @@ function tickLoader() {
   loadTick = setInterval(() => {
     loadIdx = (loadIdx + 1) % LOAD_MSGS.length;
     const el = document.getElementById('loadMsg');
-    if(el) el.textContent = LOAD_MSGS[loadIdx];
+    if (el) el.textContent = LOAD_MSGS[loadIdx];
     const bm = document.getElementById('btnMsg');
-    if(bm) bm.textContent = LOAD_MSGS[loadIdx];
+    if (bm) bm.textContent = LOAD_MSGS[loadIdx];
   }, 2200);
 }
 
 function stopLoader() { clearInterval(loadTick); }
 
-function regenerate() { generate(); }
 function startOver() {
   APP.lyrics = '';
   document.getElementById('outContent').style.display = 'none';
@@ -1177,6 +1153,8 @@ function startOver() {
   document.getElementById('emptyState').style.display = 'flex';
   document.getElementById('rpLabel').textContent = 'Your lyrics will appear here';
   document.getElementById('loadState').classList.remove('on');
+  document.getElementById('titleArea').style.display = 'none';
+  document.getElementById('chordsArea').style.display = 'none';
 }
 
 function copyLyrics() {
@@ -1193,21 +1171,10 @@ function exportLyrics() {
   toast('Lyrics downloaded!');
 }
 
-function showUpgrade() {
-  document.getElementById('upgradeBg').classList.add('on');
-}
-
-function showLogout() {
-  document.getElementById('logoutBg').classList.add('on');
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove('on');
-}
-
-function bgClose(e, id) {
-  if(e.target.id === id) closeModal(id);
-}
+function showUpgrade() { document.getElementById('upgradeBg').classList.add('on'); }
+function showLogout() { document.getElementById('logoutBg').classList.add('on'); }
+function closeModal(id) { document.getElementById(id).classList.remove('on'); }
+function bgClose(e, id) { if (e.target.id === id) closeModal(id); }
 
 let toastTimer;
 function toast(msg) {
@@ -1217,6 +1184,58 @@ function toast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('on'), 3000);
 }
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', async () => {
+  // Check for Stripe redirect
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('checkout') === 'success') {
+    window.history.replaceState({}, '', '/');
+    toast('Payment successful! Your plan has been upgraded.');
+  }
+
+  // Restore session if exists
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user) {
+    try {
+      await loadProfile(session.user);
+    } catch { showPage('landing'); }
+  } else {
+    showPage('landing');
+    switchTab('signin');
+  }
+
+  // Genre buttons
+  document.querySelectorAll('#genreGrid .pick-btn').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#genreGrid .pick-btn').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    APP.genre = b.dataset.v;
+  }));
+
+  // Mood chips
+  document.querySelectorAll('#moodGrid .mood-chip').forEach(b => b.addEventListener('click', () => {
+    b.classList.toggle('on');
+    APP.moods = [...document.querySelectorAll('#moodGrid .mood-chip.on')].map(x => x.dataset.v);
+  }));
+
+  // Tempo buttons
+  document.querySelectorAll('#tempoGrid .pick-btn').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#tempoGrid .pick-btn').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    APP.tempo = b.dataset.v;
+  }));
+
+  // Listen for auth changes (e.g. email confirm in another tab)
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session?.user && !APP.user) {
+      await loadProfile(session.user);
+    }
+    if (event === 'SIGNED_OUT') {
+      APP.user = null;
+      setNavLoggedOut();
+    }
+  });
+});
 </script>
 </body>
 </html>

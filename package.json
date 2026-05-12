@@ -1,0 +1,13 @@
+{
+  "name": "writemylyrics",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "stripe": "^16.0.0"
+  }
+}
