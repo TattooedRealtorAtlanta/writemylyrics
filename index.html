@@ -3515,13 +3515,31 @@ function karTick() {
 
   if (KAR.mode !== 'play') return;
 
-  // Find the active lyric line by timestamps
+  // Find the active lyric line by timestamps.
+  // A line stays active until the LATER of:
+  //   (a) the next line's start time, and
+  //   (b) the last word's start time + its estimated duration
+  // This prevents switching before all words in the current line have lit up.
   let activeLine = -1;
   const stamped = KAR.lines.map((l, i) => ({ ...l, i })).filter(l => !l.isLabel && l.timestamp !== null);
   for (let j = 0; j < stamped.length; j++) {
-    const cur = stamped[j];
+    const cur  = stamped[j];
     const next = stamped[j + 1];
-    if (t >= cur.timestamp && (!next || t < next.timestamp)) {
+
+    // Default: hold until the next line starts (or forever for the last line)
+    let holdUntil = next ? next.timestamp : Infinity;
+
+    // If we have word timestamps, extend hold until last word completes
+    const ln = KAR.lines[cur.i];
+    if (ln.wordTs?.length) {
+      const lastWt  = ln.wordTs[ln.wordTs.length - 1];
+      const prevWt  = ln.wordTs.length > 1 ? ln.wordTs[ln.wordTs.length - 2] : null;
+      // Estimate last-word duration from gap between last two words; floor at 150 ms
+      const wordDur = prevWt != null ? Math.max(0.15, lastWt - prevWt) : 0.35;
+      holdUntil = Math.max(holdUntil, lastWt + wordDur);
+    }
+
+    if (t >= cur.timestamp && t < holdUntil) {
       activeLine = cur.i;
     }
   }
