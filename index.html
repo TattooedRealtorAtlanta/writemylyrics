@@ -3246,7 +3246,31 @@ function matchLyricsToTimestamps(lines, segments, words) {
     });
   }
 
-  // ── Gap interpolation: unmatched lines get a time between neighbours ─────
+  // ── Trailing interpolation ───────────────────────────────────────────────
+  // Lines after the last successful match get evenly distributed timestamps
+  // between the last matched time and the song's total duration (from the
+  // last Whisper word's end time).  This handles repeated sections where
+  // Whisper's word array runs out before all lyric lines are matched.
+  const songDuration = wds.length > 0
+    ? (wds[wds.length - 1].end ?? (wds[wds.length - 1].start + 0.5))
+    : 0;
+
+  const lastMatchIdx = lineTs.reduce((best, t, i) => t !== null ? i : best, -1);
+  if (lastMatchIdx >= 0 && songDuration > 0) {
+    const lastMatchTs = lineTs[lastMatchIdx];
+    const trailing = [];
+    for (let i = lastMatchIdx + 1; i < lineTs.length; i++) {
+      if (lineTs[i] === null && !lines[i].isLabel) trailing.push(i);
+    }
+    if (trailing.length > 0 && songDuration > lastMatchTs) {
+      const step = (songDuration - lastMatchTs) / (trailing.length + 1);
+      trailing.forEach((idx, k) => { lineTs[idx] = lastMatchTs + step * (k + 1); });
+    }
+  }
+
+  // ── Interior / leading gap interpolation ─────────────────────────────────
+  // Fill any remaining nulls (gaps between two known timestamps, or leading
+  // lines before the first match).
   for (let i = 0; i < lineTs.length; i++) {
     if (lineTs[i] !== null || lines[i].isLabel) continue;
     const prev = lineTs.slice(0, i).reverse().find(t => t !== null);
