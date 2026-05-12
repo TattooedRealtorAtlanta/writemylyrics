@@ -1,3 +1,8 @@
+// Node.js 20 lacks native WebSocket — polyfill before @supabase/realtime-js loads
+if (!globalThis.WebSocket) {
+  globalThis.WebSocket = require('ws');
+}
+
 const { createClient } = require('@supabase/supabase-js');
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
