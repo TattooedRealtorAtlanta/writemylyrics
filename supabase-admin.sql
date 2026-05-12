@@ -33,7 +33,11 @@ BEGIN
         ORDER BY cnt DESC
         LIMIT 5
       ) g
-    )
+    ),
+    'monthly_revenue_pro',       (SELECT count(*)::int FROM profiles WHERE plan = 'pro') * 9,
+    'monthly_revenue_unlimited', (SELECT count(*)::int FROM profiles WHERE plan = 'unlimited') * 19,
+    'monthly_revenue_total',     ((SELECT count(*)::int FROM profiles WHERE plan = 'pro') * 9) +
+                                 ((SELECT count(*)::int FROM profiles WHERE plan = 'unlimited') * 19)
   ) INTO result;
   RETURN result;
 END;
