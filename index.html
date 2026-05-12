@@ -1432,6 +1432,7 @@ const GALLERY_GENRES = ['All','Country','Hip Hop','Pop','Rock','R&B','Blues','Fo
 
 function showGallery() {
   showPage('gallery');
+  window.history.pushState({}, '', '/gallery');
   // Build genre pills once
   const pillsEl = document.getElementById('galleryPills');
   if (pillsEl && !pillsEl.children.length) {
@@ -1745,6 +1746,10 @@ function showPage(page) {
     el.style.display = 'block';
   }
   window.scrollTo(0, 0);
+  // Keep URL in sync — gallery gets /gallery, everything else gets /
+  if (page !== 'gallery' && window.location.pathname === '/gallery') {
+    window.history.pushState({}, '', '/');
+  }
 }
 
 function showAuthTab(tab) {
@@ -3216,6 +3221,11 @@ function revertLyrics() {
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', async () => {
+  // Detect path-based routing
+  const path = window.location.pathname.replace(/\/$/, '').toLowerCase();
+  const startOnGallery = path === '/gallery';
+  if (startOnGallery) window.history.replaceState({}, '', '/gallery');
+
   // Check for Stripe redirect
   const params = new URLSearchParams(window.location.search);
   if (params.get('checkout') === 'success') {
@@ -3228,10 +3238,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (session?.user) {
     try {
       await loadProfile(session.user, session.access_token);
-    } catch { showPage('landing'); }
+      if (startOnGallery) showGallery();
+    } catch { showPage(startOnGallery ? 'gallery' : 'landing'); if (startOnGallery) loadGallery(true); }
   } else {
-    showPage('landing');
-    switchTab('signin');
+    if (startOnGallery) {
+      showGallery();
+    } else {
+      showPage('landing');
+      switchTab('signin');
+    }
   }
 
   // Genre buttons
