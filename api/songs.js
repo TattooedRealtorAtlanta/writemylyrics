@@ -9,6 +9,19 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
+  // ── Public GET /api/songs?id=xxx — no auth required ─────────────────────
+  const url0 = new URL(req.url, `http://${req.headers.host}`);
+  const publicId = url0.searchParams.get('id');
+  if (req.method === 'GET' && publicId && !req.headers.authorization) {
+    const { data, error } = await supabase
+      .from('gallery_songs')
+      .select('*')
+      .eq('id', publicId)
+      .single();
+    if (error || !data) return res.status(404).json({ error: 'Song not found or not published' });
+    return res.status(200).json({ song: data });
+  }
+
   const user = await getUser(req);
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
 

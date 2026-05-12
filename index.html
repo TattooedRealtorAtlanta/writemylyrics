@@ -1824,7 +1824,7 @@ async function voteGallery(songId, btn) {
   syncDetailVote(songId, !wasVoted, wasVoted ? Math.max(0, prev - 1) : prev + 1);
 
   try {
-    const result = await authFetch('/api/vote', { method: 'POST', body: JSON.stringify({ song_id: songId }) });
+    const result = await authFetch('/api/gallery', { method: 'POST', body: JSON.stringify({ song_id: songId }) });
     btn.classList.toggle('voted', result.voted);
     countEl.textContent = result.vote_count;
     result.voted ? GALLERY.userVotes.add(songId) : GALLERY.userVotes.delete(songId);
@@ -1863,7 +1863,7 @@ async function voteDetailDirect() {
   syncDetailVote(songId, !wasVoted, wasVoted ? Math.max(0, prev - 1) : prev + 1);
   wasVoted ? GALLERY.userVotes.delete(songId) : GALLERY.userVotes.add(songId);
   try {
-    const result = await authFetch('/api/vote', { method: 'POST', body: JSON.stringify({ song_id: songId }) });
+    const result = await authFetch('/api/gallery', { method: 'POST', body: JSON.stringify({ song_id: songId }) });
     syncDetailVote(songId, result.voted, result.vote_count);
     result.voted ? GALLERY.userVotes.add(songId) : GALLERY.userVotes.delete(songId);
   } catch(e) {
@@ -3463,7 +3463,7 @@ async function openHooksPanel() {
 
   try {
     // authFetch throws on non-ok and returns the parsed JSON object directly
-    const data = await authFetch('/api/hooks', {
+    const data = await authFetch('/api/rhyme?action=hooks', {
       method: 'POST',
       body: JSON.stringify({
         lyrics: APP.lyrics,

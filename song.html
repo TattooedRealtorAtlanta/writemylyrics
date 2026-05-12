@@ -117,7 +117,7 @@ async function loadSong() {
   if (!id) { showError(); return; }
 
   try {
-    const res = await fetch(`/api/song?id=${encodeURIComponent(id)}`);
+    const res = await fetch(`/api/songs?id=${encodeURIComponent(id)}`);
     if (!res.ok) { showError(); return; }
     const { song } = await res.json();
     if (!song) { showError(); return; }
