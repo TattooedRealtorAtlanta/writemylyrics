@@ -395,6 +395,59 @@ select option{background:var(--surface3)}
 .kar-save-btn:hover{border-color:var(--gold-border);color:var(--gold)}
 .kar-hint{font-size:12px;color:rgba(255,255,255,.25);font-style:italic}
 
+/* ── STATUS BADGES ── */
+.status-badge{display:inline-flex;align-items:center;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border:1px solid;white-space:nowrap}
+.status-draft{color:var(--text3);background:var(--surface3);border-color:var(--border)}
+.status-in-progress{color:var(--gold);background:var(--gold-dim);border-color:var(--gold-border)}
+.status-sent-to-suno{color:#4a8ee0;background:rgba(74,142,224,.1);border-color:rgba(74,142,224,.25)}
+.status-published{color:var(--green);background:rgba(78,201,148,.1);border-color:rgba(78,201,148,.25)}
+.hi-status-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.hi-date-info{font-size:11px;color:var(--text3)}
+.status-sel{border-radius:20px;padding:3px 8px;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;background:var(--surface3);border:1px solid var(--border);color:var(--text3);appearance:none;-webkit-appearance:none}
+.status-sel.s-in-progress{color:var(--gold);background:var(--gold-dim);border-color:var(--gold-border)}
+.status-sel.s-sent-to-suno{color:#4a8ee0;background:rgba(74,142,224,.1);border-color:rgba(74,142,224,.25)}
+.status-sel.s-published{color:var(--green);background:rgba(78,201,148,.1);border-color:rgba(78,201,148,.25)}
+select.status-sel option{background:var(--surface3);color:var(--text);text-transform:none;font-weight:400;letter-spacing:0;font-size:13px}
+.hi-notes-preview{font-size:11px;color:var(--text3);font-style:italic;margin-bottom:8px;line-height:1.5;padding:6px 8px;background:var(--surface3);border-radius:5px;border-left:2px solid var(--border)}
+
+/* ── SONG NOTES ── */
+.notes-panel{margin-top:20px;display:none}
+.notes-panel.on{display:block}
+.notes-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:12px}
+.notes-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--gold);font-weight:600;white-space:nowrap}
+.notes-head-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.notes-save-status{font-size:11px;color:var(--text3);font-style:italic;white-space:nowrap}
+.notes-area{width:100%;min-height:80px;resize:vertical}
+
+/* ── VERSION HISTORY OVERLAY ── */
+.ver-overlay{position:fixed;inset:0;background:var(--black);z-index:2000;display:none;flex-direction:column}
+.ver-overlay.on{display:flex}
+.ver-top{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ver-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--text)}
+.ver-top-right{display:flex;align-items:center;gap:10px}
+.ver-song-title{font-size:13px;color:var(--text2);font-style:italic}
+.ver-close{background:none;border:1px solid var(--border);border-radius:6px;padding:7px 14px;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .2s}
+.ver-close:hover{border-color:var(--text3);color:var(--text)}
+.ver-body{flex:1;display:flex;overflow:hidden}
+.ver-left{width:300px;min-width:300px;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.ver-left-head{padding:12px 16px;border-bottom:1px solid var(--border);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);font-weight:600;flex-shrink:0}
+.ver-list{flex:1;overflow-y:auto;padding:10px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.ver-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:border-color .2s}
+.ver-item:hover{border-color:var(--gold-border)}
+.ver-item.selected{border-color:var(--gold);background:var(--gold-dim)}
+.ver-item-date{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px}
+.ver-item-preview{font-size:11px;color:var(--text3);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ver-right{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.ver-right-head{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ver-right-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);font-weight:600}
+.ver-restore-btn{background:var(--gold);border:none;border-radius:6px;padding:8px 18px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:#07060a;cursor:pointer;transition:all .2s;display:none}
+.ver-restore-btn.on{display:block}
+.ver-restore-btn:hover{background:var(--gold2)}
+.ver-preview{flex:1;resize:none;background:transparent;border:none;color:var(--text2);font-family:'DM Mono',monospace;font-size:13px;padding:24px 28px;line-height:1.8;scrollbar-width:thin;scrollbar-color:var(--border) transparent;width:100%}
+.ver-preview:focus{outline:none}
+.ver-empty{padding:40px 20px;text-align:center;color:var(--text3);font-size:13px;line-height:1.7}
+.ver-loading{padding:40px 20px;text-align:center;color:var(--text3);font-size:13px}
+
 /* ── LANGUAGE CONTROLS ── */
 .mix-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer;user-select:none}
 .mix-toggle-row:hover .mix-toggle-label{color:var(--text)}
@@ -834,11 +887,15 @@ select option{background:var(--surface3)}
     <!-- Right Panel -->
     <div class="right-panel">
       <div class="rp-head">
-        <div class="rp-label" id="rpLabel">Your lyrics will appear here</div>
+        <div style="display:flex;align-items:center;gap:10px;min-width:0;overflow:hidden">
+          <div class="rp-label" id="rpLabel" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Your lyrics will appear here</div>
+          <span class="status-badge status-draft" id="rpStatus" style="display:none;flex-shrink:0">Draft</span>
+        </div>
         <div class="rp-actions" id="rpActions" style="display:none">
           <button class="act-btn gold" onclick="generate()">↺ Regenerate</button>
           <button class="act-btn" onclick="copyLyrics()">Copy</button>
           <button class="act-btn" onclick="exportToSuno()">⚡ Suno</button>
+          <button class="act-btn" id="versionsBtn" onclick="openVersionHistory(APP.currentSongId)" style="display:none">↩ Versions</button>
           <button class="act-btn" onclick="exportLyrics()">↓ Export</button>
           <button class="act-btn" onclick="startOver()">Clear</button>
         </div>
@@ -919,6 +976,23 @@ select option{background:var(--surface3)}
               </div>
             </div>
           </div>
+
+          <!-- Song Notes Panel -->
+          <div id="notesPanel" class="notes-panel">
+            <div class="notes-head">
+              <span class="notes-label">Song Notes</span>
+              <div class="notes-head-right">
+                <select class="status-sel" id="studioStatusSel" onchange="updateCurrentSongStatus(this.value, this)">
+                  <option value="draft">Draft</option>
+                  <option value="in-progress">In Progress</option>
+                  <option value="sent-to-suno">Sent to Suno</option>
+                  <option value="published">Published</option>
+                </select>
+                <span class="notes-save-status" id="notesSaveStatus"></span>
+              </div>
+            </div>
+            <textarea class="notes-area" id="notesText" rows="4" placeholder="Inspiration, melody ideas, Suno prompts that worked, co-writer feedback..." oninput="onNotesInput()"></textarea>
+          </div>
         </div>
       </div>
     </div>
@@ -946,6 +1020,30 @@ select option{background:var(--surface3)}
     <div class="modal-btns">
       <button class="m-cancel" onclick="closeModal('logoutBg')">Close</button>
       <button class="m-confirm" style="background:var(--red);color:#fff" onclick="signOut()">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- Version History Overlay -->
+<div class="ver-overlay" id="verOverlay">
+  <div class="ver-top">
+    <div class="ver-title">Version History</div>
+    <div class="ver-top-right">
+      <span class="ver-song-title" id="verSongTitle"></span>
+      <button class="ver-close" onclick="closeVersionHistory()">✕ Close</button>
+    </div>
+  </div>
+  <div class="ver-body">
+    <div class="ver-left">
+      <div class="ver-left-head">Saved Versions</div>
+      <div class="ver-list" id="verList"></div>
+    </div>
+    <div class="ver-right">
+      <div class="ver-right-head">
+        <span class="ver-right-label">Preview</span>
+        <button class="ver-restore-btn" id="verRestoreBtn">Restore This Version</button>
+      </div>
+      <textarea class="ver-preview" id="verPreview" readonly placeholder="Select a version on the left to preview it here..."></textarea>
     </div>
   </div>
 </div>
@@ -1421,9 +1519,11 @@ function startOver() {
   document.getElementById('chordsArea').style.display = 'none';
   document.getElementById('sunoPanel').classList.remove('on');
   document.getElementById('refinePanel').classList.remove('on');
-  // Reset refine body state
   document.getElementById('refineBody').classList.remove('open');
   document.getElementById('refineToggle').classList.remove('open');
+  hideNotesPanel();
+  const versionsBtn = document.getElementById('versionsBtn');
+  if (versionsBtn) versionsBtn.style.display = 'none';
 }
 
 function copyLyrics() {
@@ -1452,6 +1552,214 @@ function toast(msg) {
   t.classList.add('on');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('on'), 3000);
+}
+
+// ── NOTES ──
+let _notesSaveTimer = null;
+
+function showNotesPanel(song) {
+  const panel = document.getElementById('notesPanel');
+  const ta    = document.getElementById('notesText');
+  const sel   = document.getElementById('studioStatusSel');
+  const badge = document.getElementById('rpStatus');
+  ta.value = song.notes || '';
+  const status = song.status || 'draft';
+  if (sel) {
+    sel.value = status;
+    sel.className = `status-sel${status !== 'draft' ? ' s-' + status : ''}`;
+  }
+  if (badge) {
+    badge.textContent = statusLabel(status);
+    badge.className = `status-badge status-${status}`;
+    badge.style.display = 'inline-flex';
+  }
+  panel.classList.add('on');
+  document.getElementById('notesSaveStatus').textContent = '';
+}
+
+function hideNotesPanel() {
+  document.getElementById('notesPanel').classList.remove('on');
+  const badge = document.getElementById('rpStatus');
+  if (badge) badge.style.display = 'none';
+}
+
+function onNotesInput() {
+  document.getElementById('notesSaveStatus').textContent = 'Unsaved';
+  clearTimeout(_notesSaveTimer);
+  _notesSaveTimer = setTimeout(() => {
+    saveNotes(document.getElementById('notesText').value);
+  }, 1500);
+}
+
+async function saveNotes(val) {
+  if (!APP.currentSongId) return;
+  document.getElementById('notesSaveStatus').textContent = 'Saving...';
+  try {
+    await authFetch('/api/songs', {
+      method: 'PATCH',
+      body: JSON.stringify({ id: APP.currentSongId, notes: val })
+    });
+    const idx = getCurrentSongIdx();
+    if (idx >= 0) APP.songs[idx].notes = val;
+    document.getElementById('notesSaveStatus').textContent = 'Saved';
+    setTimeout(() => {
+      const el = document.getElementById('notesSaveStatus');
+      if (el && el.textContent === 'Saved') el.textContent = '';
+    }, 2500);
+  } catch {
+    document.getElementById('notesSaveStatus').textContent = 'Error saving';
+  }
+}
+
+// ── STATUS ──
+function statusLabel(s) {
+  return { draft: 'Draft', 'in-progress': 'In Progress', 'sent-to-suno': 'Sent to Suno', published: 'Published' }[s] || 'Draft';
+}
+
+function getCurrentSongIdx() {
+  if (!APP.currentSongId) return -1;
+  return APP.songs.findIndex(s => s.id === APP.currentSongId);
+}
+
+async function updateCurrentSongStatus(status, sel) {
+  if (!APP.currentSongId) return;
+  if (sel) sel.className = `status-sel${status !== 'draft' ? ' s-' + status : ''}`;
+  const badge = document.getElementById('rpStatus');
+  if (badge) {
+    badge.textContent = statusLabel(status);
+    badge.className = `status-badge status-${status}`;
+  }
+  try {
+    await authFetch('/api/songs', {
+      method: 'PATCH',
+      body: JSON.stringify({ id: APP.currentSongId, status })
+    });
+    const idx = getCurrentSongIdx();
+    if (idx >= 0) APP.songs[idx].status = status;
+    // Sync history item select if visible
+    const histSel = document.getElementById(`status-sel-${APP.currentSongId}`);
+    if (histSel) {
+      histSel.value = status;
+      histSel.className = `status-sel${status !== 'draft' ? ' s-' + status : ''}`;
+    }
+  } catch (e) {
+    toast('Error updating status: ' + e.message);
+  }
+}
+
+async function updateSongStatus(songId, status, idx, sel) {
+  if (sel) sel.className = `status-sel${status !== 'draft' ? ' s-' + status : ''}`;
+  try {
+    await authFetch('/api/songs', {
+      method: 'PATCH',
+      body: JSON.stringify({ id: songId, status })
+    });
+    if (APP.songs[idx]) APP.songs[idx].status = status;
+    // Sync studio badge if this is the currently loaded song
+    if (APP.currentSongId === songId) {
+      const badge = document.getElementById('rpStatus');
+      if (badge) { badge.textContent = statusLabel(status); badge.className = `status-badge status-${status}`; }
+      const studioSel = document.getElementById('studioStatusSel');
+      if (studioSel) { studioSel.value = status; studioSel.className = `status-sel${status !== 'draft' ? ' s-' + status : ''}`; }
+    }
+  } catch (e) {
+    toast('Error updating status: ' + e.message);
+  }
+}
+
+// ── VERSION HISTORY ──
+let _verCurrentSongId = null;
+let _selectedVersion  = null;
+
+async function openVersionHistory(songId) {
+  if (!songId) { toast('No song loaded — generate or load a song first.'); return; }
+  _verCurrentSongId = songId;
+  _selectedVersion  = null;
+
+  const idx = APP.songs.findIndex(s => s.id === songId);
+  const title = idx >= 0 ? (APP.songs[idx].title || APP.songs[idx].topic || 'Untitled') : '';
+  document.getElementById('verSongTitle').textContent = title ? `"${title}"` : '';
+  document.getElementById('verList').innerHTML    = '<div class="ver-loading">Loading versions...</div>';
+  document.getElementById('verPreview').value     = '';
+  document.getElementById('verRestoreBtn').classList.remove('on');
+  document.getElementById('verOverlay').classList.add('on');
+
+  try {
+    const { versions } = await authFetch(`/api/versions?songId=${songId}`);
+    renderVersionList(versions, songId);
+  } catch (e) {
+    document.getElementById('verList').innerHTML = `<div class="ver-empty">Could not load versions: ${escHtml(e.message)}</div>`;
+  }
+}
+
+function closeVersionHistory() {
+  document.getElementById('verOverlay').classList.remove('on');
+  _verCurrentSongId = null;
+  _selectedVersion  = null;
+}
+
+function renderVersionList(versions, songId) {
+  const list = document.getElementById('verList');
+  list.innerHTML = '';
+  if (!versions.length) {
+    list.innerHTML = '<div class="ver-empty">No versions saved yet.<br><br>Use Tweak &amp; Refine to automatically save a version each time you modify your lyrics.</div>';
+    return;
+  }
+  versions.forEach(v => {
+    const item = document.createElement('div');
+    item.className = 'ver-item';
+    const d = new Date(v.created_at);
+    const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const timeStr = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    const firstLine = v.lyrics.split('\n').find(l => l.trim() && !/^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK)/i.test(l.trim())) || '';
+    item.innerHTML = `
+      <div class="ver-item-date">${dateStr} at ${timeStr}</div>
+      <div class="ver-item-preview">${escHtml(firstLine.substring(0, 65))}${firstLine.length > 65 ? '…' : ''}</div>`;
+    item.onclick = () => selectVersion(v, item, songId);
+    list.appendChild(item);
+  });
+}
+
+function selectVersion(version, itemEl, songId) {
+  _selectedVersion = version;
+  document.querySelectorAll('.ver-item').forEach(el => el.classList.remove('selected'));
+  itemEl.classList.add('selected');
+  document.getElementById('verPreview').value = version.lyrics;
+  const btn = document.getElementById('verRestoreBtn');
+  btn.classList.add('on');
+  btn.onclick = () => restoreVersion(version, songId);
+}
+
+async function restoreVersion(version, songId) {
+  if (!confirm('Restore this version? A copy of your current lyrics will be saved first.')) return;
+
+  // Save current lyrics as a version before restoring
+  if (APP.lyrics) {
+    try {
+      await authFetch('/api/versions', {
+        method: 'POST',
+        body: JSON.stringify({ songId, lyrics: APP.lyrics })
+      });
+    } catch { /* best effort */ }
+  }
+
+  try {
+    await authFetch('/api/songs', {
+      method: 'PATCH',
+      body: JSON.stringify({ id: songId, lyrics: version.lyrics })
+    });
+    APP.lyrics = version.lyrics;
+    APP.originalLyrics = version.lyrics;
+    renderLyrics(version.lyrics);
+
+    const idx = getCurrentSongIdx();
+    if (idx >= 0) APP.songs[idx].lyrics = version.lyrics;
+
+    closeVersionHistory();
+    toast('Version restored!');
+  } catch (e) {
+    toast('Error restoring: ' + e.message);
+  }
 }
 
 // ── LANGUAGE ──
@@ -1593,14 +1901,27 @@ function renderHistory(songs) {
   songs.forEach((song, idx) => {
     const item = document.createElement('div');
     item.className = 'history-item';
-    const date = new Date(song.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    const genre = song.genre || 'Unknown genre';
-    const title = song.title || song.topic || 'Untitled Song';
+    const date   = new Date(song.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const genre  = song.genre || 'Unknown genre';
+    const title  = song.title || song.topic || 'Untitled Song';
+    const status = song.status || 'draft';
+    const selCls = status !== 'draft' ? ` s-${status}` : '';
+    const notesPrev = song.notes ? `<div class="hi-notes-preview">${escHtml(song.notes.substring(0, 80))}${song.notes.length > 80 ? '…' : ''}</div>` : '';
     item.innerHTML = `
       <div class="hi-title">${escHtml(title)}</div>
-      <div class="hi-info">${escHtml(genre)} · ${date}</div>
+      <div class="hi-status-row">
+        <select class="status-sel${selCls}" id="status-sel-${song.id}" onchange="updateSongStatus('${song.id}', this.value, ${idx}, this)">
+          <option value="draft"${status==='draft'?' selected':''}>Draft</option>
+          <option value="in-progress"${status==='in-progress'?' selected':''}>In Progress</option>
+          <option value="sent-to-suno"${status==='sent-to-suno'?' selected':''}>Sent to Suno</option>
+          <option value="published"${status==='published'?' selected':''}>Published</option>
+        </select>
+        <span class="hi-date-info">${escHtml(genre)} · ${date}</span>
+      </div>
+      ${notesPrev}
       <div class="hi-actions">
         <button class="hi-btn" onclick="reloadSong(${idx})">↩ Load</button>
+        <button class="hi-btn" onclick="openVersionHistory('${song.id}')">⏱ Versions</button>
         <button class="hi-btn" onclick="sunoExportSong(${idx})">⚡ Suno</button>
         <button class="hi-btn" onclick="openKaraoke(APP.songs[${idx}].lyrics, APP.songs[${idx}].id)">🎤 Karaoke</button>
         <button class="hi-btn del" onclick="deleteSong('${song.id}',${idx})">🗑</button>
@@ -1660,6 +1981,13 @@ function reloadSong(idx) {
   const rrBtn = document.getElementById('refineRevertBtn');
   if (rrBtn) rrBtn.classList.remove('on');
 
+  // Show notes panel with this song's notes and status
+  showNotesPanel(song);
+
+  // Show versions button
+  const versionsBtn = document.getElementById('versionsBtn');
+  if (versionsBtn) versionsBtn.style.display = 'inline-flex';
+
   toast('Song loaded!');
 }
 
@@ -1699,6 +2027,11 @@ async function saveSongToHistory(result) {
     });
     APP.currentSongId = song.id;
     KAR.songId = song.id;
+
+    // Show notes panel (blank for new song) and versions button
+    showNotesPanel({ notes: '', status: 'draft' });
+    const versionsBtn = document.getElementById('versionsBtn');
+    if (versionsBtn) versionsBtn.style.display = 'inline-flex';
   } catch (e) {
     console.warn('[saveSongToHistory]', e.message);
   }
@@ -1979,7 +2312,8 @@ async function submitRefine() {
         genre: APP.genre,
         moods: APP.moods,
         tempo: APP.tempo,
-        topic: document.getElementById('topic').value.trim()
+        topic: document.getElementById('topic').value.trim(),
+        songId: APP.currentSongId || null
       })
     });
 

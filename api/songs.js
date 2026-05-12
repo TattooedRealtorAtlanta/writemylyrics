@@ -72,15 +72,25 @@ module.exports = async function handler(req, res) {
     return res.status(201).json({ song: data });
   }
 
-  // PATCH /api/songs — update sync_data for karaoke
+  // PATCH /api/songs — update any combination of: sync_data, notes, status, lyrics
   if (req.method === 'PATCH') {
     const body = await getJsonBody(req);
-    const { id, sync_data } = body;
+    const { id, sync_data, notes, status, lyrics } = body;
     if (!id) return res.status(400).json({ error: 'id is required' });
+
+    const updates = {};
+    if (sync_data !== undefined) updates.sync_data = sync_data;
+    if (notes     !== undefined) updates.notes     = notes;
+    if (status    !== undefined) updates.status    = status;
+    if (lyrics    !== undefined) updates.lyrics    = lyrics;
+
+    if (!Object.keys(updates).length) {
+      return res.status(400).json({ error: 'No fields to update' });
+    }
 
     const { data, error } = await supabase
       .from('songs')
-      .update({ sync_data })
+      .update(updates)
       .eq('id', id)
       .eq('user_id', user.id)
       .select()

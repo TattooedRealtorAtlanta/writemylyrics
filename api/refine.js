@@ -27,7 +27,7 @@ module.exports = async function handler(req, res) {
   }
 
   const body = await getJsonBody(req);
-  const { lyrics, instructions, genre, moods, tempo, topic } = body;
+  const { lyrics, instructions, genre, moods, tempo, topic, songId } = body;
 
   if (!lyrics || !instructions) {
     return res.status(400).json({ error: 'lyrics and instructions are required' });
@@ -58,6 +58,21 @@ Apply the requested changes. Preserve the overall structure and what's working w
 
   const refined = message.content[0]?.text?.trim();
   if (!refined) return res.status(500).json({ error: 'AI returned empty response' });
+
+  // Save the original lyrics as a version before returning the refined version
+  if (songId) {
+    const { data: songCheck } = await supabase
+      .from('songs')
+      .select('id')
+      .eq('id', songId)
+      .eq('user_id', user.id)
+      .single();
+    if (songCheck) {
+      await supabase
+        .from('song_versions')
+        .insert({ song_id: songId, lyrics }); // lyrics = original, before refinement
+    }
+  }
 
   // Increment usage
   const newCount = profile.usage_count + 1;
