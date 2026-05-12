@@ -390,6 +390,14 @@ select option{background:var(--surface3)}
 .kar-line.passed{color:rgba(255,255,255,.5)}
 .kar-line.sec-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:rgba(201,148,58,.4);cursor:default;font-weight:600;margin-top:20px;padding:0 8px;line-height:2.5}
 .kar-line.sec-lbl:hover{color:rgba(201,148,58,.4)}
+/* ── Word-level highlighting ── */
+.kar-line.kar-has-words{color:rgba(255,255,255,.2)}
+.kar-line.kar-has-words .kar-word{color:rgba(255,255,255,.2);transition:color .07s,font-weight .07s,text-shadow .07s}
+.kar-line.active.kar-has-words{color:rgba(255,255,255,.2)}
+.kar-line.active.kar-has-words .kar-word{color:rgba(255,255,255,.28)}
+.kar-line.active.kar-has-words .kar-word.on{color:#fff;font-weight:700;text-shadow:0 0 16px rgba(201,148,58,.85)}
+.kar-line.passed.kar-has-words,.kar-line.passed.kar-has-words .kar-word{color:rgba(255,255,255,.4)}
+.kar-line.passed.kar-has-words .kar-word.on{color:rgba(255,255,255,.55)}
 .kar-bottom{padding:16px 24px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:12px;flex-shrink:0;flex-wrap:wrap}
 .kar-play-btn{background:var(--gold);border:none;border-radius:8px;padding:10px 24px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:#07060a;cursor:pointer;transition:all .2s}
 .kar-play-btn:hover{background:var(--gold2)}
@@ -3123,17 +3131,14 @@ function buildSegmentsFromWords(words) {
 }
 
 function matchLyricsToTimestamps(lines, segments, words) {
-  const timestamps = lines.map(() => null);
+  const lineTs = lines.map(() => null);
+  const wordTs = lines.map(() => null);  // per-line array of per-word start times
   const lyricLines = lines.map((l, i) => ({ ...l, i })).filter(l => !l.isLabel);
-  if (!lyricLines.length) return timestamps;
+  if (!lyricLines.length) return { lineTs, wordTs };
 
   const normWord = s => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
   // ── Word-level matching (preferred) ──────────────────────────────────────
-  // Whisper word timestamps are precise per-word; segment timestamps are coarse
-  // (many lyric lines map to the same segment → pointer stalls on line 1).
-  // Instead, for each lyric line find the window of Whisper words that best
-  // overlaps the line's words, and use the first word's start time.
   const wds = (words || [])
     .map(w => ({ ...w, n: normWord(w.word) }))
     .filter(w => w.n.length > 0);
@@ -3141,21 +3146,18 @@ function matchLyricsToTimestamps(lines, segments, words) {
   if (wds.length > 0) {
     let wPtr = 0;
     lyricLines.forEach(line => {
-      // Strip section labels / formatting from the lyric line before matching
       const lw = line.text
         .replace(/^\s*\[?(?:VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)[^\]]*\]?\s*/i, '')
         .toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean);
       if (!lw.length) return;
 
       const lSet = new Set(lw);
-      // Search up to 4× the lyric line's word count ahead of wPtr
       const searchLimit = Math.min(wds.length, wPtr + lw.length * 4 + 15);
 
-      let bestScore = 0.15; // minimum Jaccard threshold
+      let bestScore = 0.15;
       let bestPos   = -1;
 
       for (let s = wPtr; s < searchLimit; s++) {
-        // Window = same number of words as the lyric line (±3 for Whisper drift)
         const winEnd = Math.min(wds.length, s + lw.length + 3);
         const win    = wds.slice(s, winEnd);
         const winSet = new Set(win.map(w => w.n));
@@ -3165,17 +3167,38 @@ function matchLyricsToTimestamps(lines, segments, words) {
       }
 
       if (bestPos >= 0) {
-        timestamps[line.i] = wds[bestPos].start;
-        // Advance pointer by ~the lyric line's word count so next line
-        // starts searching just after this one's match (conservative -1 to
-        // absorb small Whisper omissions without overshooting)
+        lineTs[line.i] = wds[bestPos].start;
+
+        // ── Per-word timestamps ──────────────────────────────────────────
+        // Greedily align each lyric word to the first matching Whisper word
+        // in the matched window, then interpolate any gaps.
+        const win = wds.slice(bestPos, Math.min(wds.length, bestPos + lw.length + 5));
+        const wtArr = new Array(lw.length).fill(null);
+        let winPtr = 0;
+        for (let k = 0; k < lw.length; k++) {
+          for (let m = winPtr; m < win.length; m++) {
+            if (win[m].n === lw[k]) { wtArr[k] = win[m].start; winPtr = m + 1; break; }
+          }
+        }
+        // Interpolate unmatched words
+        for (let k = 0; k < wtArr.length; k++) {
+          if (wtArr[k] !== null) continue;
+          const prev = wtArr.slice(0, k).reverse().find(t => t !== null);
+          const next = wtArr.slice(k + 1).find(t => t !== null);
+          if (prev != null && next != null)      wtArr[k] = (prev + next) / 2;
+          else if (prev != null)                 wtArr[k] = prev + 0.2;
+          else if (next != null)                 wtArr[k] = Math.max(lineTs[line.i], next - 0.2);
+          else                                   wtArr[k] = lineTs[line.i];
+        }
+        wordTs[line.i] = wtArr;
+
         wPtr = bestPos + Math.max(1, lw.length - 1);
       }
     });
   } else {
     // ── Segment-level fallback (no word timestamps available) ────────────
     const segs = segments?.length ? segments : buildSegmentsFromWords(words);
-    if (!segs?.length) return timestamps;
+    if (!segs?.length) return { lineTs, wordTs };
 
     const norm = s => (s || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean);
     const similarity = (a, b) => {
@@ -3192,21 +3215,21 @@ function matchLyricsToTimestamps(lines, segments, words) {
         const score = similarity(line.text, segs[j].text);
         if (score > bestScore) { bestScore = score; bestIdx = j; }
       }
-      if (bestIdx >= 0) { timestamps[line.i] = segs[bestIdx].start; segPtr = bestIdx + 1; }
+      if (bestIdx >= 0) { lineTs[line.i] = segs[bestIdx].start; segPtr = bestIdx + 1; }
     });
   }
 
-  // ── Gap interpolation: unmatched lines get a time between their neighbours ─
-  for (let i = 0; i < timestamps.length; i++) {
-    if (timestamps[i] !== null || lines[i].isLabel) continue;
-    const prev = timestamps.slice(0, i).reverse().find(t => t !== null);
-    const next = timestamps.slice(i + 1).find(t => t !== null);
-    if (prev != null && next != null) timestamps[i] = (prev + next) / 2;
-    else if (prev != null)            timestamps[i] = prev + 2;
-    else if (next != null)            timestamps[i] = Math.max(0, next - 2);
+  // ── Gap interpolation: unmatched lines get a time between neighbours ─────
+  for (let i = 0; i < lineTs.length; i++) {
+    if (lineTs[i] !== null || lines[i].isLabel) continue;
+    const prev = lineTs.slice(0, i).reverse().find(t => t !== null);
+    const next = lineTs.slice(i + 1).find(t => t !== null);
+    if (prev != null && next != null) lineTs[i] = (prev + next) / 2;
+    else if (prev != null)            lineTs[i] = prev + 2;
+    else if (next != null)            lineTs[i] = Math.max(0, next - 2);
   }
 
-  return timestamps;
+  return { lineTs, wordTs };
 }
 
 async function autoSync() {
@@ -3254,26 +3277,26 @@ async function autoSync() {
       return;
     }
 
-    const timestamps = matchLyricsToTimestamps(KAR.lines, segments, words);
-    const matchCount = timestamps.filter(t => t !== null).length;
+    const { lineTs, wordTs } = matchLyricsToTimestamps(KAR.lines, segments, words);
+    const matchCount = lineTs.filter(t => t !== null).length;
 
     if (!matchCount) {
       toast('Could not match lyrics to audio. Try manual sync.');
       return;
     }
 
-    // Apply timestamps
-    KAR.lines.forEach((line, i) => { line.timestamp = timestamps[i]; });
+    // Apply line + word timestamps
+    KAR.lines.forEach((line, i) => { line.timestamp = lineTs[i]; line.wordTs = wordTs[i] ?? null; });
 
-    // Save to Supabase
+    // Save v2 sync data to Supabase
+    const syncPayload = JSON.stringify({ v: 2, lines: lineTs, words: wordTs });
     if (KAR.songId) {
       await authFetch('/api/songs', {
         method: 'PATCH',
-        body: JSON.stringify({ id: KAR.songId, sync_data: JSON.stringify(timestamps) })
+        body: JSON.stringify({ id: KAR.songId, sync_data: syncPayload })
       });
-      // Update in-memory cache so re-opening restores the sync
       const idx = APP.songs.findIndex(s => s.id === KAR.songId);
-      if (idx >= 0) APP.songs[idx].sync_data = JSON.stringify(timestamps);
+      if (idx >= 0) APP.songs[idx].sync_data = syncPayload;
     }
 
     // Switch to play mode
@@ -3322,9 +3345,16 @@ function openKaraoke(lyrics, songId) {
     try {
       const saved = JSON.parse(cachedSong.sync_data);
       if (Array.isArray(saved)) {
-        KAR.lines.forEach((line, i) => { line.timestamp = saved[i] ?? null; });
-        hasSavedSync = KAR.lines.some(l => l.timestamp !== null);
+        // v1 format: plain array of line timestamps
+        KAR.lines.forEach((line, i) => { line.timestamp = saved[i] ?? null; line.wordTs = null; });
+      } else if (saved?.v === 2) {
+        // v2 format: {v:2, lines:[...], words:[[t,t,...]|null,...]}
+        KAR.lines.forEach((line, i) => {
+          line.timestamp = saved.lines?.[i] ?? null;
+          line.wordTs    = saved.words?.[i] ?? null;
+        });
       }
+      hasSavedSync = KAR.lines.some(l => l.timestamp !== null);
     } catch { /* ignore corrupt data */ }
   }
 
@@ -3380,10 +3410,32 @@ function renderKarLines() {
     const div = document.createElement('div');
     div.className = 'kar-line' + (line.isLabel ? ' sec-lbl' : '');
     div.id = `kl-${idx}`;
-    div.textContent = line.text;
-    if (!line.isLabel) {
-      div.onclick = () => karTapLine(idx);
+
+    if (!line.isLabel && line.wordTs?.length) {
+      // Render individual word spans for word-by-word highlighting.
+      // wordTs has one entry per normalized word; map back to original tokens.
+      div.classList.add('kar-has-words');
+      const tokens = line.text.split(/\s+/);
+      let wtIdx = 0;
+      tokens.forEach((token, ti) => {
+        if (ti > 0) div.appendChild(document.createTextNode(' '));
+        const normT = token.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (normT && wtIdx < line.wordTs.length) {
+          const span = document.createElement('span');
+          span.className = 'kar-word';
+          span.dataset.t = line.wordTs[wtIdx];
+          span.textContent = token;
+          wtIdx++;
+          div.appendChild(span);
+        } else {
+          div.appendChild(document.createTextNode(token));
+        }
+      });
+    } else {
+      div.textContent = line.text;
     }
+
+    if (!line.isLabel) div.onclick = () => karTapLine(idx);
     container.appendChild(div);
   });
 }
@@ -3475,6 +3527,12 @@ function karTick() {
   }
 
   if (activeLine !== KAR.currentLine) {
+    // Clear word highlights on line we're leaving
+    if (KAR.currentLine >= 0) {
+      const prevEl = document.getElementById(`kl-${KAR.currentLine}`);
+      if (prevEl) prevEl.querySelectorAll('.kar-word.on').forEach(s => s.classList.remove('on'));
+    }
+
     KAR.currentLine = activeLine;
     KAR.lines.forEach((line, idx) => {
       const el = document.getElementById(`kl-${idx}`);
@@ -3488,6 +3546,17 @@ function karTick() {
       }
     });
   }
+
+  // Word-level highlighting: update every tick on the active line
+  if (activeLine >= 0) {
+    const el = document.getElementById(`kl-${activeLine}`);
+    if (el?.classList.contains('kar-has-words')) {
+      el.querySelectorAll('.kar-word').forEach(span => {
+        const wt = parseFloat(span.dataset.t);
+        if (!isNaN(wt)) span.classList.toggle('on', t >= wt);
+      });
+    }
+  }
 }
 
 function karEnded() {
@@ -3497,7 +3566,11 @@ function karEnded() {
 
 async function saveKarSync() {
   if (!KAR.songId) { toast('No song ID — generate and save a song first.'); return; }
-  const syncData = JSON.stringify(KAR.lines.map(l => l.timestamp));
+  const syncData = JSON.stringify({
+    v: 2,
+    lines: KAR.lines.map(l => l.timestamp),
+    words: KAR.lines.map(l => l.wordTs ?? null)
+  });
   try {
     await authFetch('/api/songs', {
       method: 'PATCH',
