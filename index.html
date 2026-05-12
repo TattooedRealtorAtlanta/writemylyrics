@@ -3142,7 +3142,8 @@ async function openHooksPanel() {
   panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
   try {
-    const res = await authFetch('/api/hooks', {
+    // authFetch throws on non-ok and returns the parsed JSON object directly
+    const data = await authFetch('/api/hooks', {
       method: 'POST',
       body: JSON.stringify({
         lyrics: APP.lyrics,
@@ -3151,8 +3152,6 @@ async function openHooksPanel() {
         topic:  document.getElementById('topic')?.value?.trim() || ''
       })
     });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Hook generation failed');
 
     body.innerHTML = data.hooks.map((hook, i) => `
       <div class="hook-card">
