@@ -3167,9 +3167,10 @@ function matchLyricsToTimestamps(lines, segments, words) {
       // Nothing left after stripping — treat as a label and skip without touching wPtr
       if (!lw.length) return;
 
-      // Larger window so repeated sections (chorus appearing 3× in a song) can be
-      // found well ahead of the current pointer
-      const searchLimit = Math.min(wds.length, wPtr + lw.length * 8 + 30);
+      // Search from wPtr to the end of the word array — no fixed cap.
+      // A hard window size caused the second half of longer songs to fall off
+      // the edge when wPtr lagged behind due to unmatched lines.
+      const searchLimit = wds.length;
 
       let bestScore = 0.10;   // lowered from 0.15 — near-matches now accepted
       let bestPos   = -1;
