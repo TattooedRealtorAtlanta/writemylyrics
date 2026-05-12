@@ -378,6 +378,9 @@ select option{background:var(--surface3)}
 .kar-audio-bar input[type=text]::placeholder{color:rgba(255,255,255,.3)}
 .kar-audio-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:8px 14px;font-size:12px;font-family:'DM Sans',sans-serif;color:rgba(255,255,255,.7);cursor:pointer;transition:all .2s;white-space:nowrap}
 .kar-audio-btn:hover{border-color:rgba(255,255,255,.25);color:#fff}
+.kar-autosync-btn{background:rgba(201,148,58,.15);border-color:rgba(201,148,58,.4);color:var(--gold)}
+.kar-autosync-btn:hover{background:var(--gold);color:#07060a;border-color:var(--gold)}
+.kar-autosync-btn:disabled{opacity:.5;cursor:not-allowed;pointer-events:none}
 .kar-audio-file{display:none}
 .kar-body{flex:1;overflow-y:auto;padding:40px 48px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;display:flex;flex-direction:column;align-items:center}
 .kar-lines{width:100%;max-width:700px}
@@ -1322,6 +1325,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
     <span style="color:rgba(255,255,255,.3);font-size:12px">or</span>
     <button class="kar-audio-btn" onclick="document.getElementById('karAudioFile').click()">Upload File</button>
     <input type="file" class="kar-audio-file" id="karAudioFile" accept="audio/*" onchange="karLoadFile(this)">
+    <button class="kar-audio-btn kar-autosync-btn" id="karAutoSyncBtn" onclick="autoSync()" style="display:none">✨ Auto Sync</button>
   </div>
   <div class="kar-body">
     <div class="kar-lines" id="karLines"></div>
@@ -1403,7 +1407,9 @@ const KAR = {
   lines: [],
   mode: 'sync',
   currentLine: -1,
-  songId: null
+  songId: null,
+  audioUrl: '',   // set when URL is loaded
+  audioFile: null // set when file is uploaded
 };
 
 const LOAD_MSGS = [
@@ -3104,6 +3110,151 @@ function sunoExportSong(idx) {
   toast('Suno prompt copied!');
 }
 
+// ── AUTO SYNC ──
+function buildSegmentsFromWords(words) {
+  if (!words?.length) return [];
+  const segs = [];
+  const chunk = 7;
+  for (let i = 0; i < words.length; i += chunk) {
+    const w = words.slice(i, i + chunk);
+    segs.push({ text: w.map(x => x.word).join(' '), start: w[0].start, end: w[w.length - 1].end });
+  }
+  return segs;
+}
+
+function matchLyricsToTimestamps(lines, segments, words) {
+  const timestamps = lines.map(() => null);
+  const lyricLines = lines.map((l, i) => ({ ...l, i })).filter(l => !l.isLabel);
+  if (!lyricLines.length) return timestamps;
+
+  const segs = segments?.length ? segments : buildSegmentsFromWords(words);
+  if (!segs?.length) return timestamps;
+
+  const norm = s => (s || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+
+  function similarity(a, b) {
+    const wa = norm(a);
+    const wb = new Set(norm(b));
+    if (!wa.length || !wb.size) return 0;
+    const hits = wa.filter(w => wb.has(w)).length;
+    return hits / Math.max(wa.length, wb.size);
+  }
+
+  let segPtr = 0;
+  lyricLines.forEach(line => {
+    let bestScore = 0.08; // minimum match threshold
+    let bestIdx = -1;
+    const end = Math.min(segs.length, segPtr + 10);
+    for (let j = segPtr; j < end; j++) {
+      const score = similarity(line.text, segs[j].text);
+      if (score > bestScore) { bestScore = score; bestIdx = j; }
+    }
+    if (bestIdx >= 0) {
+      timestamps[line.i] = segs[bestIdx].start;
+      segPtr = bestIdx + 1;
+    }
+  });
+
+  // Fill any gaps: lines with no match get interpolated between neighbours
+  for (let i = 0; i < timestamps.length; i++) {
+    if (timestamps[i] !== null || lines[i].isLabel) continue;
+    const prev = timestamps.slice(0, i).reverse().find(t => t !== null);
+    const next = timestamps.slice(i + 1).find(t => t !== null);
+    if (prev != null && next != null) timestamps[i] = (prev + next) / 2;
+    else if (prev != null) timestamps[i] = prev + 2;
+    else if (next != null) timestamps[i] = Math.max(0, next - 2);
+  }
+
+  return timestamps;
+}
+
+async function autoSync() {
+  if (!KAR.audioUrl && !KAR.audioFile) { toast('Load audio first.'); return; }
+
+  const btn = document.getElementById('karAutoSyncBtn');
+  btn.textContent = '⏳ Transcribing...';
+  btn.disabled = true;
+
+  try {
+    let result;
+
+    if (KAR.audioUrl) {
+      // Send URL — server downloads and sends to Whisper
+      result = await authFetch('/api/transcribe', {
+        method: 'POST',
+        body: JSON.stringify({ url: KAR.audioUrl })
+      });
+    } else {
+      // Send file as raw binary
+      if (KAR.audioFile.size > 24 * 1024 * 1024) {
+        toast('File too large for Auto Sync (max 24 MB).');
+        return;
+      }
+      const token = await getToken();
+      const res = await fetch('/api/transcribe', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': KAR.audioFile.type || 'audio/mpeg',
+          'X-Filename': KAR.audioFile.name
+        },
+        body: KAR.audioFile
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: res.statusText }));
+        throw new Error(err.error || 'Transcription failed');
+      }
+      result = await res.json();
+    }
+
+    const { segments, words } = result;
+    if (!segments?.length && !words?.length) {
+      toast('No speech detected in audio. Try manual sync.');
+      return;
+    }
+
+    const timestamps = matchLyricsToTimestamps(KAR.lines, segments, words);
+    const matchCount = timestamps.filter(t => t !== null).length;
+
+    if (!matchCount) {
+      toast('Could not match lyrics to audio. Try manual sync.');
+      return;
+    }
+
+    // Apply timestamps
+    KAR.lines.forEach((line, i) => { line.timestamp = timestamps[i]; });
+
+    // Save to Supabase
+    if (KAR.songId) {
+      await authFetch('/api/songs', {
+        method: 'PATCH',
+        body: JSON.stringify({ id: KAR.songId, sync_data: JSON.stringify(timestamps) })
+      });
+      // Update in-memory cache so re-opening restores the sync
+      const idx = APP.songs.findIndex(s => s.id === KAR.songId);
+      if (idx >= 0) APP.songs[idx].sync_data = JSON.stringify(timestamps);
+    }
+
+    // Switch to play mode
+    KAR.mode = 'play';
+    KAR.currentLine = -1;
+    document.getElementById('karModeSyncBtn').classList.remove('active');
+    document.getElementById('karModePlayBtn').classList.add('active');
+    document.getElementById('karHint').textContent = 'Lines highlight automatically during playback';
+    document.getElementById('karSaveBtn').style.display = 'block';
+    renderKarLines();
+
+    const lyricCount = KAR.lines.filter(l => !l.isLabel).length;
+    toast(`✨ Auto sync complete — ${matchCount} / ${lyricCount} lines matched`);
+
+  } catch (e) {
+    toast('Auto sync failed: ' + e.message);
+  } finally {
+    btn.textContent = '✨ Auto Sync';
+    btn.disabled = false;
+  }
+}
+
 // ── KARAOKE ──
 function openKaraoke(lyrics, songId) {
   if (APP.plan === 'free') {
@@ -3111,7 +3262,9 @@ function openKaraoke(lyrics, songId) {
     return;
   }
 
-  KAR.lines = [];
+  KAR.lines     = [];
+  KAR.audioUrl  = '';
+  KAR.audioFile = null;
   lyrics.split('\n').forEach(line => {
     const t = line.trim();
     if (!t) return;
@@ -3119,18 +3272,36 @@ function openKaraoke(lyrics, songId) {
     KAR.lines.push({ text: t, isLabel, timestamp: null });
   });
 
-  KAR.mode = 'sync';
-  KAR.currentLine = -1;
   KAR.songId = songId || APP.currentSongId || null;
+
+  // Restore saved sync data if available
+  const cachedSong = KAR.songId ? APP.songs.find(s => s.id === KAR.songId) : null;
+  let hasSavedSync = false;
+  if (cachedSong?.sync_data) {
+    try {
+      const saved = JSON.parse(cachedSong.sync_data);
+      if (Array.isArray(saved)) {
+        KAR.lines.forEach((line, i) => { line.timestamp = saved[i] ?? null; });
+        hasSavedSync = KAR.lines.some(l => l.timestamp !== null);
+      }
+    } catch { /* ignore corrupt data */ }
+  }
+
+  // Default to play mode if sync data exists, sync mode otherwise
+  KAR.mode = hasSavedSync ? 'play' : 'sync';
+  KAR.currentLine = -1;
 
   renderKarLines();
 
-  document.getElementById('karModeSyncBtn').classList.add('active');
-  document.getElementById('karModePlayBtn').classList.remove('active');
+  document.getElementById('karModeSyncBtn').classList.toggle('active', KAR.mode === 'sync');
+  document.getElementById('karModePlayBtn').classList.toggle('active', KAR.mode === 'play');
   document.getElementById('karPlayBtn').textContent = '▶ Play';
   document.getElementById('karTime').textContent = '0:00';
-  document.getElementById('karSaveBtn').style.display = 'none';
-  document.getElementById('karHint').textContent = 'Tap lines while playing to set timestamps';
+  document.getElementById('karSaveBtn').style.display = hasSavedSync ? 'block' : 'none';
+  document.getElementById('karHint').textContent = KAR.mode === 'play'
+    ? 'Lines highlight automatically during playback'
+    : 'Tap lines while playing to set timestamps';
+  document.getElementById('karAutoSyncBtn').style.display = 'none';
 
   const audio = document.getElementById('karAudio');
   audio.pause();
@@ -3140,20 +3311,15 @@ function openKaraoke(lyrics, songId) {
   const karUrlInput = document.getElementById('karAudioUrl');
   if (karUrlInput) {
     let savedUrl = '';
-    // Studio input is most up-to-date for the current song
     const studioInput = document.getElementById('studioAudioUrl');
-    if (studioInput && KAR.songId === APP.currentSongId) {
-      savedUrl = studioInput.value.trim();
-    }
-    // Fall back to APP.songs cache
-    if (!savedUrl && KAR.songId) {
-      const cached = APP.songs.find(s => s.id === KAR.songId);
-      if (cached) savedUrl = cached.audio_url || '';
-    }
+    if (studioInput && KAR.songId === APP.currentSongId) savedUrl = studioInput.value.trim();
+    if (!savedUrl && cachedSong) savedUrl = cachedSong.audio_url || '';
     karUrlInput.value = savedUrl;
     if (savedUrl) {
+      KAR.audioUrl = savedUrl;
       audio.src = savedUrl;
       audio.load();
+      document.getElementById('karAutoSyncBtn').style.display = 'inline-block';
     }
   }
 
@@ -3195,18 +3361,24 @@ function setKarMode(mode) {
 function karLoadUrl() {
   const url = document.getElementById('karAudioUrl').value.trim();
   if (!url) return;
+  KAR.audioUrl  = url;
+  KAR.audioFile = null;
   const audio = document.getElementById('karAudio');
   audio.src = url;
   audio.load();
+  document.getElementById('karAutoSyncBtn').style.display = 'inline-block';
   toast('Audio loading...');
 }
 
 function karLoadFile(input) {
   const file = input.files[0];
   if (!file) return;
+  KAR.audioFile = file;
+  KAR.audioUrl  = '';
   const audio = document.getElementById('karAudio');
   audio.src = URL.createObjectURL(file);
   audio.load();
+  document.getElementById('karAutoSyncBtn').style.display = 'inline-block';
   toast('Audio loaded: ' + file.name);
 }
 
