@@ -395,6 +395,19 @@ select option{background:var(--surface3)}
 .kar-save-btn:hover{border-color:var(--gold-border);color:var(--gold)}
 .kar-hint{font-size:12px;color:rgba(255,255,255,.25);font-style:italic}
 
+/* ── LANGUAGE CONTROLS ── */
+.mix-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer;user-select:none}
+.mix-toggle-row:hover .mix-toggle-label{color:var(--text)}
+.mix-toggle-label{font-size:13px;color:var(--text2);transition:color .2s}
+.mix-toggle-sub{font-size:10px;color:var(--text3);display:block;margin-top:1px}
+.mix-switch{width:36px;height:20px;background:var(--surface3);border-radius:10px;position:relative;transition:background .2s;flex-shrink:0;border:1px solid var(--border)}
+.mix-switch.on{background:var(--gold);border-color:var(--gold)}
+.mix-switch::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.mix-switch.on::after{transform:translateX(16px)}
+.section-lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.section-lang-item{display:flex;flex-direction:column;gap:4px}
+.section-lang-label{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);font-weight:600}
+
 /* Responsive */
 @media(max-width:768px){
   .pricing-grid{grid-template-columns:1fr}
@@ -770,6 +783,33 @@ select option{background:var(--surface3)}
           <label class="field-label">Style Notes <span>(optional)</span></label>
           <textarea id="tone" rows="2" placeholder="Raw and honest, poetic, conversational, storytelling..."></textarea>
         </div>
+
+        <div class="field">
+          <label class="field-label">Language</label>
+          <select id="languageSel" onchange="onLanguageChange()">
+            <option value="English">English</option>
+            <option value="Spanish">Spanish</option>
+            <option value="French">French</option>
+            <option value="Portuguese">Portuguese</option>
+            <option value="German">German</option>
+            <option value="Italian">Italian</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Korean">Korean</option>
+            <option value="Arabic">Arabic</option>
+            <option value="Hindi">Hindi</option>
+          </select>
+        </div>
+
+        <div class="field" id="mixLangField" style="display:none">
+          <div class="mix-toggle-row" onclick="toggleMixLanguages()">
+            <div>
+              <div class="mix-toggle-label">Mix Languages</div>
+              <span class="mix-toggle-sub">Set a different language per section</span>
+            </div>
+            <span class="mix-switch" id="mixSwitch"></span>
+          </div>
+          <div id="sectionLangGrid" class="section-lang-grid" style="display:none"></div>
+        </div>
       </div>
 
       <div class="lp-footer">
@@ -971,6 +1011,9 @@ const APP = {
   originalLyrics: '',
   currentSongId: null,
   songs: [],
+  language: 'English',
+  mixLanguages: false,
+  sectionLanguages: {},
   busy: false
 };
 
@@ -1217,7 +1260,10 @@ async function generate() {
         rhyme: document.getElementById('rhyme').value,
         pov: document.getElementById('pov').value,
         words: document.getElementById('words').value,
-        styleNotes: document.getElementById('tone').value
+        styleNotes: document.getElementById('tone').value,
+        language: APP.language,
+        mixLanguages: APP.mixLanguages,
+        sectionLanguages: APP.mixLanguages ? APP.sectionLanguages : {}
       })
     });
 
@@ -1408,6 +1454,81 @@ function toast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('on'), 3000);
 }
 
+// ── LANGUAGE ──
+const LANGUAGES = ['English','Spanish','French','Portuguese','German','Italian','Japanese','Korean','Arabic','Hindi'];
+
+function onLanguageChange() {
+  const sel = document.getElementById('languageSel');
+  APP.language = sel.value;
+  const mixField = document.getElementById('mixLangField');
+  if (APP.language !== 'English') {
+    mixField.style.display = 'block';
+  } else {
+    mixField.style.display = 'none';
+    // Reset mix state
+    APP.mixLanguages = false;
+    APP.sectionLanguages = {};
+    document.getElementById('mixSwitch').classList.remove('on');
+    document.getElementById('sectionLangGrid').style.display = 'none';
+  }
+}
+
+function toggleMixLanguages() {
+  APP.mixLanguages = !APP.mixLanguages;
+  document.getElementById('mixSwitch').classList.toggle('on', APP.mixLanguages);
+  const grid = document.getElementById('sectionLangGrid');
+  if (APP.mixLanguages) {
+    buildSectionLangGrid();
+    grid.style.display = 'grid';
+  } else {
+    grid.style.display = 'none';
+    APP.sectionLanguages = {};
+  }
+}
+
+function buildSectionLangGrid() {
+  const structureVal = document.getElementById('structure').value;
+  // Parse unique section types from structure string
+  const parts = structureVal.split('/').map(s => s.trim().replace(/\s*\(.*\)/, '').trim());
+  const seen = new Set();
+  const sections = [];
+  for (const p of parts) {
+    // Normalize: "Verse 1", "Verse 2" → "Verse"; "Pre-Chorus" stays
+    const base = p.replace(/\s+\d+$/, '').trim();
+    if (base && !seen.has(base)) { seen.add(base); sections.push(base); }
+  }
+
+  const grid = document.getElementById('sectionLangGrid');
+  grid.innerHTML = '';
+
+  sections.forEach(sect => {
+    const item = document.createElement('div');
+    item.className = 'section-lang-item';
+    const lbl = document.createElement('div');
+    lbl.className = 'section-lang-label';
+    lbl.textContent = sect;
+    const sel = document.createElement('select');
+    sel.id = `slang-${sect.replace(/\s+/g, '-')}`;
+    // Default: primary language for the non-English language, English for others
+    const defaultLang = APP.language;
+    LANGUAGES.forEach(lang => {
+      const opt = document.createElement('option');
+      opt.value = lang;
+      opt.textContent = lang;
+      if (lang === defaultLang) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change', () => {
+      APP.sectionLanguages[sect] = sel.value;
+    });
+    // Init default
+    APP.sectionLanguages[sect] = defaultLang;
+    item.appendChild(lbl);
+    item.appendChild(sel);
+    grid.appendChild(item);
+  });
+}
+
 // ── VIEW SWITCHING ──
 function showView(v) {
   const leftPanel = document.querySelector('.left-panel');
@@ -1558,7 +1679,7 @@ async function saveSongToHistory(result) {
   if (APP.plan === 'free') return;
   try {
     const topic = document.getElementById('topic').value.trim();
-    const sunoPrompt = buildSunoPrompt(result.lyrics);
+    const sunoPrompt = buildSunoPrompt(result.lyrics, { language: APP.language, mixLanguages: APP.mixLanguages });
     const { song } = await authFetch('/api/songs', {
       method: 'POST',
       body: JSON.stringify({
@@ -1589,9 +1710,17 @@ function buildSunoPrompt(lyrics, opts = {}) {
   const moods = opts.moods !== undefined ? opts.moods : APP.moods;
   const tempo = opts.tempo !== undefined ? opts.tempo : APP.tempo || '';
   const styleNotes = opts.styleNotes !== undefined ? opts.styleNotes : (document.getElementById('tone')?.value || '');
+  const language = opts.language !== undefined ? opts.language : APP.language || 'English';
+  const mixLanguages = opts.mixLanguages !== undefined ? opts.mixLanguages : APP.mixLanguages;
 
   const moodsStr = Array.isArray(moods) ? moods.join(', ') : (moods || '');
-  const styleParts = [genre, moodsStr, tempo, styleNotes].filter(Boolean);
+  let langTag = '';
+  if (mixLanguages) {
+    langTag = 'multilingual vocals';
+  } else if (language && language !== 'English') {
+    langTag = `${language} vocals`;
+  }
+  const styleParts = [genre, moodsStr, tempo, styleNotes, langTag].filter(Boolean);
   let out = styleParts.length ? `Style: ${styleParts.join(', ')}\n\n` : '';
 
   const formatted = lyrics.split('\n').map(line => {
@@ -1919,6 +2048,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     b.classList.add('on');
     APP.tempo = b.dataset.v;
   }));
+
+  // Rebuild section lang grid when structure changes
+  document.getElementById('structure').addEventListener('change', () => {
+    if (APP.mixLanguages) {
+      APP.sectionLanguages = {};
+      buildSectionLangGrid();
+    }
+  });
 
   // Listen for auth changes (e.g. email confirm in another tab)
   let _profileLoading = false;
