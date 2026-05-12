@@ -76,14 +76,15 @@ module.exports = async function handler(req, res) {
   // PATCH /api/songs — update any combination of: sync_data, notes, status, lyrics
   if (req.method === 'PATCH') {
     const body = await getJsonBody(req);
-    const { id, sync_data, notes, status, lyrics } = body;
+    const { id, sync_data, notes, status, lyrics, published } = body;
     if (!id) return res.status(400).json({ error: 'id is required' });
 
     const updates = {};
-    if (sync_data !== undefined) updates.sync_data = sync_data;
-    if (notes     !== undefined) updates.notes     = notes;
-    if (status    !== undefined) updates.status    = status;
-    if (lyrics    !== undefined) updates.lyrics    = lyrics;
+    if (sync_data  !== undefined) updates.sync_data  = sync_data;
+    if (notes      !== undefined) updates.notes      = notes;
+    if (status     !== undefined) updates.status     = status;
+    if (lyrics     !== undefined) updates.lyrics     = lyrics;
+    if (published  !== undefined) updates.published  = published;
 
     if (!Object.keys(updates).length) {
       return res.status(400).json({ error: 'No fields to update' });

@@ -506,6 +506,112 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
   .history-panel{width:100%;min-width:unset}
   nav{padding:0 20px}
 }
+
+/* ══════════════════════════════════════
+   NAV CENTER LINKS
+══════════════════════════════════════ */
+.nav-center{display:flex;align-items:center;gap:4px}
+.nav-gallery-link{background:none;border:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;padding:6px 12px;border-radius:6px;transition:color .2s}
+.nav-gallery-link:hover{color:var(--gold)}
+
+/* ══════════════════════════════════════
+   GALLERY PAGE
+══════════════════════════════════════ */
+#page-gallery{padding-top:64px;min-height:100vh}
+.gallery-hero{background:linear-gradient(180deg,var(--surface) 0%,var(--black) 100%);border-bottom:1px solid var(--border);padding:56px 40px 36px;text-align:center}
+.gallery-hero-inner{max-width:620px;margin:0 auto}
+.gallery-tag-label{display:inline-block;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:40px;padding:4px 14px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+.gallery-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,5vw,52px);font-weight:700;letter-spacing:-.02em;margin-bottom:10px}
+.gallery-sub{font-size:15px;color:var(--text2)}
+.gallery-inner{max-width:1200px;margin:0 auto;padding:36px 40px 60px}
+
+/* Leaderboards */
+.gallery-boards{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:44px}
+.board-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.board-head{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--border)}
+.board-icon{font-size:18px}
+.board-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;flex:1}
+.board-sub{font-size:11px;color:var(--text3);white-space:nowrap}
+.board-list{padding:6px 0}
+.board-item{display:flex;align-items:center;gap:12px;padding:9px 20px;cursor:pointer;transition:background .15s}
+.board-item:hover{background:var(--surface2)}
+.board-rank{width:22px;font-size:13px;font-weight:700;color:var(--text3);text-align:center;flex-shrink:0}
+.board-rank.top3{color:var(--gold)}
+.board-info{flex:1;min-width:0}
+.board-info-title{font-size:13.5px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.board-info-meta{font-size:11px;color:var(--text3)}
+.board-votes{font-size:13px;color:var(--gold);font-weight:600;white-space:nowrap;flex-shrink:0}
+.board-empty{padding:24px 20px;text-align:center;color:var(--text3);font-size:13px}
+
+/* Filters */
+.gallery-filters{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:28px}
+.gallery-search{flex:0 0 240px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;transition:border-color .2s}
+.gallery-search:focus{outline:none;border-color:var(--gold-border)}
+.gallery-search::placeholder{color:var(--text3)}
+.gallery-pills{display:flex;flex-wrap:wrap;gap:7px}
+.gpill{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 13px;font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s}
+.gpill:hover{border-color:var(--gold-border);color:var(--gold)}
+.gpill.on{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold)}
+
+/* Song grid */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin-bottom:32px}
+.gc{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:10px}
+.gc:hover{border-color:var(--gold-border);transform:translateY(-2px)}
+.gc-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;line-height:1.2}
+.gc-author{font-size:12px;color:var(--text3)}
+.gc-tags{display:flex;flex-wrap:wrap;gap:6px;min-height:22px}
+.gc-tag{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px 9px;font-size:11px;color:var(--text2)}
+.gc-tag.artist{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold)}
+.gc-preview{font-size:13px;color:var(--text2);line-height:1.65;font-style:italic;flex:1;white-space:pre-line}
+.gc-footer{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.gc-vote{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 11px;font-size:13px;color:var(--text2);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.gc-vote:hover{border-color:var(--gold-border);color:var(--gold)}
+.gc-vote.voted{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold)}
+.gc-date{font-size:11px;color:var(--text3)}
+.gallery-load-more{text-align:center;padding:16px 0}
+.gallery-load-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 28px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text2);cursor:pointer;transition:all .2s}
+.gallery-load-btn:hover{border-color:var(--gold-border);color:var(--gold)}
+.gallery-empty{text-align:center;padding:60px 20px;color:var(--text3);font-size:15px}
+.gallery-loading{text-align:center;padding:40px;color:var(--text3)}
+
+/* Song detail modal */
+.sg-overlay{position:fixed;inset:0;z-index:500;background:rgba(7,6,10,.93);display:none;overflow-y:auto;padding:40px 20px}
+.sg-overlay.on{display:block}
+.sg-modal{max-width:740px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.sg-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:24px 28px 20px;border-bottom:1px solid var(--border)}
+.sg-top-left{flex:1;min-width:0}
+.sg-top-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sg-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;line-height:1.2;margin-bottom:8px}
+.sg-meta{font-size:13px;color:var(--text2);line-height:1.7}
+.sg-vote-btn{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:8px 16px;font-size:14px;color:var(--text2);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.sg-vote-btn:hover{border-color:var(--gold-border);color:var(--gold)}
+.sg-vote-btn.voted{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold)}
+.sg-close{background:none;border:1px solid var(--border);border-radius:6px;padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);cursor:pointer;transition:all .15s}
+.sg-close:hover{color:var(--text);border-color:rgba(255,255,255,.15)}
+.sg-body{padding:24px 28px;display:flex;flex-direction:column;gap:20px}
+.sg-lyrics{font-family:'DM Mono',monospace;font-size:13.5px;line-height:1.9;color:var(--text2);white-space:pre-wrap}
+.sg-lyrics .sec-label{display:block;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-top:16px;margin-bottom:2px;font-weight:600}
+.sg-chords-hd{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);margin-bottom:8px}
+.sg-chords-body{font-family:'DM Mono',monospace;font-size:13px;color:var(--text2);line-height:1.8}
+
+/* Publish button */
+.pub-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.pub-btn:hover{border-color:var(--gold-border);color:var(--gold)}
+.pub-btn.on{background:rgba(78,201,148,.08);border-color:rgba(78,201,148,.3);color:var(--green)}
+
+/* Studio publish row (inside notes panel) */
+.notes-pub-row{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);margin-top:6px}
+.notes-pub-label{font-size:12px;color:var(--text3)}
+
+@media(max-width:900px){
+  .gallery-boards{grid-template-columns:1fr}
+  .gallery-inner{padding:28px 20px 48px}
+}
+@media(max-width:600px){
+  .gallery-hero{padding:40px 20px 28px}
+  .sg-top{flex-direction:column;gap:12px}
+  .sg-top-right{align-self:flex-start}
+}
 </style>
 </head>
 <body>
@@ -513,6 +619,9 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 <!-- ── NAV ── -->
 <nav>
   <div class="nav-logo" onclick="showPage('landing')">Write<span>My</span>Lyrics</div>
+  <div class="nav-center">
+    <button class="nav-gallery-link" onclick="showGallery()">🔥 Gallery</button>
+  </div>
   <div class="nav-right" id="navRight">
     <button class="nav-link" onclick="showPage('auth')">Sign In</button>
     <button class="nav-cta" onclick="showAuthTab('signup')">Start Free</button>
@@ -747,6 +856,56 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         <button class="form-btn" style="background:var(--surface3);color:var(--text);border:1px solid var(--border)" onclick="switchTab('signin')">Sign In</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     GALLERY PAGE
+══════════════════════════════════════ -->
+<div class="page" id="page-gallery">
+  <div class="gallery-hero">
+    <div class="gallery-hero-inner">
+      <div class="gallery-tag-label">Community</div>
+      <h1 class="gallery-h1">Song Gallery</h1>
+      <p class="gallery-sub">Published songs from the WriteMyLyrics community. Vote for your favorites.</p>
+    </div>
+  </div>
+  <div class="gallery-inner">
+
+    <!-- Leaderboards -->
+    <div class="gallery-boards">
+      <div class="board-card">
+        <div class="board-head">
+          <span class="board-icon">⚡</span>
+          <div class="board-title">This Week's Top 10</div>
+          <span class="board-sub">Rolling 7-day window</span>
+        </div>
+        <div class="board-list" id="weeklyTop10List"><div class="board-empty">Loading...</div></div>
+      </div>
+      <div class="board-card">
+        <div class="board-head">
+          <span class="board-icon">🏆</span>
+          <div class="board-title">Hall of Fame</div>
+          <span class="board-sub">All-time highest voted</span>
+        </div>
+        <div class="board-list" id="hofList"><div class="board-empty">Loading...</div></div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="gallery-filters">
+      <input type="text" id="gallerySearch" class="gallery-search" placeholder="Search by title..." oninput="onGallerySearch()" />
+      <div class="gallery-pills" id="galleryPills"></div>
+    </div>
+
+    <!-- Grid -->
+    <div class="gallery-grid" id="galleryGrid"></div>
+    <div class="gallery-loading" id="galleryLoading" style="display:none">Loading songs...</div>
+    <div class="gallery-load-more" id="galleryLoadMore" style="display:none">
+      <button class="gallery-load-btn" onclick="loadMoreGallery()">Load More</button>
+    </div>
+    <div class="gallery-empty" id="galleryEmpty" style="display:none">No songs found.</div>
+
   </div>
 </div>
 
@@ -1051,6 +1210,10 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
               </div>
             </div>
             <textarea class="notes-area" id="notesText" rows="4" placeholder="Inspiration, melody ideas, Suno prompts that worked, co-writer feedback..." oninput="onNotesInput()"></textarea>
+          <div class="notes-pub-row" id="notesPubRow" style="display:none">
+            <span class="notes-pub-label">Gallery</span>
+            <button class="pub-btn" id="notesPubBtn" onclick="toggleStudioPublish()">📤 Publish to Gallery</button>
+          </div>
           </div>
         </div>
       </div>
@@ -1150,6 +1313,29 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 
 <div class="toast" id="toast"></div>
 
+<!-- ── Song Detail Modal ── -->
+<div class="sg-overlay" id="sgOverlay">
+  <div class="sg-modal" id="sgModal">
+    <div class="sg-top">
+      <div class="sg-top-left">
+        <div class="sg-title" id="sgTitle"></div>
+        <div class="sg-meta" id="sgMeta"></div>
+      </div>
+      <div class="sg-top-right">
+        <button class="sg-vote-btn" id="sgVoteBtn" onclick="voteFromDetail()">🔥 <span id="sgVoteCount">0</span></button>
+        <button class="sg-close" onclick="closeSongDetail()">✕ Close</button>
+      </div>
+    </div>
+    <div class="sg-body">
+      <div class="sg-lyrics" id="sgLyrics"></div>
+      <div id="sgChordsWrap" style="display:none">
+        <div class="sg-chords-hd">Chord Progression</div>
+        <div class="sg-chords-body" id="sgChordsBody"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- jsPDF (client-side PDF generation) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <!-- Supabase JS (CDN) -->
@@ -1230,6 +1416,321 @@ async function authFetch(path, options = {}, overrideToken) {
     throw new Error(err.error || `Request failed (${res.status})`);
   }
   return res.json();
+}
+
+// ── GALLERY ──
+const GALLERY = {
+  songs: [], total: 0, page: 1,
+  weeklyTop10: [], hallOfFame: [],
+  userVotes: new Set(),
+  genre: '', search: '',
+  loading: false, detailSong: null, searchTimer: null,
+  initialized: false
+};
+
+const GALLERY_GENRES = ['All','Country','Hip Hop','Pop','Rock','R&B','Blues','Folk','Gospel','Americana','Trap','Singer-Songwriter'];
+
+function showGallery() {
+  showPage('gallery');
+  // Build genre pills once
+  const pillsEl = document.getElementById('galleryPills');
+  if (pillsEl && !pillsEl.children.length) {
+    GALLERY_GENRES.forEach(g => {
+      const btn = document.createElement('button');
+      btn.className = 'gpill' + (g === 'All' ? ' on' : '');
+      btn.textContent = g;
+      btn.onclick = () => filterGalleryGenre(g);
+      pillsEl.appendChild(btn);
+    });
+  }
+  GALLERY.page = 1;
+  GALLERY.search = document.getElementById('gallerySearch')?.value || '';
+  loadGallery(true);
+}
+
+async function loadGallery(reset) {
+  if (GALLERY.loading) return;
+  GALLERY.loading = true;
+  if (reset) { GALLERY.page = 1; GALLERY.songs = []; }
+
+  const loadingEl = document.getElementById('galleryLoading');
+  if (loadingEl) loadingEl.style.display = reset ? 'block' : 'none';
+
+  const params = new URLSearchParams({ page: GALLERY.page });
+  if (GALLERY.genre) params.set('genre', GALLERY.genre);
+  if (GALLERY.search) params.set('search', GALLERY.search);
+
+  try {
+    let data;
+    const token = await getToken().catch(() => null);
+    if (token) {
+      data = await authFetch(`/api/gallery?${params}`);
+    } else {
+      const r = await fetch(`/api/gallery?${params}`);
+      if (!r.ok) throw new Error('Failed to load gallery');
+      data = await r.json();
+    }
+
+    if (reset) {
+      GALLERY.weeklyTop10 = data.weekly_top10 || [];
+      GALLERY.hallOfFame  = data.hall_of_fame || [];
+      GALLERY.userVotes   = new Set(data.user_votes || []);
+      renderBoardList(document.getElementById('weeklyTop10List'), GALLERY.weeklyTop10, true);
+      renderBoardList(document.getElementById('hofList'), GALLERY.hallOfFame, false);
+    }
+
+    const newSongs = data.songs || [];
+    GALLERY.total = data.total || 0;
+    GALLERY.songs = reset ? newSongs : [...GALLERY.songs, ...newSongs];
+    renderGalleryGrid(newSongs, reset);
+
+    const hasMore = GALLERY.songs.length < GALLERY.total;
+    document.getElementById('galleryLoadMore').style.display = hasMore ? 'block' : 'none';
+    document.getElementById('galleryEmpty').style.display = (!GALLERY.songs.length) ? 'block' : 'none';
+  } catch(e) {
+    toast('Gallery error: ' + e.message);
+  } finally {
+    GALLERY.loading = false;
+    if (loadingEl) loadingEl.style.display = 'none';
+  }
+}
+
+function loadMoreGallery() { GALLERY.page++; loadGallery(false); }
+
+function onGallerySearch() {
+  clearTimeout(GALLERY.searchTimer);
+  GALLERY.searchTimer = setTimeout(() => {
+    GALLERY.search = (document.getElementById('gallerySearch')?.value || '').trim();
+    loadGallery(true);
+  }, 400);
+}
+
+function filterGalleryGenre(genre) {
+  GALLERY.genre = genre === 'All' ? '' : genre;
+  document.querySelectorAll('.gpill').forEach(p => p.classList.toggle('on', p.textContent === genre));
+  loadGallery(true);
+}
+
+function renderBoardList(el, items, weeklyMode) {
+  if (!el) return;
+  if (!items || !items.length) {
+    el.innerHTML = '<div class="board-empty">Nothing here yet.</div>';
+    return;
+  }
+  el.innerHTML = items.slice(0, 10).map((s, i) => {
+    const votes   = weeklyMode ? (s.weekly_votes || 0) : (s.vote_count || 0);
+    const rankStr = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
+    const rankCls = i < 3 ? ' top3' : '';
+    return `<div class="board-item" onclick="openSongDetail(${JSON.stringify(s).replace(/"/g,'&quot;')})">
+      <span class="board-rank${rankCls}">${rankStr}</span>
+      <div class="board-info">
+        <div class="board-info-title">${escHtml(s.title || 'Untitled')}</div>
+        <div class="board-info-meta">${escHtml(s.author_name || 'Anonymous')}${s.genre ? ' · ' + escHtml(s.genre) : ''}</div>
+      </div>
+      <span class="board-votes">🔥 ${votes}</span>
+    </div>`;
+  }).join('');
+}
+
+function glyricsPreview(lyrics) {
+  if (!lyrics) return '';
+  const lines = lyrics.split('\n').filter(l => {
+    const t = l.trim();
+    return t && !/^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(t);
+  });
+  return lines.slice(0, 3).join('\n');
+}
+
+function renderGalleryGrid(songs, reset) {
+  const grid = document.getElementById('galleryGrid');
+  if (!grid) return;
+  if (reset) grid.innerHTML = '';
+  songs.forEach(song => {
+    const card = document.createElement('div');
+    card.className = 'gc';
+    card.dataset.id = song.id;
+    const voted   = GALLERY.userVotes.has(song.id);
+    const preview = glyricsPreview(song.lyrics);
+    const dateStr = new Date(song.created_at).toLocaleDateString('en-US', { month:'short', day:'numeric' });
+    const genreTag  = song.genre ? `<span class="gc-tag">${escHtml(song.genre)}</span>` : '';
+    const artistTag = song.artist_style ? `<span class="gc-tag artist">✦ ${escHtml(song.artist_style)}</span>` : '';
+    card.innerHTML = `
+      <div>
+        <div class="gc-title">${escHtml(song.title || 'Untitled')}</div>
+        <div class="gc-author">by ${escHtml(song.author_name || 'Anonymous')}</div>
+      </div>
+      <div class="gc-tags">${genreTag}${artistTag}</div>
+      <div class="gc-preview">${escHtml(preview)}</div>
+      <div class="gc-footer">
+        <button class="gc-vote${voted ? ' voted' : ''}" onclick="event.stopPropagation();voteGallery('${song.id}',this)">🔥 <span>${song.vote_count || 0}</span></button>
+        <span class="gc-date">${dateStr}</span>
+      </div>`;
+    card.addEventListener('click', () => openSongDetail(song));
+    grid.appendChild(card);
+  });
+}
+
+async function voteGallery(songId, btn) {
+  const token = await getToken().catch(() => null);
+  if (!token) { showAuthTab('signin'); toast('Sign in to vote.'); return; }
+
+  const wasVoted = btn.classList.contains('voted');
+  const countEl  = btn.querySelector('span');
+  const prev     = parseInt(countEl.textContent) || 0;
+
+  // Optimistic update
+  btn.classList.toggle('voted', !wasVoted);
+  countEl.textContent = wasVoted ? Math.max(0, prev - 1) : prev + 1;
+  wasVoted ? GALLERY.userVotes.delete(songId) : GALLERY.userVotes.add(songId);
+  syncDetailVote(songId, !wasVoted, wasVoted ? Math.max(0, prev - 1) : prev + 1);
+
+  try {
+    const result = await authFetch('/api/vote', { method: 'POST', body: JSON.stringify({ song_id: songId }) });
+    btn.classList.toggle('voted', result.voted);
+    countEl.textContent = result.vote_count;
+    result.voted ? GALLERY.userVotes.add(songId) : GALLERY.userVotes.delete(songId);
+    syncDetailVote(songId, result.voted, result.vote_count);
+  } catch(e) {
+    // Revert
+    btn.classList.toggle('voted', wasVoted);
+    countEl.textContent = prev;
+    wasVoted ? GALLERY.userVotes.add(songId) : GALLERY.userVotes.delete(songId);
+    toast('Vote error: ' + e.message);
+  }
+}
+
+function syncDetailVote(songId, voted, count) {
+  if (GALLERY.detailSong?.id !== songId) return;
+  document.getElementById('sgVoteBtn').classList.toggle('voted', voted);
+  document.getElementById('sgVoteCount').textContent = count;
+}
+
+function voteFromDetail() {
+  if (!GALLERY.detailSong) return;
+  const card = document.querySelector(`.gc[data-id="${GALLERY.detailSong.id}"]`);
+  const btn  = card?.querySelector('.gc-vote');
+  if (btn) { voteGallery(GALLERY.detailSong.id, btn); return; }
+  // Song not in current grid (came from leaderboard) — vote directly
+  voteDetailDirect();
+}
+
+async function voteDetailDirect() {
+  const songId = GALLERY.detailSong?.id;
+  if (!songId) return;
+  const token = await getToken().catch(() => null);
+  if (!token) { showAuthTab('signin'); toast('Sign in to vote.'); return; }
+  const wasVoted = GALLERY.userVotes.has(songId);
+  const prev = parseInt(document.getElementById('sgVoteCount').textContent) || 0;
+  syncDetailVote(songId, !wasVoted, wasVoted ? Math.max(0, prev - 1) : prev + 1);
+  wasVoted ? GALLERY.userVotes.delete(songId) : GALLERY.userVotes.add(songId);
+  try {
+    const result = await authFetch('/api/vote', { method: 'POST', body: JSON.stringify({ song_id: songId }) });
+    syncDetailVote(songId, result.voted, result.vote_count);
+    result.voted ? GALLERY.userVotes.add(songId) : GALLERY.userVotes.delete(songId);
+  } catch(e) {
+    syncDetailVote(songId, wasVoted, prev);
+    wasVoted ? GALLERY.userVotes.add(songId) : GALLERY.userVotes.delete(songId);
+    toast('Vote error: ' + e.message);
+  }
+}
+
+function openSongDetail(song) {
+  if (!song || !song.id) return;
+  GALLERY.detailSong = song;
+
+  document.getElementById('sgTitle').textContent = song.title || 'Untitled';
+
+  const parts = [];
+  if (song.author_name) parts.push('by ' + song.author_name);
+  if (song.genre)       parts.push(song.genre);
+  if (song.tempo)       parts.push(song.tempo);
+  if (song.artist_style) parts.push('Style: ' + song.artist_style);
+  const dateStr = song.created_at ? new Date(song.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '';
+  if (dateStr) parts.push(dateStr);
+  document.getElementById('sgMeta').textContent = parts.join(' · ');
+
+  const voted = GALLERY.userVotes.has(song.id);
+  document.getElementById('sgVoteBtn').classList.toggle('voted', voted);
+  document.getElementById('sgVoteCount').textContent = song.vote_count || 0;
+
+  // Render lyrics
+  const lyricsEl = document.getElementById('sgLyrics');
+  lyricsEl.innerHTML = '';
+  (song.lyrics || '').split('\n').forEach(line => {
+    const t = line.trim();
+    if (!t) { lyricsEl.appendChild(document.createTextNode('\n')); return; }
+    const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(t);
+    if (isLabel) {
+      const span = document.createElement('span');
+      span.className = 'sec-label';
+      span.textContent = t;
+      lyricsEl.appendChild(span);
+    } else {
+      lyricsEl.appendChild(document.createTextNode(line + '\n'));
+    }
+  });
+
+  const chordsWrap = document.getElementById('sgChordsWrap');
+  const chordsBody = document.getElementById('sgChordsBody');
+  if (song.chords && chordsBody) {
+    chordsBody.textContent = song.chords;
+    if (chordsWrap) chordsWrap.style.display = 'block';
+  } else if (chordsWrap) {
+    chordsWrap.style.display = 'none';
+  }
+
+  const overlay = document.getElementById('sgOverlay');
+  overlay.classList.add('on');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSongDetail() {
+  document.getElementById('sgOverlay').classList.remove('on');
+  document.body.style.overflow = '';
+  GALLERY.detailSong = null;
+}
+
+// Publish / Unpublish a song
+async function publishSong(id, publish, btn) {
+  if (APP.plan === 'free') { showUpgrade(); return; }
+  if (!id) return;
+  try {
+    await authFetch('/api/songs', { method: 'PATCH', body: JSON.stringify({ id, published: publish }) });
+    if (btn) {
+      btn.classList.toggle('on', publish);
+      // Update onclick to toggle the other way next time
+      btn.setAttribute('onclick', `publishSong('${id}',${!publish},this)`);
+      btn.textContent = publish ? '✓ Published' : '📤 Publish';
+    }
+    // Sync studio publish button if this is the current song
+    if (APP.currentSongId === id) {
+      const notesPubBtn = document.getElementById('notesPubBtn');
+      if (notesPubBtn) {
+        notesPubBtn.classList.toggle('on', publish);
+        notesPubBtn.textContent = publish ? '✓ Published' : '📤 Publish to Gallery';
+      }
+    }
+    // Update cached song
+    const idx = APP.songs.findIndex(s => s.id === id);
+    if (idx >= 0) APP.songs[idx].published = publish;
+    toast(publish ? 'Published to Gallery! 🔥' : 'Removed from Gallery.');
+  } catch(e) {
+    toast('Error: ' + e.message);
+  }
+}
+
+// Toggle publish from studio notes panel
+function toggleStudioPublish() {
+  if (!APP.currentSongId) return;
+  const btn = document.getElementById('notesPubBtn');
+  const isPublished = btn?.classList.contains('on');
+  publishSong(APP.currentSongId, !isPublished, null);
+  // Update button immediately
+  if (btn) {
+    btn.classList.toggle('on', !isPublished);
+    btn.textContent = !isPublished ? '✓ Published' : '📤 Publish to Gallery';
+  }
 }
 
 // ── PAGE ROUTING ──
@@ -1927,10 +2428,22 @@ function showNotesPanel(song) {
   }
   panel.classList.add('on');
   document.getElementById('notesSaveStatus').textContent = '';
+
+  // Publish row
+  const pubRow = document.getElementById('notesPubRow');
+  const pubBtn = document.getElementById('notesPubBtn');
+  if (pubRow && pubBtn) {
+    pubRow.style.display = 'flex';
+    const isPublished = !!(song && song.published);
+    pubBtn.classList.toggle('on', isPublished);
+    pubBtn.textContent = isPublished ? '✓ Published' : '📤 Publish to Gallery';
+  }
 }
 
 function hideNotesPanel() {
   document.getElementById('notesPanel').classList.remove('on');
+  const pubRow = document.getElementById('notesPubRow');
+  if (pubRow) pubRow.style.display = 'none';
   const badge = document.getElementById('rpStatus');
   if (badge) badge.style.display = 'none';
 }
@@ -2276,6 +2789,7 @@ function renderHistory(songs) {
         <button class="hi-btn" onclick="openVersionHistory('${song.id}')">⏱ Versions</button>
         <button class="hi-btn" onclick="sunoExportSong(${idx})">⚡ Suno</button>
         <button class="hi-btn" onclick="openKaraoke(APP.songs[${idx}].lyrics, APP.songs[${idx}].id)">🎤 Karaoke</button>
+        <button class="pub-btn${song.published ? ' on' : ''}" id="pub-${song.id}" onclick="publishSong('${song.id}',${!song.published},this)">${song.published ? '✓ Published' : '📤 Publish'}</button>
         <button class="hi-btn del" onclick="deleteSong('${song.id}',${idx})">🗑</button>
       </div>`;
     scroll.appendChild(item);
@@ -2746,6 +3260,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       APP.sectionLanguages = {};
       buildSectionLangGrid();
     }
+  });
+
+  // Close song detail on overlay background click
+  document.getElementById('sgOverlay')?.addEventListener('click', e => {
+    if (e.target === document.getElementById('sgOverlay')) closeSongDetail();
   });
 
   // Listen for auth changes (e.g. email confirm in another tab)
