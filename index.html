@@ -304,11 +304,100 @@ select option{background:var(--surface3)}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
+/* ── HISTORY PANEL ── */
+.history-panel{width:380px;min-width:380px;background:var(--surface);border-right:1px solid var(--border);display:none;flex-direction:column;overflow:hidden}
+.history-panel.active{display:flex}
+.hp-head{padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.hp-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700}
+.hp-title em{color:var(--gold);font-style:italic}
+.hp-sub{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);margin-top:2px}
+.hp-scroll{flex:1;overflow-y:auto;padding:12px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.history-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;transition:border-color .2s}
+.history-item:hover{border-color:var(--gold-border)}
+.hi-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hi-info{font-size:11px;color:var(--text3);margin-bottom:10px}
+.hi-actions{display:flex;gap:6px;flex-wrap:wrap}
+.hi-btn{background:var(--surface3);border:1px solid var(--border);border-radius:5px;padding:4px 10px;font-size:11px;font-family:'DM Sans',sans-serif;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.hi-btn:hover{border-color:var(--gold-border);color:var(--text)}
+.hi-btn.del:hover{border-color:var(--red);color:var(--red)}
+.hi-empty{text-align:center;padding:60px 20px;color:var(--text3);font-size:14px;line-height:1.6}
+.hi-loading{text-align:center;padding:40px;color:var(--text3);font-size:13px}
+.plan-gate{background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:10px;padding:24px;text-align:center;margin:12px 0}
+.plan-gate-h{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--gold);margin-bottom:8px}
+.plan-gate-p{font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6}
+.plan-gate-btn{background:var(--gold);border:none;border-radius:6px;padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#07060a;cursor:pointer;transition:all .2s}
+.plan-gate-btn:hover{background:var(--gold2)}
+
+/* ── SUNO PANEL ── */
+.suno-panel{background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:20px;display:none}
+.suno-panel.on{display:block}
+.suno-head{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.suno-title{font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:var(--gold);font-weight:600}
+.suno-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;padding:0 4px;line-height:1;transition:color .15s}
+.suno-close:hover{color:var(--text)}
+.suno-body{padding:16px 20px}
+.suno-text{font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:14px;line-height:1.6;white-space:pre-wrap;word-break:break-word;max-height:300px;overflow-y:auto;margin-bottom:12px;scrollbar-width:thin}
+.suno-copy{background:var(--gold);border:none;border-radius:6px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#07060a;cursor:pointer;transition:all .2s}
+.suno-copy:hover{background:var(--gold2)}
+
+/* ── TWEAK & REFINE ── */
+.refine-panel{margin-top:20px;display:none}
+.refine-panel.on{display:block}
+.refine-toggle{display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;padding:10px 0;width:100%;text-align:left;transition:color .2s}
+.refine-toggle:hover{color:var(--gold)}
+.refine-toggle-icon{font-size:12px;transition:transform .2s;display:inline-block}
+.refine-toggle.open .refine-toggle-icon{transform:rotate(90deg)}
+.refine-body{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:4px;display:none}
+.refine-body.open{display:block}
+.refine-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--gold);font-weight:600;margin-bottom:8px;display:block}
+.refine-row{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.refine-apply{background:var(--gold);border:none;border-radius:6px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#07060a;cursor:pointer;transition:all .2s}
+.refine-apply:hover{background:var(--gold2)}
+.refine-apply:disabled{opacity:.5;cursor:not-allowed}
+.refine-revert{background:none;border:1px solid var(--border);border-radius:6px;padding:9px 16px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);cursor:pointer;transition:all .2s;display:none}
+.refine-revert.on{display:inline-block}
+.refine-revert:hover{border-color:var(--text3);color:var(--text)}
+
+/* ── KARAOKE OVERLAY ── */
+.kar-overlay{position:fixed;inset:0;background:#000;z-index:2000;display:none;flex-direction:column}
+.kar-overlay.on{display:flex}
+.kar-top{padding:16px 24px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.kar-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:#fff}
+.kar-top-right{display:flex;align-items:center;gap:12px}
+.kar-mode-btns{display:flex;gap:6px}
+.kar-mode-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:7px 14px;font-size:12px;font-family:'DM Sans',sans-serif;color:rgba(255,255,255,.5);cursor:pointer;transition:all .2s}
+.kar-mode-btn.active{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold)}
+.kar-close{background:none;border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:7px 14px;color:rgba(255,255,255,.6);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .2s}
+.kar-close:hover{border-color:rgba(255,255,255,.3);color:#fff}
+.kar-audio-bar{padding:12px 24px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px;flex-shrink:0;flex-wrap:wrap}
+.kar-audio-bar input[type=text]{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#fff;font-size:13px;padding:8px 12px;flex:1;min-width:200px;font-family:'DM Sans',sans-serif}
+.kar-audio-bar input[type=text]:focus{outline:none;border-color:var(--gold-border)}
+.kar-audio-bar input[type=text]::placeholder{color:rgba(255,255,255,.3)}
+.kar-audio-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:8px 14px;font-size:12px;font-family:'DM Sans',sans-serif;color:rgba(255,255,255,.7);cursor:pointer;transition:all .2s;white-space:nowrap}
+.kar-audio-btn:hover{border-color:rgba(255,255,255,.25);color:#fff}
+.kar-audio-file{display:none}
+.kar-body{flex:1;overflow-y:auto;padding:40px 48px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;display:flex;flex-direction:column;align-items:center}
+.kar-lines{width:100%;max-width:700px}
+.kar-line{font-family:'DM Sans',sans-serif;font-size:22px;color:rgba(255,255,255,.3);line-height:1.8;cursor:pointer;transition:color .3s,font-size .3s;padding:4px 8px;border-radius:6px;user-select:none}
+.kar-line:hover{color:rgba(255,255,255,.5)}
+.kar-line.active{color:#fff;font-size:26px;text-shadow:0 0 40px rgba(201,148,58,.5)}
+.kar-line.passed{color:rgba(255,255,255,.5)}
+.kar-line.sec-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:rgba(201,148,58,.4);cursor:default;font-weight:600;margin-top:20px;padding:0 8px;line-height:2.5}
+.kar-line.sec-lbl:hover{color:rgba(201,148,58,.4)}
+.kar-bottom{padding:16px 24px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:12px;flex-shrink:0;flex-wrap:wrap}
+.kar-play-btn{background:var(--gold);border:none;border-radius:8px;padding:10px 24px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:#07060a;cursor:pointer;transition:all .2s}
+.kar-play-btn:hover{background:var(--gold2)}
+.kar-time{font-family:'DM Mono',monospace;font-size:13px;color:rgba(255,255,255,.4)}
+.kar-save-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:9px 16px;font-size:12px;font-family:'DM Sans',sans-serif;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;margin-left:auto}
+.kar-save-btn:hover{border-color:var(--gold-border);color:var(--gold)}
+.kar-hint{font-size:12px;color:rgba(255,255,255,.25);font-style:italic}
+
 /* Responsive */
 @media(max-width:768px){
   .pricing-grid{grid-template-columns:1fr}
   .demo-body{grid-template-columns:1fr}
   .left-panel{width:100%;min-width:unset}
+  .history-panel{width:100%;min-width:unset}
   nav{padding:0 20px}
 }
 </style>
@@ -444,7 +533,7 @@ select option{background:var(--surface3)}
           <li>Chord progressions</li>
           <li>Song title suggestions</li>
           <li class="no">Karaoke Mode</li>
-          <li class="no">Suno export</li>
+          <li>Suno export</li>
           <li class="no">Song history</li>
           <li class="no">Tweak &amp; refine</li>
         </ul>
@@ -563,8 +652,8 @@ select option{background:var(--surface3)}
 
     <!-- Sidebar -->
     <div class="sidebar">
-      <div class="sb-icon active" title="Studio">✍️</div>
-      <div class="sb-icon" title="History" onclick="toast('Song history — coming soon!')">🕐</div>
+      <div class="sb-icon active" id="sbStudio" title="Studio" onclick="showView('studio')">✍️</div>
+      <div class="sb-icon" id="sbHistory" title="History" onclick="showView('history')">🕐</div>
       <div class="sb-divider"></div>
       <div class="sb-spacer"></div>
       <div class="sb-icon" title="Settings" onclick="toast('Settings — coming soon!')">⚙️</div>
@@ -688,6 +777,17 @@ select option{background:var(--surface3)}
       </div>
     </div>
 
+    <!-- History Panel -->
+    <div class="history-panel" id="historyPanel">
+      <div class="hp-head">
+        <div class="hp-title">Song<em>History</em></div>
+        <div class="hp-sub">Your saved songs</div>
+      </div>
+      <div class="hp-scroll" id="hpScroll">
+        <div class="hi-loading" id="hpLoading">Loading songs...</div>
+      </div>
+    </div>
+
     <!-- Right Panel -->
     <div class="right-panel">
       <div class="rp-head">
@@ -695,6 +795,7 @@ select option{background:var(--surface3)}
         <div class="rp-actions" id="rpActions" style="display:none">
           <button class="act-btn gold" onclick="generate()">↺ Regenerate</button>
           <button class="act-btn" onclick="copyLyrics()">Copy</button>
+          <button class="act-btn" onclick="exportToSuno()">⚡ Suno</button>
           <button class="act-btn" onclick="exportLyrics()">↓ Export</button>
           <button class="act-btn" onclick="startOver()">Clear</button>
         </div>
@@ -740,6 +841,41 @@ select option{background:var(--surface3)}
               <div class="chord-body" id="chordsDisplay"></div>
             </div>
           </div>
+
+          <!-- Suno Export Panel -->
+          <div id="sunoPanel" class="suno-panel">
+            <div class="suno-head">
+              <span class="suno-title">⚡ Suno Export</span>
+              <button class="suno-close" onclick="closeSunoPanel()">✕</button>
+            </div>
+            <div class="suno-body">
+              <div class="suno-text" id="sunoText"></div>
+              <button class="suno-copy" onclick="copySuno()">Copy for Suno</button>
+            </div>
+          </div>
+
+          <!-- Tweak & Refine Panel -->
+          <div id="refinePanel" class="refine-panel">
+            <button class="refine-toggle" id="refineToggle" onclick="toggleRefine()">
+              <span class="refine-toggle-icon">▶</span>
+              <span>Tweak &amp; Refine</span>
+            </button>
+            <div class="refine-body" id="refineBody">
+              <div id="refineGate" class="plan-gate" style="display:none">
+                <div class="plan-gate-h">Pro Feature</div>
+                <div class="plan-gate-p">Tweak &amp; Refine requires a Pro or Unlimited plan. Upgrade to instantly refine your lyrics with AI.</div>
+                <button class="plan-gate-btn" onclick="showUpgrade()">Upgrade Now</button>
+              </div>
+              <div id="refineForm" style="display:none">
+                <span class="refine-label">What to change?</span>
+                <textarea id="refineInstructions" rows="3" placeholder="Make the chorus more hopeful. Tighten the rhymes in verse 2. Change the ending to be more upbeat..."></textarea>
+                <div class="refine-row">
+                  <button class="refine-apply" id="refineApplyBtn" onclick="submitRefine()">Apply Changes</button>
+                  <button class="refine-revert" id="refineRevertBtn" onclick="revertLyrics()">↩ Revert</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -771,6 +907,37 @@ select option{background:var(--surface3)}
   </div>
 </div>
 
+<!-- Karaoke Overlay -->
+<div class="kar-overlay" id="karOverlay">
+  <div class="kar-top">
+    <div class="kar-title" id="karTitle">Karaoke Mode</div>
+    <div class="kar-top-right">
+      <div class="kar-mode-btns">
+        <button class="kar-mode-btn active" id="karModeSyncBtn" onclick="setKarMode('sync')">🎵 Sync</button>
+        <button class="kar-mode-btn" id="karModePlayBtn" onclick="setKarMode('play')">▶ Play</button>
+      </div>
+      <button class="kar-close" onclick="closeKaraoke()">✕ Close</button>
+    </div>
+  </div>
+  <div class="kar-audio-bar">
+    <input type="text" id="karAudioUrl" placeholder="Paste audio URL (MP3, etc.)...">
+    <button class="kar-audio-btn" onclick="karLoadUrl()">Load URL</button>
+    <span style="color:rgba(255,255,255,.3);font-size:12px">or</span>
+    <button class="kar-audio-btn" onclick="document.getElementById('karAudioFile').click()">Upload File</button>
+    <input type="file" class="kar-audio-file" id="karAudioFile" accept="audio/*" onchange="karLoadFile(this)">
+  </div>
+  <div class="kar-body">
+    <div class="kar-lines" id="karLines"></div>
+  </div>
+  <div class="kar-bottom">
+    <button class="kar-play-btn" id="karPlayBtn" onclick="karTogglePlay()">▶ Play</button>
+    <span class="kar-time" id="karTime">0:00</span>
+    <span class="kar-hint" id="karHint">Tap lines while playing to set timestamps</span>
+    <button class="kar-save-btn" id="karSaveBtn" onclick="saveKarSync()" style="display:none">💾 Save Sync</button>
+  </div>
+  <audio id="karAudio" onended="karEnded()" ontimeupdate="karTick()"></audio>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- Supabase JS (CDN) -->
@@ -798,7 +965,18 @@ const APP = {
   moods: [],
   tempo: 'Mid tempo',
   lyrics: '',
+  originalLyrics: '',
+  currentSongId: null,
+  songs: [],
   busy: false
+};
+
+// ── KARAOKE STATE ──
+const KAR = {
+  lines: [],
+  mode: 'sync',
+  currentLine: -1,
+  songId: null
 };
 
 const LOAD_MSGS = [
@@ -1040,6 +1218,8 @@ async function generate() {
     });
 
     APP.lyrics = result.lyrics;
+    APP.originalLyrics = result.lyrics;
+    APP.currentSongId = null;
     APP.usage = result.usage;
     APP.limit = result.limit;
     APP.plan = result.plan;
@@ -1049,6 +1229,21 @@ async function generate() {
 
     if (result.titles?.length) renderTitles(result.titles);
     if (result.chords) renderChords(result.chords);
+
+    // Auto-save to history for pro/unlimited
+    if (APP.plan !== 'free') {
+      await saveSongToHistory(result);
+    }
+
+    // Show refine panel for pro/unlimited
+    if (APP.plan !== 'free') {
+      const rp = document.getElementById('refinePanel');
+      if (rp) rp.classList.add('on');
+      const rrBtn = document.getElementById('refineRevertBtn');
+      if (rrBtn) rrBtn.classList.remove('on');
+      const ri = document.getElementById('refineInstructions');
+      if (ri) ri.value = '';
+    }
 
   } catch (e) {
     if (e.message !== 'Monthly limit reached') {
@@ -1165,6 +1360,8 @@ function stopLoader() { clearInterval(loadTick); }
 
 function startOver() {
   APP.lyrics = '';
+  APP.originalLyrics = '';
+  APP.currentSongId = null;
   document.getElementById('outContent').style.display = 'none';
   document.getElementById('rpActions').style.display = 'none';
   document.getElementById('emptyState').style.display = 'flex';
@@ -1172,6 +1369,11 @@ function startOver() {
   document.getElementById('loadState').classList.remove('on');
   document.getElementById('titleArea').style.display = 'none';
   document.getElementById('chordsArea').style.display = 'none';
+  document.getElementById('sunoPanel').classList.remove('on');
+  document.getElementById('refinePanel').classList.remove('on');
+  // Reset refine body state
+  document.getElementById('refineBody').classList.remove('open');
+  document.getElementById('refineToggle').classList.remove('open');
 }
 
 function copyLyrics() {
@@ -1200,6 +1402,478 @@ function toast(msg) {
   t.classList.add('on');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('on'), 3000);
+}
+
+// ── VIEW SWITCHING ──
+function showView(v) {
+  const leftPanel = document.querySelector('.left-panel');
+  const historyPanel = document.getElementById('historyPanel');
+  const sbStudio = document.getElementById('sbStudio');
+  const sbHistory = document.getElementById('sbHistory');
+
+  if (v === 'history') {
+    leftPanel.style.display = 'none';
+    historyPanel.classList.add('active');
+    sbStudio.classList.remove('active');
+    sbHistory.classList.add('active');
+    loadHistory();
+  } else {
+    leftPanel.style.display = '';
+    historyPanel.classList.remove('active');
+    sbStudio.classList.add('active');
+    sbHistory.classList.remove('active');
+  }
+}
+
+// ── HISTORY ──
+function planGateEl(feature, text) {
+  const div = document.createElement('div');
+  div.className = 'plan-gate';
+  div.innerHTML = `<div class="plan-gate-h">${escHtml(feature)}</div><div class="plan-gate-p">${escHtml(text)}</div><button class="plan-gate-btn" onclick="showUpgrade()">Upgrade Now</button>`;
+  return div;
+}
+
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function loadHistory() {
+  const scroll = document.getElementById('hpScroll');
+  scroll.innerHTML = '<div class="hi-loading">Loading songs...</div>';
+
+  if (APP.plan === 'free') {
+    scroll.innerHTML = '';
+    scroll.appendChild(planGateEl('Song History', 'Song history requires a Pro or Unlimited plan. Upgrade to automatically save every song you generate.'));
+    return;
+  }
+
+  try {
+    const { songs } = await authFetch('/api/songs');
+    APP.songs = songs;
+    renderHistory(songs);
+  } catch (e) {
+    scroll.innerHTML = `<div class="hi-empty">Could not load songs: ${escHtml(e.message)}</div>`;
+  }
+}
+
+function renderHistory(songs) {
+  const scroll = document.getElementById('hpScroll');
+  scroll.innerHTML = '';
+
+  if (!songs.length) {
+    scroll.innerHTML = '<div class="hi-empty">No songs saved yet.<br>Generate a song to get started!</div>';
+    return;
+  }
+
+  songs.forEach((song, idx) => {
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    const date = new Date(song.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const genre = song.genre || 'Unknown genre';
+    const title = song.title || song.topic || 'Untitled Song';
+    item.innerHTML = `
+      <div class="hi-title">${escHtml(title)}</div>
+      <div class="hi-info">${escHtml(genre)} · ${date}</div>
+      <div class="hi-actions">
+        <button class="hi-btn" onclick="reloadSong(${idx})">↩ Load</button>
+        <button class="hi-btn" onclick="sunoExportSong(${idx})">⚡ Suno</button>
+        <button class="hi-btn" onclick="openKaraoke(APP.songs[${idx}].lyrics, APP.songs[${idx}].id)">🎤 Karaoke</button>
+        <button class="hi-btn del" onclick="deleteSong('${song.id}',${idx})">🗑</button>
+      </div>`;
+    scroll.appendChild(item);
+  });
+}
+
+function reloadSong(idx) {
+  const song = APP.songs[idx];
+  if (!song) return;
+
+  showView('studio');
+
+  document.getElementById('topic').value = song.topic || '';
+
+  document.querySelectorAll('#genreGrid .pick-btn').forEach(b => {
+    b.classList.toggle('on', b.dataset.v === song.genre);
+  });
+  APP.genre = song.genre || '';
+
+  const moodArr = song.moods ? song.moods.split(',').filter(Boolean) : [];
+  document.querySelectorAll('#moodGrid .mood-chip').forEach(b => {
+    b.classList.toggle('on', moodArr.includes(b.dataset.v));
+  });
+  APP.moods = moodArr;
+
+  document.querySelectorAll('#tempoGrid .pick-btn').forEach(b => {
+    b.classList.toggle('on', b.dataset.v === song.tempo);
+  });
+  APP.tempo = song.tempo || 'Mid tempo';
+
+  if (song.structure) {
+    const sel = document.getElementById('structure');
+    for (const opt of sel.options) { if (opt.value === song.structure) { sel.value = song.structure; break; } }
+  }
+  if (song.rhyme) {
+    const sel = document.getElementById('rhyme');
+    for (const opt of sel.options) { if (opt.value === song.rhyme) { sel.value = song.rhyme; break; } }
+  }
+  if (song.pov) {
+    const sel = document.getElementById('pov');
+    for (const opt of sel.options) { if (opt.value === song.pov) { sel.value = song.pov; break; } }
+  }
+  document.getElementById('tone').value = song.style_notes || '';
+
+  APP.lyrics = song.lyrics;
+  APP.originalLyrics = song.lyrics;
+  APP.currentSongId = song.id;
+
+  renderLyrics(song.lyrics);
+  if (song.chords) renderChords(song.chords);
+
+  // Show refine panel
+  const rp = document.getElementById('refinePanel');
+  if (rp) rp.classList.add('on');
+  const rrBtn = document.getElementById('refineRevertBtn');
+  if (rrBtn) rrBtn.classList.remove('on');
+
+  toast('Song loaded!');
+}
+
+async function deleteSong(id, idx) {
+  if (!confirm('Delete this song? This cannot be undone.')) return;
+  try {
+    await authFetch(`/api/songs?id=${id}`, { method: 'DELETE' });
+    APP.songs.splice(idx, 1);
+    renderHistory(APP.songs);
+    toast('Song deleted.');
+  } catch (e) {
+    toast('Error: ' + e.message);
+  }
+}
+
+async function saveSongToHistory(result) {
+  if (APP.plan === 'free') return;
+  try {
+    const topic = document.getElementById('topic').value.trim();
+    const sunoPrompt = buildSunoPrompt(result.lyrics);
+    const { song } = await authFetch('/api/songs', {
+      method: 'POST',
+      body: JSON.stringify({
+        title: result.titles?.[0] || null,
+        lyrics: result.lyrics,
+        genre: APP.genre || null,
+        moods: APP.moods,
+        tempo: APP.tempo || null,
+        structure: document.getElementById('structure').value,
+        rhyme: document.getElementById('rhyme').value,
+        pov: document.getElementById('pov').value,
+        topic: topic || null,
+        style_notes: document.getElementById('tone').value || null,
+        chords: result.chords || null,
+        suno_prompt: sunoPrompt
+      })
+    });
+    APP.currentSongId = song.id;
+    KAR.songId = song.id;
+  } catch (e) {
+    console.warn('[saveSongToHistory]', e.message);
+  }
+}
+
+// ── SUNO EXPORT ──
+function buildSunoPrompt(lyrics, opts = {}) {
+  const genre = opts.genre !== undefined ? opts.genre : APP.genre || '';
+  const moods = opts.moods !== undefined ? opts.moods : APP.moods;
+  const tempo = opts.tempo !== undefined ? opts.tempo : APP.tempo || '';
+  const styleNotes = opts.styleNotes !== undefined ? opts.styleNotes : (document.getElementById('tone')?.value || '');
+
+  const moodsStr = Array.isArray(moods) ? moods.join(', ') : (moods || '');
+  const styleParts = [genre, moodsStr, tempo, styleNotes].filter(Boolean);
+  let out = styleParts.length ? `Style: ${styleParts.join(', ')}\n\n` : '';
+
+  const formatted = lyrics.split('\n').map(line => {
+    const t = line.trim();
+    if (/^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(t)) {
+      return `[${t}]`;
+    }
+    return line;
+  }).join('\n');
+
+  return out + formatted;
+}
+
+function exportToSuno() {
+  if (!APP.lyrics) { toast('Generate a song first.'); return; }
+  const prompt = buildSunoPrompt(APP.lyrics);
+  document.getElementById('sunoText').textContent = prompt;
+  document.getElementById('sunoPanel').classList.add('on');
+  setTimeout(() => document.getElementById('sunoPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function closeSunoPanel() {
+  document.getElementById('sunoPanel').classList.remove('on');
+}
+
+function copySuno() {
+  const text = document.getElementById('sunoText').textContent;
+  navigator.clipboard.writeText(text);
+  toast('Suno prompt copied!');
+}
+
+function sunoExportSong(idx) {
+  const song = APP.songs[idx];
+  if (!song) return;
+  const prompt = buildSunoPrompt(song.lyrics, {
+    genre: song.genre || '',
+    moods: song.moods ? song.moods.split(',').filter(Boolean) : [],
+    tempo: song.tempo || '',
+    styleNotes: song.style_notes || ''
+  });
+  navigator.clipboard.writeText(prompt);
+  toast('Suno prompt copied!');
+}
+
+// ── KARAOKE ──
+function openKaraoke(lyrics, songId) {
+  if (APP.plan === 'free') {
+    showUpgrade();
+    return;
+  }
+
+  KAR.lines = [];
+  lyrics.split('\n').forEach(line => {
+    const t = line.trim();
+    if (!t) return;
+    const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(t);
+    KAR.lines.push({ text: t, isLabel, timestamp: null });
+  });
+
+  KAR.mode = 'sync';
+  KAR.currentLine = -1;
+  KAR.songId = songId || APP.currentSongId || null;
+
+  renderKarLines();
+
+  document.getElementById('karModeSyncBtn').classList.add('active');
+  document.getElementById('karModePlayBtn').classList.remove('active');
+  document.getElementById('karPlayBtn').textContent = '▶ Play';
+  document.getElementById('karTime').textContent = '0:00';
+  document.getElementById('karSaveBtn').style.display = 'none';
+  document.getElementById('karHint').textContent = 'Tap lines while playing to set timestamps';
+
+  const audio = document.getElementById('karAudio');
+  audio.pause();
+  audio.src = '';
+
+  document.getElementById('karOverlay').classList.add('on');
+}
+
+function closeKaraoke() {
+  document.getElementById('karOverlay').classList.remove('on');
+  document.getElementById('karAudio').pause();
+  document.getElementById('karPlayBtn').textContent = '▶ Play';
+}
+
+function renderKarLines() {
+  const container = document.getElementById('karLines');
+  container.innerHTML = '';
+  KAR.lines.forEach((line, idx) => {
+    const div = document.createElement('div');
+    div.className = 'kar-line' + (line.isLabel ? ' sec-lbl' : '');
+    div.id = `kl-${idx}`;
+    div.textContent = line.text;
+    if (!line.isLabel) {
+      div.onclick = () => karTapLine(idx);
+    }
+    container.appendChild(div);
+  });
+}
+
+function setKarMode(mode) {
+  KAR.mode = mode;
+  KAR.currentLine = -1;
+  document.getElementById('karModeSyncBtn').classList.toggle('active', mode === 'sync');
+  document.getElementById('karModePlayBtn').classList.toggle('active', mode === 'play');
+  document.getElementById('karHint').textContent = mode === 'sync'
+    ? 'Tap lines while playing to set timestamps'
+    : 'Lines highlight automatically during playback';
+  renderKarLines();
+}
+
+function karLoadUrl() {
+  const url = document.getElementById('karAudioUrl').value.trim();
+  if (!url) return;
+  const audio = document.getElementById('karAudio');
+  audio.src = url;
+  audio.load();
+  toast('Audio loading...');
+}
+
+function karLoadFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const audio = document.getElementById('karAudio');
+  audio.src = URL.createObjectURL(file);
+  audio.load();
+  toast('Audio loaded: ' + file.name);
+}
+
+function karTogglePlay() {
+  const audio = document.getElementById('karAudio');
+  const btn = document.getElementById('karPlayBtn');
+  if (!audio.src) { toast('Load an audio file or URL first.'); return; }
+  if (audio.paused) {
+    audio.play().catch(e => toast('Playback error: ' + e.message));
+    btn.textContent = '⏸ Pause';
+  } else {
+    audio.pause();
+    btn.textContent = '▶ Play';
+  }
+}
+
+function karTapLine(idx) {
+  if (KAR.mode !== 'sync') return;
+  const audio = document.getElementById('karAudio');
+  const t = audio.currentTime || 0;
+  KAR.lines[idx].timestamp = t;
+
+  const el = document.getElementById(`kl-${idx}`);
+  if (el) {
+    const orig = el.style.color;
+    el.style.color = 'var(--gold)';
+    el.style.transition = 'none';
+    setTimeout(() => { if (el) { el.style.color = orig; el.style.transition = ''; } }, 400);
+  }
+
+  if (KAR.songId) document.getElementById('karSaveBtn').style.display = 'block';
+}
+
+function karTick() {
+  const audio = document.getElementById('karAudio');
+  const t = audio.currentTime;
+
+  const mins = Math.floor(t / 60);
+  const secs = Math.floor(t % 60).toString().padStart(2, '0');
+  document.getElementById('karTime').textContent = `${mins}:${secs}`;
+
+  if (KAR.mode !== 'play') return;
+
+  // Find the active lyric line by timestamps
+  let activeLine = -1;
+  const stamped = KAR.lines.map((l, i) => ({ ...l, i })).filter(l => !l.isLabel && l.timestamp !== null);
+  for (let j = 0; j < stamped.length; j++) {
+    const cur = stamped[j];
+    const next = stamped[j + 1];
+    if (t >= cur.timestamp && (!next || t < next.timestamp)) {
+      activeLine = cur.i;
+    }
+  }
+
+  if (activeLine !== KAR.currentLine) {
+    KAR.currentLine = activeLine;
+    KAR.lines.forEach((line, idx) => {
+      const el = document.getElementById(`kl-${idx}`);
+      if (!el || line.isLabel) return;
+      el.classList.remove('active', 'passed');
+      if (idx === activeLine) {
+        el.classList.add('active');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (line.timestamp !== null && t > line.timestamp) {
+        el.classList.add('passed');
+      }
+    });
+  }
+}
+
+function karEnded() {
+  document.getElementById('karPlayBtn').textContent = '▶ Play';
+  KAR.currentLine = -1;
+}
+
+async function saveKarSync() {
+  if (!KAR.songId) { toast('No song ID — generate and save a song first.'); return; }
+  const syncData = JSON.stringify(KAR.lines.map(l => l.timestamp));
+  try {
+    await authFetch('/api/songs', {
+      method: 'PATCH',
+      body: JSON.stringify({ id: KAR.songId, sync_data: syncData })
+    });
+    toast('Karaoke sync saved!');
+  } catch (e) {
+    toast('Error saving sync: ' + e.message);
+  }
+}
+
+// ── TWEAK & REFINE ──
+function toggleRefine() {
+  const toggle = document.getElementById('refineToggle');
+  const body = document.getElementById('refineBody');
+  const isOpen = body.classList.contains('open');
+
+  if (isOpen) {
+    body.classList.remove('open');
+    toggle.classList.remove('open');
+  } else {
+    body.classList.add('open');
+    toggle.classList.add('open');
+
+    const gate = document.getElementById('refineGate');
+    const form = document.getElementById('refineForm');
+    if (APP.plan === 'free') {
+      gate.style.display = 'block';
+      form.style.display = 'none';
+    } else {
+      gate.style.display = 'none';
+      form.style.display = 'block';
+    }
+  }
+}
+
+async function submitRefine() {
+  const instructions = document.getElementById('refineInstructions').value.trim();
+  if (!instructions) { toast('Describe what to change first.'); return; }
+  if (!APP.lyrics) { toast('Generate a song first.'); return; }
+
+  const btn = document.getElementById('refineApplyBtn');
+  btn.disabled = true;
+  btn.textContent = 'Applying...';
+
+  try {
+    const result = await authFetch('/api/refine', {
+      method: 'POST',
+      body: JSON.stringify({
+        lyrics: APP.lyrics,
+        instructions,
+        genre: APP.genre,
+        moods: APP.moods,
+        tempo: APP.tempo,
+        topic: document.getElementById('topic').value.trim()
+      })
+    });
+
+    APP.lyrics = result.lyrics;
+    APP.usage = result.usage;
+    APP.limit = result.limit;
+    APP.plan = result.plan;
+    updateUsage();
+
+    renderLyrics(result.lyrics);
+    document.getElementById('refineRevertBtn').classList.add('on');
+    toast('Lyrics refined!');
+  } catch (e) {
+    if (e.message !== 'Monthly limit reached') toast('Error: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Apply Changes';
+  }
+}
+
+function revertLyrics() {
+  if (!APP.originalLyrics) return;
+  APP.lyrics = APP.originalLyrics;
+  renderLyrics(APP.originalLyrics);
+  document.getElementById('refineRevertBtn').classList.remove('on');
+  document.getElementById('refineInstructions').value = '';
+  toast('Reverted to original lyrics.');
 }
 
 // ── INIT ──
