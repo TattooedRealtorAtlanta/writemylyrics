@@ -301,6 +301,9 @@ select option{background:var(--surface3)}
 .m-confirm:hover{background:var(--gold2)}
 .m-confirm-2{background:var(--surface3);border:1px solid var(--gold-border);border-radius:6px;padding:10px 24px;color:var(--gold);font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;transition:all .15s}
 .m-confirm-2:hover{background:var(--gold-dim)}
+.nav-plan-badge{background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);pointer-events:none;white-space:nowrap}
+.nav-signout{background:none;border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);cursor:pointer;transition:all .2s}
+.nav-signout:hover{border-color:var(--red);color:var(--red)}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
@@ -1135,15 +1138,16 @@ function enterApp(profile) {
   const ai = document.getElementById('accountInfo');
   if (ai) ai.textContent = `Signed in as ${profile.name} (${profile.email}) — ${profile.plan.toUpperCase()} plan`;
 
-  setNavLoggedIn();
+  setNavLoggedIn(profile.plan);
   updateUsage();
   showPage('app');
 }
 
-function setNavLoggedIn() {
+function setNavLoggedIn(plan) {
+  const label = plan === 'unlimited' ? 'Unlimited' : plan === 'pro' ? 'Pro' : 'Free Plan';
   document.getElementById('navRight').innerHTML = `
-    <button class="nav-link" onclick="showPage('app')">Studio</button>
-    <button class="nav-cta" onclick="showPage('app')">Open Studio</button>
+    <span class="nav-plan-badge">${label}</span>
+    <button class="nav-signout" onclick="signOut()">Sign Out</button>
   `;
 }
 function setNavLoggedOut() {
