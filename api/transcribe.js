@@ -96,6 +96,15 @@ const handler = async function transcribeHandler(req, res) {
 
   try {
     const data = await callWhisper(audioBuffer, audioType, audioName);
+
+    console.log('[transcribe] raw text:', data.text);
+    console.log('[transcribe] segments count:', (data.segments || []).length);
+    console.log('[transcribe] words count:', (data.words || []).length);
+    console.log('[transcribe] words:', JSON.stringify(data.words || [], null, 2));
+    console.log('[transcribe] segments:', JSON.stringify((data.segments || []).map(s => ({
+      start: s.start, end: s.end, text: s.text
+    })), null, 2));
+
     return res.status(200).json({
       segments: data.segments || [],
       words:    data.words    || [],

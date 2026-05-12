@@ -3143,6 +3143,8 @@ function matchLyricsToTimestamps(lines, segments, words) {
     .map(w => ({ ...w, n: normWord(w.word) }))
     .filter(w => w.n.length > 0);
 
+  console.log('[kar] Whisper words received:', wds.length, wds.map(w => `"${w.word}"@${w.start.toFixed(2)}`));
+
   if (wds.length > 0) {
     let wPtr = 0;
     lyricLines.forEach(line => {
@@ -3170,8 +3172,6 @@ function matchLyricsToTimestamps(lines, segments, words) {
         lineTs[line.i] = wds[bestPos].start;
 
         // ── Per-word timestamps ──────────────────────────────────────────
-        // Greedily align each lyric word to the first matching Whisper word
-        // in the matched window, then interpolate any gaps.
         const win = wds.slice(bestPos, Math.min(wds.length, bestPos + lw.length + 5));
         const wtArr = new Array(lw.length).fill(null);
         let winPtr = 0;
@@ -3192,7 +3192,11 @@ function matchLyricsToTimestamps(lines, segments, words) {
         }
         wordTs[line.i] = wtArr;
 
+        console.log(`[kar] line ${line.i} "${line.text.substring(0,40)}" → lineTs=${lineTs[line.i].toFixed(2)} bestPos=${bestPos} score=${bestScore.toFixed(2)} wordTs=[${wtArr.map(x=>x!=null?x.toFixed(2):'null').join(', ')}]`);
+
         wPtr = bestPos + Math.max(1, lw.length - 1);
+      } else {
+        console.log(`[kar] line ${line.i} "${line.text.substring(0,40)}" → NO MATCH (wPtr=${wPtr} searchLimit=${Math.min(wds.length, wPtr + lw.length * 4 + 15)})`);
       }
     });
   } else {
@@ -3229,6 +3233,7 @@ function matchLyricsToTimestamps(lines, segments, words) {
     else if (next != null)            lineTs[i] = Math.max(0, next - 2);
   }
 
+  console.log('[kar] final lineTs:', lineTs.map((t,i) => `[${i}]${t!=null?t.toFixed(2):'null'}`).join(' '));
   return { lineTs, wordTs };
 }
 
