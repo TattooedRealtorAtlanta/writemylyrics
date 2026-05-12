@@ -809,8 +809,8 @@ async function getToken() {
   return session?.access_token || null;
 }
 
-async function authFetch(path, options = {}) {
-  const token = await getToken();
+async function authFetch(path, options = {}, overrideToken) {
+  const token = overrideToken || await getToken();
   if (!token) throw new Error('Not signed in');
   const res = await fetch(path, {
     ...options,
@@ -884,8 +884,10 @@ async function signUp() {
   btn.textContent = 'Create Account';
 
   if (error) return showError(error.message);
-  if (data.user) {
-    await loadProfile(data.user);
+  if (data.session) {
+    await loadProfile(data.user, data.session.access_token);
+  } else if (data.user) {
+    showError('Account created! Please check your email to confirm your account, then sign in.');
   }
 }
 
@@ -905,8 +907,10 @@ async function signIn() {
   btn.textContent = 'Sign In';
 
   if (error) return showError(error.message);
-  if (data.user) {
-    await loadProfile(data.user);
+  if (data.session) {
+    await loadProfile(data.user, data.session.access_token);
+  } else if (data.user) {
+    showError('Please check your email to confirm your account before signing in.');
   }
 }
 
@@ -919,17 +923,18 @@ async function signOut() {
   showPage('landing');
 }
 
-async function loadProfile(user) {
+async function loadProfile(user, token) {
   APP.user = user;
   try {
-    const profile = await authFetch('/api/user');
+    const profile = await authFetch('/api/user', {}, token);
     APP.profile = profile;
     APP.plan = profile.plan;
     APP.usage = profile.usage;
     APP.limit = profile.limit;
     enterApp(profile);
   } catch (e) {
-    showError('Could not load profile. Please try again.');
+    console.error('loadProfile error:', e);
+    showError('Could not load profile: ' + e.message);
   }
 }
 
@@ -1198,7 +1203,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const { data: { session } } = await sb.auth.getSession();
   if (session?.user) {
     try {
-      await loadProfile(session.user);
+      await loadProfile(session.user, session.access_token);
     } catch { showPage('landing'); }
   } else {
     showPage('landing');
@@ -1228,7 +1233,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Listen for auth changes (e.g. email confirm in another tab)
   sb.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session?.user && !APP.user) {
-      await loadProfile(session.user);
+      await loadProfile(session.user, session.access_token);
     }
     if (event === 'SIGNED_OUT') {
       APP.user = null;
