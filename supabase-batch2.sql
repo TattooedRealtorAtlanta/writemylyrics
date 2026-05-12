@@ -63,3 +63,34 @@ GROUP  BY s.id, p.name;
 
 -- Grant read access on the view to all roles
 GRANT SELECT ON public.gallery_songs TO anon, authenticated;
+
+-- ============================================================
+-- AUDIO URL — Batch 2 additions
+-- ============================================================
+
+-- Persistent Suno audio URL per song (nullable)
+ALTER TABLE public.songs ADD COLUMN IF NOT EXISTS audio_url text;
+
+-- Rebuild gallery view to expose audio_url
+CREATE OR REPLACE VIEW public.gallery_songs AS
+SELECT
+  s.id,
+  s.title,
+  s.genre,
+  s.moods,
+  s.tempo,
+  s.artist_style,
+  s.lyrics,
+  s.chords,
+  s.audio_url,
+  s.created_at,
+  s.user_id,
+  COALESCE(p.name, 'Anonymous') AS author_name,
+  COUNT(sv.id)::int             AS vote_count
+FROM   public.songs       s
+LEFT   JOIN public.profiles    p  ON p.id      = s.user_id
+LEFT   JOIN public.song_votes  sv ON sv.song_id = s.id
+WHERE  s.published = true
+GROUP  BY s.id, p.name;
+
+GRANT SELECT ON public.gallery_songs TO anon, authenticated;

@@ -603,6 +603,23 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 .notes-pub-row{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);margin-top:6px}
 .notes-pub-label{font-size:12px;color:var(--text3)}
 
+/* Studio audio URL row */
+.notes-audio-row{padding-top:10px;margin-top:2px}
+.notes-audio-label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:6px}
+.notes-audio-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;transition:border-color .2s}
+.notes-audio-input:focus{outline:none;border-color:var(--gold-border)}
+.notes-audio-input::placeholder{color:var(--text3)}
+
+/* History card audio URL */
+.hi-audio-row{padding:8px 0 4px}
+.hi-audio-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;transition:border-color .2s}
+.hi-audio-input:focus{outline:none;border-color:var(--gold-border)}
+.hi-audio-input::placeholder{color:var(--text3)}
+
+/* Gallery card play button */
+.gc-play{width:30px;height:30px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);font-size:11px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;line-height:1}
+.gc-play:hover,.gc-play.playing{background:var(--gold);color:#07060a;border-color:var(--gold)}
+
 @media(max-width:900px){
   .gallery-boards{grid-template-columns:1fr}
   .gallery-inner{padding:28px 20px 48px}
@@ -909,6 +926,9 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
   </div>
 </div>
 
+<!-- Shared audio player for gallery card previews -->
+<audio id="galleryAudio" preload="none"></audio>
+
 <!-- ══════════════════════════════════════
      APP PAGE
 ══════════════════════════════════════ -->
@@ -1210,6 +1230,10 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
               </div>
             </div>
             <textarea class="notes-area" id="notesText" rows="4" placeholder="Inspiration, melody ideas, Suno prompts that worked, co-writer feedback..." oninput="onNotesInput()"></textarea>
+          <div class="notes-audio-row" id="notesAudioRow" style="display:none">
+            <label class="notes-audio-label">Suno Audio URL</label>
+            <input type="text" id="studioAudioUrl" class="notes-audio-input" placeholder="Paste your Suno link here..." onblur="saveStudioAudioUrl()">
+          </div>
           <div class="notes-pub-row" id="notesPubRow" style="display:none">
             <span class="notes-pub-label">Gallery</span>
             <button class="pub-btn" id="notesPubBtn" data-published="false" onclick="togglePublish(this)">📤 Publish to Gallery</button>
@@ -1418,6 +1442,83 @@ async function authFetch(path, options = {}, overrideToken) {
   return res.json();
 }
 
+// ── AUDIO URL SAVE ──
+async function saveStudioAudioUrl() {
+  if (!APP.currentSongId) return;
+  const val = (document.getElementById('studioAudioUrl')?.value || '').trim();
+  try {
+    await authFetch('/api/songs', {
+      method: 'PATCH',
+      body: JSON.stringify({ id: APP.currentSongId, audio_url: val || null })
+    });
+    const idx = APP.songs.findIndex(s => s.id === APP.currentSongId);
+    if (idx >= 0) APP.songs[idx].audio_url = val || null;
+  } catch(e) {
+    toast('Error saving audio URL: ' + e.message);
+  }
+}
+
+async function saveHistoryAudioUrl(id, val) {
+  val = (val || '').trim();
+  try {
+    await authFetch('/api/songs', {
+      method: 'PATCH',
+      body: JSON.stringify({ id, audio_url: val || null })
+    });
+    const idx = APP.songs.findIndex(s => s.id === id);
+    if (idx >= 0) APP.songs[idx].audio_url = val || null;
+    // Keep studio input in sync if this is the currently loaded song
+    if (APP.currentSongId === id) {
+      const studioInput = document.getElementById('studioAudioUrl');
+      if (studioInput) studioInput.value = val;
+    }
+  } catch(e) {
+    toast('Error saving audio URL: ' + e.message);
+  }
+}
+
+// ── GALLERY AUDIO PLAYBACK ──
+function playGalleryAudio(btn) {
+  const songId  = btn.dataset.songId;
+  const url     = btn.dataset.audioUrl;
+  const gAudio  = document.getElementById('galleryAudio');
+  if (!gAudio || !url) return;
+
+  // Same card — toggle play/pause
+  if (GALLERY.playingId === songId) {
+    if (gAudio.paused) {
+      gAudio.play().catch(() => toast('Could not play audio.'));
+      btn.textContent = '⏸';
+      btn.classList.add('playing');
+    } else {
+      gAudio.pause();
+      btn.textContent = '▶';
+      btn.classList.remove('playing');
+    }
+    return;
+  }
+
+  // Stop previously playing card
+  if (GALLERY.playingId) {
+    const prev = document.querySelector(`.gc-play[data-song-id="${GALLERY.playingId}"]`);
+    if (prev) { prev.textContent = '▶'; prev.classList.remove('playing'); }
+    gAudio.pause();
+  }
+
+  // Start this card
+  GALLERY.playingId = songId;
+  gAudio.src = url;
+  gAudio.play().catch(() => { toast('Could not play audio.'); GALLERY.playingId = null; });
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+
+  gAudio.onended = () => {
+    btn.textContent = '▶';
+    btn.classList.remove('playing');
+    GALLERY.playingId = null;
+  };
+}
+
 // ── GALLERY ──
 const GALLERY = {
   songs: [], total: 0, page: 1,
@@ -1425,7 +1526,7 @@ const GALLERY = {
   userVotes: new Set(),
   genre: '', search: '',
   loading: false, detailSong: null, searchTimer: null,
-  initialized: false
+  initialized: false, playingId: null
 };
 
 const GALLERY_GENRES = ['All','Country','Hip Hop','Pop','Rock','R&B','Blues','Folk','Gospel','Americana','Trap','Singer-Songwriter'];
@@ -1555,6 +1656,9 @@ function renderGalleryGrid(songs, reset) {
     const dateStr = new Date(song.created_at).toLocaleDateString('en-US', { month:'short', day:'numeric' });
     const genreTag  = song.genre ? `<span class="gc-tag">${escHtml(song.genre)}</span>` : '';
     const artistTag = song.artist_style ? `<span class="gc-tag artist">✦ ${escHtml(song.artist_style)}</span>` : '';
+    const playBtn = song.audio_url
+      ? `<button class="gc-play" data-song-id="${song.id}" data-audio-url="${escHtml(song.audio_url)}" onclick="event.stopPropagation();playGalleryAudio(this)" title="Play preview">▶</button>`
+      : '';
     card.innerHTML = `
       <div>
         <div class="gc-title">${escHtml(song.title || 'Untitled')}</div>
@@ -1563,7 +1667,10 @@ function renderGalleryGrid(songs, reset) {
       <div class="gc-tags">${genreTag}${artistTag}</div>
       <div class="gc-preview">${escHtml(preview)}</div>
       <div class="gc-footer">
-        <button class="gc-vote${voted ? ' voted' : ''}" onclick="event.stopPropagation();voteGallery('${song.id}',this)">🔥 <span>${song.vote_count || 0}</span></button>
+        <div style="display:flex;align-items:center;gap:8px">
+          ${playBtn}
+          <button class="gc-vote${voted ? ' voted' : ''}" onclick="event.stopPropagation();voteGallery('${song.id}',this)">🔥 <span>${song.vote_count || 0}</span></button>
+        </div>
         <span class="gc-date">${dateStr}</span>
       </div>`;
     card.addEventListener('click', () => openSongDetail(song));
@@ -1678,6 +1785,17 @@ function openSongDetail(song) {
     if (chordsWrap) chordsWrap.style.display = 'block';
   } else if (chordsWrap) {
     chordsWrap.style.display = 'none';
+  }
+
+  // Pause gallery audio when detail opens
+  const gAudio = document.getElementById('galleryAudio');
+  if (gAudio && !gAudio.paused) {
+    gAudio.pause();
+    if (GALLERY.playingId) {
+      const playBtn = document.querySelector(`.gc-play[data-song-id="${GALLERY.playingId}"]`);
+      if (playBtn) { playBtn.textContent = '▶'; playBtn.classList.remove('playing'); }
+      GALLERY.playingId = null;
+    }
   }
 
   const overlay = document.getElementById('sgOverlay');
@@ -2435,6 +2553,14 @@ function showNotesPanel(song) {
   panel.classList.add('on');
   document.getElementById('notesSaveStatus').textContent = '';
 
+  // Audio URL row
+  const audioRow = document.getElementById('notesAudioRow');
+  const audioInput = document.getElementById('studioAudioUrl');
+  if (audioRow && audioInput) {
+    audioRow.style.display = 'block';
+    audioInput.value = (song && song.audio_url) || '';
+  }
+
   // Publish row
   const pubRow = document.getElementById('notesPubRow');
   const pubBtn = document.getElementById('notesPubBtn');
@@ -2446,6 +2572,8 @@ function showNotesPanel(song) {
 
 function hideNotesPanel() {
   document.getElementById('notesPanel').classList.remove('on');
+  const audioRow = document.getElementById('notesAudioRow');
+  if (audioRow) audioRow.style.display = 'none';
   const pubRow = document.getElementById('notesPubRow');
   if (pubRow) pubRow.style.display = 'none';
   const badge = document.getElementById('rpStatus');
@@ -2788,6 +2916,9 @@ function renderHistory(songs) {
         <span class="hi-date-info">${escHtml(genre)} · ${date}</span>
       </div>
       ${notesPrev}
+      <div class="hi-audio-row">
+        <input type="text" class="hi-audio-input" placeholder="Suno Audio URL" value="${escHtml(song.audio_url || '')}" onblur="saveHistoryAudioUrl('${song.id}', this.value)" onclick="event.stopPropagation()">
+      </div>
       <div class="hi-actions">
         <button class="hi-btn" onclick="reloadSong(${idx})">↩ Load</button>
         <button class="hi-btn" onclick="openVersionHistory('${song.id}')">⏱ Versions</button>
@@ -3004,6 +3135,27 @@ function openKaraoke(lyrics, songId) {
   const audio = document.getElementById('karAudio');
   audio.pause();
   audio.src = '';
+
+  // Pre-populate audio URL from saved value
+  const karUrlInput = document.getElementById('karAudioUrl');
+  if (karUrlInput) {
+    let savedUrl = '';
+    // Studio input is most up-to-date for the current song
+    const studioInput = document.getElementById('studioAudioUrl');
+    if (studioInput && KAR.songId === APP.currentSongId) {
+      savedUrl = studioInput.value.trim();
+    }
+    // Fall back to APP.songs cache
+    if (!savedUrl && KAR.songId) {
+      const cached = APP.songs.find(s => s.id === KAR.songId);
+      if (cached) savedUrl = cached.audio_url || '';
+    }
+    karUrlInput.value = savedUrl;
+    if (savedUrl) {
+      audio.src = savedUrl;
+      audio.load();
+    }
+  }
 
   document.getElementById('karOverlay').classList.add('on');
 }
