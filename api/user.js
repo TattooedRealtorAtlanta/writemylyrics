@@ -9,8 +9,19 @@ module.exports = async function handler(req, res) {
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
   const name = user.user_metadata?.name || user.user_metadata?.full_name;
-  const profile = await getProfile(user.id, user.email, name);
-  if (!profile) return res.status(500).json({ error: 'Profile not found' });
+
+  let profile;
+  try {
+    profile = await getProfile(user.id, user.email, name);
+  } catch (e) {
+    console.error('[/api/user] getProfile threw:', e.message);
+    return res.status(500).json({ error: e.message });
+  }
+
+  if (!profile) {
+    console.error('[/api/user] getProfile returned null for user:', user.id);
+    return res.status(500).json({ error: 'Profile not found' });
+  }
 
   // Reset monthly usage if 30+ days have passed
   const now = new Date();
