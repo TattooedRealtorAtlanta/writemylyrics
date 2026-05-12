@@ -839,9 +839,15 @@ async function authFetch(path, options = {}, overrideToken) {
 
 // ── PAGE ROUTING ──
 function showPage(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+    p.style.display = 'none';
+  });
   const el = document.getElementById('page-' + page);
-  if (el) el.classList.add('active');
+  if (el) {
+    el.classList.add('active');
+    el.style.display = 'block';
+  }
   window.scrollTo(0, 0);
 }
 
