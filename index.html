@@ -344,6 +344,22 @@ select option{background:var(--surface3)}
 .suno-copy:hover{background:var(--gold2)}
 
 /* ── TWEAK & REFINE ── */
+/* ── TIKTOK HOOKS PANEL ── */
+.hooks-panel{background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:20px;display:none}
+.hooks-panel.on{display:block}
+.hooks-head{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.hooks-title{font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:#e94dff;font-weight:600}
+.hooks-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;padding:0 4px;line-height:1;transition:color .15s}
+.hooks-close:hover{color:var(--text)}
+.hooks-body{padding:16px 20px}
+.hooks-loading{display:flex;align-items:center;gap:10px;color:var(--text2);font-size:13px;padding:8px 0}
+.hook-card{background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;position:relative}
+.hook-card:last-child{margin-bottom:0}
+.hook-num{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:#e94dff;font-weight:600;margin-bottom:6px}
+.hook-text{font-size:14px;color:var(--text);line-height:1.55;margin-bottom:10px;white-space:pre-wrap}
+.hook-copy{background:none;border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text2);cursor:pointer;transition:all .2s}
+.hook-copy:hover{border-color:#e94dff;color:#e94dff}
+.hook-copy.copied{border-color:#4ade80;color:#4ade80}
 .refine-panel{margin-top:20px;display:none}
 .refine-panel.on{display:block}
 .refine-toggle{display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;padding:10px 0;width:100%;text-align:left;transition:color .2s}
@@ -1144,6 +1160,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
           <button class="act-btn" onclick="exportToSuno()">⚡ Suno</button>
           <button class="act-btn" id="versionsBtn" onclick="openVersionHistory(APP.currentSongId)" style="display:none">↩ Versions</button>
           <button class="act-btn" id="syllableBtn" onclick="toggleSyllables()">Syllables</button>
+          <button class="act-btn" onclick="openHooksPanel()">🎵 TikTok Hooks</button>
           <button class="act-btn" onclick="exportLyrics()">↓ TXT</button>
           <button class="act-btn" onclick="downloadPDF()">↓ PDF</button>
           <button class="act-btn" onclick="startOver()">Clear</button>
@@ -1201,6 +1218,15 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
               <div class="suno-text" id="sunoText"></div>
               <button class="suno-copy" onclick="copySuno()">Copy for Suno</button>
             </div>
+          </div>
+
+          <!-- TikTok Hooks Panel -->
+          <div id="hooksPanel" class="hooks-panel">
+            <div class="hooks-head">
+              <span class="hooks-title">🎵 TikTok Hook Generator</span>
+              <button class="hooks-close" onclick="closeHooksPanel()">✕</button>
+            </div>
+            <div class="hooks-body" id="hooksBody"></div>
           </div>
 
           <!-- Tweak & Refine Panel -->
@@ -3103,6 +3129,53 @@ function copySuno() {
   const text = document.getElementById('sunoText').textContent;
   navigator.clipboard.writeText(text);
   toast('Suno prompt copied!');
+}
+
+// ── TIKTOK HOOKS ──
+async function openHooksPanel() {
+  if (!APP.lyrics) { toast('Generate a song first.'); return; }
+  const panel = document.getElementById('hooksPanel');
+  const body  = document.getElementById('hooksBody');
+  panel.classList.add('on');
+  body.innerHTML = '<div class="hooks-loading"><span class="spinner"></span> Generating hooks…</div>';
+  // Scroll panel into view
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  try {
+    const res = await authFetch('/api/hooks', {
+      method: 'POST',
+      body: JSON.stringify({
+        lyrics: APP.lyrics,
+        genre:  APP.genre  || '',
+        moods:  APP.moods  || [],
+        topic:  document.getElementById('topic')?.value?.trim() || ''
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Hook generation failed');
+
+    body.innerHTML = data.hooks.map((hook, i) => `
+      <div class="hook-card">
+        <div class="hook-num">Hook ${i + 1}</div>
+        <div class="hook-text">${escHtml(hook)}</div>
+        <button class="hook-copy" onclick="copyHook(this, ${i})">Copy</button>
+      </div>`).join('');
+  } catch (e) {
+    body.innerHTML = `<div style="color:var(--red);font-size:13px">${escHtml(e.message)}</div>`;
+  }
+}
+
+function closeHooksPanel() {
+  document.getElementById('hooksPanel').classList.remove('on');
+}
+
+function copyHook(btn, idx) {
+  const cards = document.querySelectorAll('.hook-text');
+  if (!cards[idx]) return;
+  navigator.clipboard.writeText(cards[idx].textContent.trim());
+  btn.textContent = 'Copied!';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
 }
 
 function sunoExportSong(idx) {
