@@ -3578,15 +3578,18 @@ function karTick() {
     const cur  = stamped[j];
     const next = stamped[j + 1];
 
-    // Default: hold until the next line starts (or forever for the last line)
-    let holdUntil = next ? next.timestamp : Infinity;
+    // Hold the current line until 500 ms after the next line's start time.
+    // Without this buffer the last 2-3 words of a line never highlight —
+    // their timestamps land right at or just before next.timestamp, and the
+    // line switches before the word spans get the .on class.
+    const SWITCH_BUFFER = 0.5;
+    let holdUntil = next ? next.timestamp + SWITCH_BUFFER : Infinity;
 
-    // If we have word timestamps, extend hold until last word completes
+    // Also extend until the last word of the line has had time to display
     const ln = KAR.lines[cur.i];
     if (ln.wordTs?.length) {
       const lastWt  = ln.wordTs[ln.wordTs.length - 1];
       const prevWt  = ln.wordTs.length > 1 ? ln.wordTs[ln.wordTs.length - 2] : null;
-      // Estimate last-word duration from gap between last two words; floor at 150 ms
       const wordDur = prevWt != null ? Math.max(0.15, lastWt - prevWt) : 0.35;
       holdUntil = Math.max(holdUntil, lastWt + wordDur);
     }
