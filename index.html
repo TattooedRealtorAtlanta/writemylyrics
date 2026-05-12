@@ -1212,7 +1212,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
             <textarea class="notes-area" id="notesText" rows="4" placeholder="Inspiration, melody ideas, Suno prompts that worked, co-writer feedback..." oninput="onNotesInput()"></textarea>
           <div class="notes-pub-row" id="notesPubRow" style="display:none">
             <span class="notes-pub-label">Gallery</span>
-            <button class="pub-btn" id="notesPubBtn" onclick="toggleStudioPublish()">📤 Publish to Gallery</button>
+            <button class="pub-btn" id="notesPubBtn" data-published="false" onclick="togglePublish(this)">📤 Publish to Gallery</button>
           </div>
           </div>
         </div>
@@ -1692,45 +1692,46 @@ function closeSongDetail() {
   GALLERY.detailSong = null;
 }
 
-// Publish / Unpublish a song
-async function publishSong(id, publish, btn) {
-  if (APP.plan === 'free') { showUpgrade(); return; }
-  if (!id) return;
-  try {
-    await authFetch('/api/songs', { method: 'PATCH', body: JSON.stringify({ id, published: publish }) });
-    if (btn) {
-      btn.classList.toggle('on', publish);
-      // Update onclick to toggle the other way next time
-      btn.setAttribute('onclick', `publishSong('${id}',${!publish},this)`);
-      btn.textContent = publish ? '✓ Published' : '📤 Publish';
-    }
-    // Sync studio publish button if this is the current song
-    if (APP.currentSongId === id) {
-      const notesPubBtn = document.getElementById('notesPubBtn');
-      if (notesPubBtn) {
-        notesPubBtn.classList.toggle('on', publish);
-        notesPubBtn.textContent = publish ? '✓ Published' : '📤 Publish to Gallery';
-      }
-    }
-    // Update cached song
-    const idx = APP.songs.findIndex(s => s.id === id);
-    if (idx >= 0) APP.songs[idx].published = publish;
-    toast(publish ? 'Published to Gallery! 🔥' : 'Removed from Gallery.');
-  } catch(e) {
-    toast('Error: ' + e.message);
-  }
+// Set publish button appearance and data state
+function setPublishBtn(btn, published) {
+  if (!btn) return;
+  btn.dataset.published = String(published);
+  btn.classList.toggle('on', published);
+  btn.textContent = published
+    ? '✓ Published'
+    : (btn.id === 'notesPubBtn' ? '📤 Publish to Gallery' : '📤 Publish');
 }
 
-// Toggle publish from studio notes panel
-function toggleStudioPublish() {
-  if (!APP.currentSongId) return;
-  const btn = document.getElementById('notesPubBtn');
-  const isPublished = btn?.classList.contains('on');
-  publishSong(APP.currentSongId, !isPublished, null);
-  // Update button immediately
-  if (btn) {
-    btn.classList.toggle('on', !isPublished);
-    btn.textContent = !isPublished ? '✓ Published' : '📤 Publish to Gallery';
+// Single toggle handler for both history cards and studio button
+async function togglePublish(btn) {
+  // Resolve song ID — history cards carry data-song-id; studio button uses APP.currentSongId
+  const id = btn.dataset.songId || APP.currentSongId;
+  if (!id) { toast('No song loaded.'); return; }
+  if (APP.plan === 'free') { showUpgrade(); return; }
+
+  const publish = btn.dataset.published !== 'true'; // toggle current state
+
+  // Optimistic update
+  setPublishBtn(btn, publish);
+
+  try {
+    await authFetch('/api/songs', { method: 'PATCH', body: JSON.stringify({ id, published: publish }) });
+
+    // Keep the paired button (history ↔ studio) in sync
+    const histBtn   = document.getElementById(`pub-${id}`);
+    const studioBtn = document.getElementById('notesPubBtn');
+    if (histBtn   && histBtn   !== btn) setPublishBtn(histBtn,   publish);
+    if (studioBtn && studioBtn !== btn && APP.currentSongId === id) setPublishBtn(studioBtn, publish);
+
+    // Update in-memory cache
+    const idx = APP.songs.findIndex(s => s.id === id);
+    if (idx >= 0) APP.songs[idx].published = publish;
+
+    toast(publish ? 'Published to Gallery! 🔥' : 'Removed from Gallery.');
+  } catch(e) {
+    // Revert optimistic update
+    setPublishBtn(btn, !publish);
+    toast('Error: ' + e.message);
   }
 }
 
@@ -2439,9 +2440,7 @@ function showNotesPanel(song) {
   const pubBtn = document.getElementById('notesPubBtn');
   if (pubRow && pubBtn) {
     pubRow.style.display = 'flex';
-    const isPublished = !!(song && song.published);
-    pubBtn.classList.toggle('on', isPublished);
-    pubBtn.textContent = isPublished ? '✓ Published' : '📤 Publish to Gallery';
+    setPublishBtn(pubBtn, !!(song && song.published));
   }
 }
 
@@ -2794,7 +2793,7 @@ function renderHistory(songs) {
         <button class="hi-btn" onclick="openVersionHistory('${song.id}')">⏱ Versions</button>
         <button class="hi-btn" onclick="sunoExportSong(${idx})">⚡ Suno</button>
         <button class="hi-btn" onclick="openKaraoke(APP.songs[${idx}].lyrics, APP.songs[${idx}].id)">🎤 Karaoke</button>
-        <button class="pub-btn${song.published ? ' on' : ''}" id="pub-${song.id}" onclick="publishSong('${song.id}',${!song.published},this)">${song.published ? '✓ Published' : '📤 Publish'}</button>
+        <button class="pub-btn${song.published ? ' on' : ''}" id="pub-${song.id}" data-song-id="${song.id}" data-published="${!!song.published}" onclick="togglePublish(this)">${song.published ? '✓ Published' : '📤 Publish'}</button>
         <button class="hi-btn del" onclick="deleteSong('${song.id}',${idx})">🗑</button>
       </div>`;
     scroll.appendChild(item);
