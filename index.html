@@ -884,10 +884,12 @@ async function signUp() {
   btn.textContent = 'Create Account';
 
   if (error) return showError(error.message);
-  if (data.session) {
-    await loadProfile(data.user, data.session.access_token);
-  } else if (data.user) {
-    showError('Account created! Please check your email to confirm your account, then sign in.');
+  if (!data.user) return showError('Account creation failed — please try again.');
+  const token = data.session?.access_token || await getToken();
+  if (token) {
+    await loadProfile(data.user, token);
+  } else {
+    showError('Account created! Check your email to confirm your account, then sign in.');
   }
 }
 
@@ -907,11 +909,9 @@ async function signIn() {
   btn.textContent = 'Sign In';
 
   if (error) return showError(error.message);
-  if (data.session) {
-    await loadProfile(data.user, data.session.access_token);
-  } else if (data.user) {
-    showError('Please check your email to confirm your account before signing in.');
-  }
+  if (!data.user) return showError('Sign in failed — please try again.');
+  const token = data.session?.access_token || await getToken();
+  await loadProfile(data.user, token);
 }
 
 async function signOut() {
