@@ -3210,15 +3210,15 @@ function matchLyricsToTimestamps(lines, segments, words) {
 
         console.log(`[kar] line ${line.i} "${line.text.substring(0,40)}" → lineTs=${lineTs[line.i].toFixed(2)} bestPos=${bestPos} score=${bestScore.toFixed(2)} wordTs=[${wtArr.map(x=>x!=null?x.toFixed(2):'null').join(', ')}]`);
 
-        wPtr = bestPos + Math.max(1, lw.length - 1);
+        // Clamp so wPtr never exceeds the last valid index.
+        // bestPos near the end + lw.length could otherwise push wPtr past
+        // wds.length, making the for-loop condition (s < wds.length) always
+        // false and cascading every remaining line to NO MATCH.
+        wPtr = Math.min(bestPos + Math.max(1, lw.length - 1), wds.length - 1);
       } else {
-        // wPtr stays unchanged on no-match.
-        // The no-match advance (wPtr += lw.length) was overshooting: a run of
-        // unmatched lines could push wPtr past wds.length, making the for-loop
-        // condition (s < searchLimit) false for ALL subsequent lines.
-        // Sequential ordering for repeated sections is already enforced by
-        // searchLimit = wds.length — successful matches advance wPtr past the
-        // first occurrence so the second occurrence is found naturally.
+        // wPtr stays unchanged on no-match — do not advance.
+        // Advancing on no-match was pushing wPtr past the end of the array,
+        // causing every subsequent line to also fail.
         console.log(`[kar] line ${line.i} "${line.text.substring(0,40)}" → NO MATCH (wPtr=${wPtr}, searchLimit=${searchLimit})`);
       }
     });
