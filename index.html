@@ -1060,6 +1060,10 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
             <button class="pick-btn" data-v="Outlaw Country">Outlaw</button>
             <button class="pick-btn" data-v="Trap">Trap</button>
             <button class="pick-btn" data-v="Singer-Songwriter">S-S-W</button>
+            <button class="pick-btn" data-v="Metal">Metal</button>
+            <button class="pick-btn" data-v="Alternative">Alt</button>
+            <button class="pick-btn" data-v="EDM">EDM</button>
+            <button class="pick-btn" data-v="Latin">Latin</button>
           </div>
         </div>
 
@@ -1656,7 +1660,7 @@ const GALLERY = {
   initialized: false, playingId: null
 };
 
-const GALLERY_GENRES = ['All','Country','Hip Hop','Pop','Rock','R&B','Blues','Folk','Gospel','Americana','Trap','Singer-Songwriter'];
+const GALLERY_GENRES = ['All','Country','Hip Hop','Pop','Rock','R&B','Blues','Folk','Gospel','Americana','Trap','Singer-Songwriter','Metal','Alternative','EDM','Latin'];
 
 function showGallery() {
   showPage('gallery');
@@ -2407,13 +2411,13 @@ function toast(msg) {
 const TEMPLATES = [
   { name:'Classic Country Ballad', emoji:'🤠', genre:'Country', moods:['Nostalgic','Melancholy','Tender'], tempo:'Slow ballad', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'ABCB ballad style', pov:'First person (I / me / my)', styleNotes:'Storytelling, vivid small-town imagery, plain honest language, earned emotion' },
   { name:'Trap Anthem', emoji:'🔥', genre:'Trap', moods:['Defiant','Raw'], tempo:'Driving fast', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'AABB couplets', pov:'First person (I / me / my)', styleNotes:'Short punchy lines, internal rhyme, repetition in hook, hustle and ambition themes' },
-  { name:'Worship Song', emoji:'🙏', genre:'Gospel', moods:['Hopeful','Tender'], tempo:'Mid tempo', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'ABAB alternating', pov:'First person (I / me / my)', styleNotes:'Reverent tone, scripture-adjacent imagery, repetitive and singable chorus, sincere' },
+  { name:'Rock Anthem', emoji:'🎸', genre:'Rock', moods:['Defiant','Energetic'], tempo:'Driving fast', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'ABAB alternating', pov:'First person (I / me / my)', styleNotes:'Big chorus, power chords, anthemic feel, crowd-ready hook' },
   { name:'Pop Love Song', emoji:'💛', genre:'Pop', moods:['Happy','Tender','Hopeful'], tempo:'Uptempo', structure:'Intro / Verse / Pre-Chorus / Chorus / Verse / Pre-Chorus / Chorus / Bridge / Chorus', rhyme:'AABB couplets', pov:'First person (I / me / my)', styleNotes:'Catchy and radio-friendly, universal emotion, strong pre-chorus build' },
-  { name:'Breakup Song', emoji:'💔', genre:'Pop', moods:['Heartbroken','Sad','Reflective'], tempo:'Slow ballad', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'ABAB alternating', pov:'First person (I / me / my)', styleNotes:'Emotional and specific, honest and a little raw, avoiding clichés' },
-  { name:'Road Trip Anthem', emoji:'🛣️', genre:'Country', moods:['Happy','Celebratory','Hopeful'], tempo:'Uptempo', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'AABB couplets', pov:'First person (I / me / my)', styleNotes:'Windows-down energy, highway imagery, carefree and celebratory, sing-along chorus' },
+  { name:'R&B Love Song', emoji:'💛', genre:'R&B', moods:['Romantic','Tender'], tempo:'Mid tempo', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'ABAB alternating', pov:'First person (I / me / my)', styleNotes:'Smooth delivery, emotional runs, sensual imagery, intimate tone' },
+  { name:'Outlaw Country Story', emoji:'🤠', genre:'Outlaw Country', moods:['Defiant','Reflective'], tempo:'Mid tempo', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'AABB couplets', pov:'First person (I / me / my)', styleNotes:'Gritty storytelling, anti-hero narrator, dust and whiskey imagery, earned world-weariness' },
   { name:'Military / Patriotic', emoji:'🎖️', genre:'Military / Patriotic', moods:['Defiant','Reflective','Nostalgic'], tempo:'Mid tempo', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'ABAB alternating', pov:'First person (I / me / my)', styleNotes:'Respectful and earned, grounded in real sacrifice and service, not clichéd flag-waving' },
   { name:'Blues Standard', emoji:'🎸', genre:'Blues', moods:['Sad','Raw','Melancholy'], tempo:'Slow ballad', structure:'Verse / Verse / Chorus / Verse / Chorus', rhyme:'AABB couplets', pov:'First person (I / me / my)', styleNotes:'Call and response feel, repeated lines with variation, world-weariness, understated emotion' },
-  { name:'Hip Hop Battle Rap', emoji:'🎤', genre:'Hip Hop', moods:['Defiant','Angry','Raw'], tempo:'Driving fast', structure:'Verse / Chorus / Verse / Chorus', rhyme:'AABB couplets', pov:'First person (I / me / my)', styleNotes:'Aggressive wordplay, dense rhyme schemes, technical skill on display, multisyllabic rhymes' },
+  { name:'Latin / Reggaeton', emoji:'🔥', genre:'Latin', moods:['Celebratory','Energetic'], tempo:'Driving fast', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'AABB couplets', pov:'First person (I / me / my)', styleNotes:'Bilingual friendly, danceable rhythm, street romance, confident energy' },
   { name:'Singer-Songwriter Confessional', emoji:'✍️', genre:'Singer-Songwriter', moods:['Reflective','Melancholy','Raw'], tempo:'Slow ballad', structure:'Verse / Chorus / Verse / Chorus / Bridge / Chorus', rhyme:'Mixed, rhyme where it feels natural', pov:'First person (I / me / my)', styleNotes:'Intimate and personal, conversational, specific details over general statements' }
 ];
 
