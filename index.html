@@ -780,7 +780,12 @@ select option{background:var(--surface3)}
 // ── SUPABASE INIT ──
 const SUPABASE_URL = 'https://vlxjmkojunrmpomhuxyg.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5XqQ-CLL9ggr62obfkAdwA_IWFMVLr1';
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let sb;
+try {
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} catch (e) {
+  console.error('Supabase init failed:', e);
+}
 
 // ── STATE ──
 const APP = {
@@ -805,6 +810,7 @@ let loadTick = null, loadIdx = 0;
 
 // ── AUTH HELPERS ──
 async function getToken() {
+  if (!sb) return null;
   const { data: { session } } = await sb.auth.getSession();
   return session?.access_token || null;
 }
@@ -915,12 +921,12 @@ async function signIn() {
 }
 
 async function signOut() {
-  await sb.auth.signOut();
+  closeModal('logoutBg');
   APP.user = null;
   APP.profile = null;
-  closeModal('logoutBg');
   setNavLoggedOut();
   showPage('landing');
+  await sb.auth.signOut();
 }
 
 async function loadProfile(user, token) {
@@ -1231,13 +1237,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   }));
 
   // Listen for auth changes (e.g. email confirm in another tab)
+  let _profileLoading = false;
   sb.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN' && session?.user && !APP.user) {
-      await loadProfile(session.user, session.access_token);
+    if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user) {
+      if (!APP.user && !_profileLoading) {
+        _profileLoading = true;
+        try { await loadProfile(session.user, session.access_token); }
+        finally { _profileLoading = false; }
+      }
     }
     if (event === 'SIGNED_OUT') {
       APP.user = null;
+      APP.profile = null;
+      _profileLoading = false;
       setNavLoggedOut();
+      showPage('landing');
     }
   });
 });
