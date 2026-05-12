@@ -343,6 +343,57 @@ select option{background:var(--surface3)}
 .suno-copy{background:var(--gold);border:none;border-radius:6px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#07060a;cursor:pointer;transition:all .2s}
 .suno-copy:hover{background:var(--gold2)}
 
+/* ── CO-WRITER & SUGGESTIONS MODALS ── */
+.cw-overlay{position:fixed;inset:0;background:rgba(7,6,10,.82);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.cw-overlay.on{display:flex}
+.cw-modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;width:100%;max-width:500px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+.cw-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cw-head-title{font-size:14px;font-weight:600;color:var(--text)}
+.cw-head-sub{font-size:11px;color:var(--text3);margin-top:2px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;max-width:300px}
+.cw-close{background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;padding:0 4px;line-height:1;transition:color .15s}
+.cw-close:hover{color:var(--text)}
+.cw-body{padding:20px 22px;overflow-y:auto;flex:1}
+.cw-invite-row{display:flex;gap:8px;margin-bottom:18px}
+.cw-invite-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none}
+.cw-invite-input:focus{border-color:rgba(201,148,58,.4)}
+.cw-invite-btn{background:var(--gold);border:none;border-radius:8px;padding:9px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#07060a;cursor:pointer;white-space:nowrap;transition:background .2s}
+.cw-invite-btn:hover{background:var(--gold2)}
+.cw-invite-btn:disabled{opacity:.5;cursor:default}
+.cw-section-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);font-weight:600;margin-bottom:10px}
+.cw-list{display:flex;flex-direction:column;gap:8px}
+.cw-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cw-item-email{font-size:13px;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cw-item-status{font-size:11px;padding:2px 8px;border-radius:10px;flex-shrink:0}
+.cw-item-status.accepted{background:rgba(78,201,148,.12);color:#4ec994}
+.cw-item-status.pending{background:rgba(201,148,58,.12);color:var(--gold)}
+.cw-item-remove{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 4px;transition:color .15s;flex-shrink:0}
+.cw-item-remove:hover{color:var(--red)}
+.cw-empty{color:var(--text3);font-size:13px;text-align:center;padding:16px 0}
+/* Suggestion submission */
+.sg-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text);resize:vertical;min-height:160px;outline:none;margin-bottom:10px}
+.sg-textarea:focus{border-color:rgba(201,148,58,.4)}
+.sg-comment{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;margin-bottom:14px}
+.sg-comment:focus{border-color:rgba(201,148,58,.4)}
+.sg-submit{background:var(--gold);border:none;border-radius:8px;padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#07060a;cursor:pointer;transition:background .2s}
+.sg-submit:hover{background:var(--gold2)}
+.sg-submit:disabled{opacity:.5;cursor:default}
+/* Suggestion review cards */
+.sg-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px}
+.sg-card-meta{font-size:11px;color:var(--text3);margin-bottom:6px}
+.sg-card-comment{font-size:13px;color:var(--gold);font-style:italic;margin-bottom:8px}
+.sg-card-text{font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);background:var(--surface3);border-radius:6px;padding:10px;max-height:140px;overflow-y:auto;white-space:pre-wrap;margin-bottom:10px;line-height:1.5}
+.sg-card-actions{display:flex;gap:8px}
+.sg-accept{background:rgba(78,201,148,.15);border:1px solid rgba(78,201,148,.3);color:#4ec994;border-radius:6px;padding:5px 14px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.sg-accept:hover{background:rgba(78,201,148,.25)}
+.sg-reject{background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.2);color:var(--red);border-radius:6px;padding:5px 14px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.sg-reject:hover{background:rgba(224,85,85,.2)}
+.sg-status-badge{font-size:11px;padding:3px 10px;border-radius:10px}
+.sg-status-badge.accepted{background:rgba(78,201,148,.12);color:#4ec994}
+.sg-status-badge.rejected{background:rgba(224,85,85,.1);color:var(--red)}
+.sg-status-badge.pending{background:rgba(201,148,58,.12);color:var(--gold)}
+/* Co-writer badge in history */
+.hi-cowrite-badge{font-size:10px;background:rgba(201,148,58,.12);color:var(--gold);border:1px solid rgba(201,148,58,.2);border-radius:10px;padding:2px 8px;margin-left:6px}
+.hi-cowrite-section{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);font-weight:600;padding:12px 4px 6px}
 /* ── TWEAK & REFINE ── */
 /* ── TIKTOK HOOKS PANEL ── */
 .hooks-panel{background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:20px;display:none}
@@ -1282,6 +1333,41 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
   </div>
 </div>
 
+<!-- Co-writer Management Modal -->
+<div class="cw-overlay" id="cowrOverlay" onclick="bgCloseCw(event,'cowrOverlay')">
+  <div class="cw-modal">
+    <div class="cw-head">
+      <div>
+        <div class="cw-head-title">👥 Co-writers</div>
+        <div class="cw-head-sub" id="cowrSongTitle"></div>
+      </div>
+      <button class="cw-close" onclick="closeCwModal('cowrOverlay')">✕</button>
+    </div>
+    <div class="cw-body">
+      <div class="cw-invite-row">
+        <input class="cw-invite-input" id="cowrEmailInput" type="email" placeholder="Invite by email address…" onkeydown="if(event.key==='Enter')inviteCowriter()">
+        <button class="cw-invite-btn" id="cowrInviteBtn" onclick="inviteCowriter()">Invite</button>
+      </div>
+      <div class="cw-section-label">Current co-writers</div>
+      <div class="cw-list" id="cowrList"><div class="cw-empty">No co-writers yet.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Suggestions Modal (submit for co-writers / review for owners) -->
+<div class="cw-overlay" id="sgOverlay" onclick="bgCloseCw(event,'sgOverlay')">
+  <div class="cw-modal">
+    <div class="cw-head">
+      <div>
+        <div class="cw-head-title" id="sgModalTitle">💡 Suggestions</div>
+        <div class="cw-head-sub" id="sgSongTitle"></div>
+      </div>
+      <button class="cw-close" onclick="closeCwModal('sgOverlay')">✕</button>
+    </div>
+    <div class="cw-body" id="sgBody"></div>
+  </div>
+</div>
+
 <!-- Templates Modal -->
 <div class="tmpl-bg" id="tmplBg" onclick="bgCloseTmpl(event)">
   <div class="tmpl-modal">
@@ -1428,6 +1514,7 @@ const APP = {
   originalLyrics: '',
   currentSongId: null,
   songs: [],
+  cowriteSongs: [],
   language: 'English',
   mixLanguages: false,
   sectionLanguages: {},
@@ -2920,6 +3007,13 @@ async function loadHistory() {
   try {
     const { songs } = await authFetch('/api/songs');
     APP.songs = songs;
+
+    // Also fetch songs this user is a co-writer on
+    try {
+      const cw = await authFetch('/api/cowrite?mine=true');
+      APP.cowriteSongs = cw.songs || [];
+    } catch { APP.cowriteSongs = []; }
+
     renderHistory(songs);
   } catch (e) {
     scroll.innerHTML = `<div class="hi-empty">Could not load songs: ${escHtml(e.message)}</div>`;
@@ -2965,10 +3059,44 @@ function renderHistory(songs) {
         <button class="hi-btn" onclick="sunoExportSong(${idx})">⚡ Suno</button>
         <button class="hi-btn" onclick="openKaraoke(APP.songs[${idx}].lyrics, APP.songs[${idx}].id)">🎤 Karaoke</button>
         <button class="pub-btn${song.published ? ' on' : ''}" id="pub-${song.id}" data-song-id="${song.id}" data-published="${!!song.published}" onclick="togglePublish(this)">${song.published ? '✓ Published' : '📤 Publish'}</button>
+        ${song.published ? `<button class="hi-btn" onclick="shareSong('${song.id}')">🔗 Share</button>` : ''}
+        ${APP.plan !== 'free' ? `<button class="hi-btn" onclick="openCowrModal('${song.id}','${escHtml(title)}')">👥 Co-writers</button><button class="hi-btn" onclick="openSuggestModal('${song.id}','${escHtml(title)}',true)">💡 Suggestions</button>` : ''}
         <button class="hi-btn del" onclick="deleteSong('${song.id}',${idx})">🗑</button>
       </div>`;
     scroll.appendChild(item);
   });
+
+  // Render co-written songs below owned songs
+  renderCowriteSongs();
+}
+
+function renderCowriteSongs() {
+  const scroll = document.getElementById('hpScroll');
+  const existing = document.getElementById('cowriteSection');
+  if (existing) existing.remove();
+
+  const cwSongs = APP.cowriteSongs || [];
+  if (!cwSongs.length) return;
+
+  const section = document.createElement('div');
+  section.id = 'cowriteSection';
+  section.innerHTML = `<div class="hi-cowrite-section">✍ Co-writing</div>`;
+
+  cwSongs.forEach(song => {
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    const date  = new Date(song.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const title = song.title || song.topic || 'Untitled Song';
+    item.innerHTML = `
+      <div class="hi-title">${escHtml(title)}<span class="hi-cowrite-badge">Co-writer</span></div>
+      <div class="hi-status-row"><span class="hi-date-info">${escHtml(song.genre || 'No genre')} · ${date}</span></div>
+      <div class="hi-actions">
+        <button class="hi-btn" onclick="openSuggestModal('${song.id}','${escHtml(title)}',false)">💡 Suggest Changes</button>
+      </div>`;
+    section.appendChild(item);
+  });
+
+  scroll.appendChild(section);
 }
 
 function reloadSong(idx) {
@@ -3129,6 +3257,194 @@ function copySuno() {
   const text = document.getElementById('sunoText').textContent;
   navigator.clipboard.writeText(text);
   toast('Suno prompt copied!');
+}
+
+// ── SHARE ──
+function shareSong(id) {
+  const url = `${window.location.origin}/song/${id}`;
+  navigator.clipboard.writeText(url).then(() => toast('Link copied to clipboard!'))
+    .catch(() => { prompt('Copy this link:', url); });
+}
+
+// ── CO-WRITER ──
+let _cwSongId = null;
+
+function bgCloseCw(e, id) { if (e.target.id === id) closeCwModal(id); }
+function closeCwModal(id) { document.getElementById(id).classList.remove('on'); }
+
+async function openCowrModal(songId, songTitle) {
+  _cwSongId = songId;
+  document.getElementById('cowrSongTitle').textContent = songTitle;
+  document.getElementById('cowrEmailInput').value = '';
+  document.getElementById('cowrOverlay').classList.add('on');
+  await refreshCowrList();
+}
+
+async function refreshCowrList() {
+  const list = document.getElementById('cowrList');
+  list.innerHTML = '<div class="cw-empty">Loading…</div>';
+  try {
+    const { cowriters } = await authFetch(`/api/cowrite?song_id=${_cwSongId}`);
+    if (!cowriters.length) {
+      list.innerHTML = '<div class="cw-empty">No co-writers yet. Invite someone by email.</div>';
+      return;
+    }
+    list.innerHTML = cowriters.map(cw => `
+      <div class="cw-item" id="cwitem-${cw.id}">
+        <span class="cw-item-email">${escHtml(cw.invitee_email)}</span>
+        <span class="cw-item-status ${cw.status}">${cw.status}</span>
+        <button class="cw-item-remove" title="Remove" onclick="removeCowriter('${cw.id}')">✕</button>
+      </div>`).join('');
+  } catch (e) {
+    list.innerHTML = `<div class="cw-empty" style="color:var(--red)">${escHtml(e.message)}</div>`;
+  }
+}
+
+async function inviteCowriter() {
+  const email = document.getElementById('cowrEmailInput').value.trim();
+  if (!email) { toast('Enter an email address.'); return; }
+  const btn = document.getElementById('cowrInviteBtn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    await authFetch('/api/cowrite', {
+      method: 'POST',
+      body: JSON.stringify({ song_id: _cwSongId, email })
+    });
+    document.getElementById('cowrEmailInput').value = '';
+    toast(`Invited ${email}!`);
+    await refreshCowrList();
+  } catch (e) {
+    toast('Error: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Invite';
+  }
+}
+
+async function removeCowriter(id) {
+  try {
+    await authFetch(`/api/cowrite?id=${id}`, { method: 'DELETE' });
+    document.getElementById(`cwitem-${id}`)?.remove();
+    const list = document.getElementById('cowrList');
+    if (!list.children.length) list.innerHTML = '<div class="cw-empty">No co-writers yet.</div>';
+  } catch (e) { toast('Error: ' + e.message); }
+}
+
+// ── SUGGESTIONS ──
+let _sgSongId = null;
+let _sgIsOwner = false;
+
+async function openSuggestModal(songId, songTitle, isOwner) {
+  _sgSongId = songId;
+  _sgIsOwner = isOwner;
+  document.getElementById('sgSongTitle').textContent = songTitle;
+  document.getElementById('sgModalTitle').textContent = isOwner ? '💡 Review Suggestions' : '💡 Suggest Changes';
+  document.getElementById('sgOverlay').classList.add('on');
+  await refreshSuggestions();
+}
+
+async function refreshSuggestions() {
+  const body = document.getElementById('sgBody');
+  body.innerHTML = '<div class="cw-empty">Loading…</div>';
+  try {
+    const { suggestions } = await authFetch(`/api/suggestions?song_id=${_sgSongId}`);
+
+    if (_sgIsOwner) {
+      // Owner sees all suggestions to review
+      const pending = suggestions.filter(s => s.status === 'pending');
+      const resolved = suggestions.filter(s => s.status !== 'pending');
+      let html = '';
+      if (!suggestions.length) {
+        html = '<div class="cw-empty">No suggestions yet.</div>';
+      } else {
+        if (pending.length) {
+          html += `<div class="cw-section-label" style="margin-bottom:10px">Pending (${pending.length})</div>`;
+          html += pending.map(s => `
+            <div class="sg-card" id="sgcard-${s.id}">
+              <div class="sg-card-meta">From ${escHtml(s.author_name || 'Co-writer')} · ${new Date(s.created_at).toLocaleDateString()}</div>
+              ${s.comment ? `<div class="sg-card-comment">"${escHtml(s.comment)}"</div>` : ''}
+              <div class="sg-card-text">${escHtml(s.suggested_text)}</div>
+              <div class="sg-card-actions">
+                <button class="sg-accept" onclick="reviewSuggestion('${s.id}','accepted')">✓ Accept &amp; Apply</button>
+                <button class="sg-reject" onclick="reviewSuggestion('${s.id}','rejected')">✗ Reject</button>
+              </div>
+            </div>`).join('');
+        }
+        if (resolved.length) {
+          html += `<div class="cw-section-label" style="margin:14px 0 10px">Resolved</div>`;
+          html += resolved.map(s => `
+            <div class="sg-card">
+              <div class="sg-card-meta">${escHtml(s.author_name || 'Co-writer')} · ${new Date(s.created_at).toLocaleDateString()} <span class="sg-status-badge ${s.status}">${s.status}</span></div>
+              <div class="sg-card-text">${escHtml(s.suggested_text.substring(0, 120))}${s.suggested_text.length > 120 ? '…' : ''}</div>
+            </div>`).join('');
+        }
+      }
+      body.innerHTML = html;
+    } else {
+      // Co-writer sees their own suggestions + submit form
+      const mine = suggestions.filter(s => s.author_id === APP.user?.id);
+      let html = '';
+      if (mine.length) {
+        html += `<div class="cw-section-label" style="margin-bottom:10px">Your previous suggestions</div>`;
+        html += mine.map(s => `
+          <div class="sg-card">
+            <div class="sg-card-meta">${new Date(s.created_at).toLocaleDateString()} <span class="sg-status-badge ${s.status}">${s.status}</span></div>
+            ${s.comment ? `<div class="sg-card-comment">"${escHtml(s.comment)}"</div>` : ''}
+            <div class="sg-card-text">${escHtml(s.suggested_text.substring(0, 120))}${s.suggested_text.length > 120 ? '…' : ''}</div>
+          </div>`).join('');
+        html += '<div style="margin-bottom:16px"></div>';
+      }
+      html += `<div class="cw-section-label" style="margin-bottom:10px">Submit new suggestion</div>
+        <textarea class="sg-textarea" id="sgText" placeholder="Paste your suggested lyrics here…"></textarea>
+        <input class="sg-comment" id="sgComment" placeholder="Optional note to the owner…" type="text">
+        <button class="sg-submit" onclick="submitSuggestion()">Submit Suggestion</button>`;
+      body.innerHTML = html;
+    }
+  } catch (e) {
+    body.innerHTML = `<div class="cw-empty" style="color:var(--red)">${escHtml(e.message)}</div>`;
+  }
+}
+
+async function submitSuggestion() {
+  const text = document.getElementById('sgText')?.value?.trim();
+  const comment = document.getElementById('sgComment')?.value?.trim();
+  if (!text) { toast('Enter your suggested lyrics.'); return; }
+  const btn = document.querySelector('.sg-submit');
+  if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+  try {
+    await authFetch('/api/suggestions', {
+      method: 'POST',
+      body: JSON.stringify({ song_id: _sgSongId, suggested_text: text, comment })
+    });
+    toast('Suggestion submitted!');
+    await refreshSuggestions();
+  } catch (e) {
+    toast('Error: ' + e.message);
+    if (btn) { btn.disabled = false; btn.textContent = 'Submit Suggestion'; }
+  }
+}
+
+async function reviewSuggestion(id, status) {
+  const card = document.getElementById(`sgcard-${id}`);
+  try {
+    const result = await authFetch('/api/suggestions', {
+      method: 'PATCH',
+      body: JSON.stringify({ id, status })
+    });
+    if (status === 'accepted' && result.lyricsUpdated) {
+      // Update in-memory cache for this song
+      const idx = APP.songs.findIndex(s => s.id === _sgSongId);
+      if (idx >= 0) {
+        const { suggestions } = await authFetch(`/api/suggestions?song_id=${_sgSongId}`);
+        const sg = suggestions.find(s => s.id === id);
+        if (sg) APP.songs[idx].lyrics = sg.suggested_text;
+      }
+      toast('Suggestion accepted — lyrics updated!');
+    } else {
+      toast('Suggestion rejected.');
+    }
+    if (card) card.remove();
+    await refreshSuggestions();
+  } catch (e) { toast('Error: ' + e.message); }
 }
 
 // ── TIKTOK HOOKS ──

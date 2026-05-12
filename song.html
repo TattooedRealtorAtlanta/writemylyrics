@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WriteMyLyrics</title>
+<meta name="description" content="Read and listen to this song on WriteMyLyrics.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#07060a;--surface:#0e0d12;--surface2:#151419;--surface3:#1c1b22;--gold:#c9943a;--gold2:#e8b84b;--text:#ede8df;--text2:#9b9490;--text3:#524e4a;--border:rgba(255,255,255,.06)}
+body{background:var(--black);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+nav{padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(7,6,10,.9)}
+.logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text);text-decoration:none;letter-spacing:-.02em}
+.logo span{color:var(--gold)}
+.cta-btn{background:var(--gold);color:#07060a;border:none;border-radius:6px;padding:9px 22px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;transition:background .2s}
+.cta-btn:hover{background:var(--gold2)}
+.container{max-width:720px;margin:0 auto;padding:56px 24px 80px}
+.loading{text-align:center;padding:80px 0;color:var(--text2);font-size:14px}
+.error-state{text-align:center;padding:80px 0}
+.error-state h2{font-family:'Cormorant Garamond',serif;font-size:28px;margin-bottom:12px}
+.error-state p{color:var(--text2);margin-bottom:24px}
+.song-meta-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:32px}
+.meta-chip{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--text2)}
+.vote-chip{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--gold)}
+.song-title{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:700;line-height:1.15;margin-bottom:6px;letter-spacing:-.02em}
+.song-author{font-size:13px;color:var(--text2);margin-bottom:28px}
+.song-author span{color:var(--gold)}
+.audio-player{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:32px;display:flex;align-items:center;gap:14px}
+.play-btn{width:44px;height:44px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
+.play-btn:hover{background:var(--gold2)}
+.play-btn svg{width:18px;height:18px;fill:#07060a}
+.player-info{flex:1;min-width:0}
+.player-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px}
+.player-time{font-size:12px;color:var(--text2);font-family:'DM Mono',monospace}
+audio{display:none}
+.notebook{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px 36px;margin-bottom:40px}
+.lyrics-text{font-family:'DM Mono',monospace;font-size:14px;line-height:2;color:var(--text);white-space:pre-wrap;word-break:break-word}
+.section-label{font-size:10px;text-transform:uppercase;letter-spacing:.2em;color:rgba(201,148,58,.6);font-weight:600;margin-top:20px;display:block;line-height:2.5}
+.divider{border:none;border-top:1px solid var(--border);margin:40px 0}
+.cta-block{text-align:center;padding:8px 0}
+.cta-block h3{font-family:'Cormorant Garamond',serif;font-size:28px;margin-bottom:8px}
+.cta-block p{color:var(--text2);font-size:14px;margin-bottom:20px}
+@media(max-width:600px){.container{padding:36px 16px 60px}.song-title{font-size:30px}.notebook{padding:20px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="/">Write<span>My</span>Lyrics</a>
+  <a class="cta-btn" href="/">Write Your Own Song →</a>
+</nav>
+
+<div class="container">
+  <div class="loading" id="loadingState">Loading song…</div>
+  <div class="error-state" id="errorState" style="display:none">
+    <h2>Song not found</h2>
+    <p>This song may have been unpublished or the link is incorrect.</p>
+    <a class="cta-btn" href="/">Write Your Own Song</a>
+  </div>
+  <div id="songContent" style="display:none">
+    <div class="song-title" id="songTitle"></div>
+    <div class="song-author" id="songAuthor"></div>
+    <div class="song-meta-row" id="songMeta"></div>
+
+    <div class="audio-player" id="audioPlayer" style="display:none">
+      <button class="play-btn" id="playBtn" onclick="togglePlay()">
+        <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <div class="player-info">
+        <div class="player-label">Listen</div>
+        <div class="player-time" id="playerTime">0:00</div>
+      </div>
+      <audio id="audioEl" ontimeupdate="onTimeUpdate()" onended="onEnded()"></audio>
+    </div>
+
+    <div class="notebook">
+      <div class="lyrics-text" id="lyricsDisplay"></div>
+    </div>
+
+    <hr class="divider">
+    <div class="cta-block">
+      <h3>Write your own song</h3>
+      <p>Generate professional lyrics in any genre, instantly with AI.</p>
+      <a class="cta-btn" href="/">Start Writing Free →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const LABEL_RE = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i;
+
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderLyrics(text) {
+  const el = document.getElementById('lyricsDisplay');
+  el.innerHTML = '';
+  (text||'').split('\n').forEach(line => {
+    const t = line.trim();
+    if (!t) { el.appendChild(document.createElement('br')); return; }
+    if (LABEL_RE.test(t)) {
+      const span = document.createElement('span');
+      span.className = 'section-label';
+      span.textContent = t;
+      el.appendChild(span);
+    } else {
+      el.appendChild(document.createTextNode(t + '\n'));
+    }
+  });
+}
+
+async function loadSong() {
+  const id = window.location.pathname.replace('/song/', '').replace(/\//g,'').trim();
+  if (!id) { showError(); return; }
+
+  try {
+    const res = await fetch(`/api/song?id=${encodeURIComponent(id)}`);
+    if (!res.ok) { showError(); return; }
+    const { song } = await res.json();
+    if (!song) { showError(); return; }
+
+    document.title = `${song.title || 'Untitled Song'} — WriteMyLyrics`;
+
+    document.getElementById('songTitle').textContent = song.title || 'Untitled Song';
+    document.getElementById('songAuthor').innerHTML = `By <span>${escHtml(song.author_name || 'Anonymous')}</span>`;
+
+    const meta = document.getElementById('songMeta');
+    if (song.genre) meta.innerHTML += `<span class="meta-chip">${escHtml(song.genre)}</span>`;
+    if (song.moods) {
+      song.moods.split(',').filter(Boolean).forEach(m => {
+        meta.innerHTML += `<span class="meta-chip">${escHtml(m.trim())}</span>`;
+      });
+    }
+    if (song.vote_count) {
+      meta.innerHTML += `<span class="vote-chip">♥ ${song.vote_count}</span>`;
+    }
+
+    renderLyrics(song.lyrics);
+
+    if (song.audio_url) {
+      document.getElementById('audioEl').src = song.audio_url;
+      document.getElementById('audioPlayer').style.display = 'flex';
+    }
+
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('songContent').style.display = 'block';
+  } catch {
+    showError();
+  }
+}
+
+function showError() {
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('errorState').style.display = 'block';
+}
+
+let playing = false;
+function togglePlay() {
+  const audio = document.getElementById('audioEl');
+  const icon = document.getElementById('playIcon');
+  if (audio.paused) {
+    audio.play();
+    icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+    playing = true;
+  } else {
+    audio.pause();
+    icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+    playing = false;
+  }
+}
+
+function onTimeUpdate() {
+  const t = document.getElementById('audioEl').currentTime;
+  const m = Math.floor(t/60), s = Math.floor(t%60).toString().padStart(2,'0');
+  document.getElementById('playerTime').textContent = `${m}:${s}`;
+}
+
+function onEnded() {
+  document.getElementById('playIcon').innerHTML = '<path d="M8 5v14l11-7z"/>';
+  playing = false;
+}
+
+loadSong();
+</script>
+</body>
+</html>
