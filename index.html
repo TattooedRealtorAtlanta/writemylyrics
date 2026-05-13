@@ -2396,11 +2396,15 @@ function renderLyricsNormal(text, out) {
       }
       return;
     }
-    const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(trimmed);
+    const innerLabel = trimmed.replace(/^\*{1,3}(.*)\*{1,3}$/, '$1').replace(/^\[(.*)\]$/, '$1').trim();
+    const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|PRE CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(innerLabel)
+      || /^\*{1,3}.{1,40}\*{1,3}$/.test(trimmed)
+      || /^\[.{1,40}\]$/.test(trimmed)
+      || (/^[A-Z][A-Z\s\d\-\/]{1,24}$/.test(trimmed) && !/[a-z]/.test(trimmed) && trimmed.split(' ').length <= 4);
     if (isLabel) {
       const span = document.createElement('span');
       span.className = 'sec-label';
-      span.textContent = trimmed;
+      span.textContent = innerLabel || trimmed;
       out.appendChild(span);
     } else if (APP.showSyllables) {
       const row = document.createElement('div');
@@ -2446,14 +2450,18 @@ function renderLyricsChordMode(text, out) {
       return;
     }
 
-    // Section label
-    const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(trimmed);
+    // Section label — detect bare keywords, **bold**, [bracket], or all-caps short lines
+    const innerText = trimmed.replace(/^\*{1,3}(.*)\*{1,3}$/, '$1').replace(/^\[(.*)\]$/, '$1').trim();
+    const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|PRE CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(innerText)
+      || /^\*{1,3}.{1,40}\*{1,3}$/.test(trimmed)
+      || /^\[.{1,40}\]$/.test(trimmed)
+      || (/^[A-Z][A-Z\s\d\-\/]{1,24}$/.test(trimmed) && !/[a-z]/.test(trimmed) && trimmed.split(' ').length <= 4);
     if (isLabel) {
       const span = document.createElement('span');
       span.className = 'sec-label';
-      span.textContent = trimmed;
+      span.textContent = innerText || trimmed;
       out.appendChild(span);
-      return;
+      return; // do NOT increment lyricIdx
     }
 
     // Lyric line — wrap in a block with chord stacked above
