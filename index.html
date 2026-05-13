@@ -322,15 +322,9 @@ select option{background:var(--surface3)}
 .tr-btn:hover{border-color:var(--gold-border);color:var(--gold)}
 .tr-key{min-width:26px;text-align:center;font-family:'DM Mono',monospace;font-size:13px;color:var(--gold);font-weight:600}
 
-/* ── LEAD SHEET INLINE CHORD DISPLAY ── */
-/* Normal (no chord mode): lyric-line-row is horizontal for syllables */
+/* ── LYRIC LINE ROW (syllable mode only) ── */
 .lyric-line-row{display:flex;align-items:baseline;gap:10px;line-height:2;min-height:1.6em}
 .lyric-line-text{flex:1;color:#1a140e}
-/* chord-mode: stack chord above lyric text */
-.lyrics-out.chord-mode .lyric-line-row{display:block;line-height:1;margin-top:10px}
-.lyrics-out.chord-mode .lyric-line-row.spacer{display:block;height:.8em;margin-top:0}
-.inline-chord{display:block;font-family:'DM Mono',monospace;font-size:11.5px;color:#a06a10;font-weight:700;letter-spacing:.08em;line-height:1.2;margin-bottom:1px}
-.lyrics-out.chord-mode .lyric-line-text{display:block;color:#1a140e;font-size:15px;line-height:1.7;font-family:'DM Sans',sans-serif}
 
 /* ── CHORD GUIDE DIAGRAMS ── */
 .chord-guide{margin-top:12px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
@@ -2369,14 +2363,31 @@ function renderLyrics(text) {
   const out = document.getElementById('lyricsOut');
   out.innerHTML = '';
   out.classList.toggle('syl-on', !!APP.showSyllables);
-  out.classList.toggle('chord-mode', !!APP.showChords);
+
+  if (APP.showChords) {
+    renderLyricsChordMode(text, out);
+  } else {
+    renderLyricsNormal(text, out);
+  }
+
+  // Stats
+  const allLines = text.split('\n');
+  const words = text.replace(/[^\w\s]/g, '').split(/\s+/).filter(Boolean).length;
+  const lyricLines = allLines.filter(l => l.trim() && !/^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO)/i.test(l.trim())).length;
+  document.getElementById('wc').textContent = words;
+  document.getElementById('lc').textContent = lyricLines;
+  document.getElementById('el').textContent = Math.round(lyricLines * 2.5 / 60 * 10) / 10 + ' min';
+
+  document.getElementById('rpScroll').scrollTop = 0;
+}
+
+// Normal lyrics render (no chords) — handles plain text and syllable mode
+function renderLyricsNormal(text, out) {
   const lines = text.split('\n');
-  let currentSection = null;
-  let lineCountInSection = 0;
   lines.forEach(line => {
     const trimmed = line.trim();
     if (!trimmed) {
-      if (APP.showSyllables || APP.showChords) {
+      if (APP.showSyllables) {
         const spacer = document.createElement('div');
         spacer.className = 'lyric-line-row spacer';
         out.appendChild(spacer);
@@ -2387,49 +2398,99 @@ function renderLyrics(text) {
     }
     const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(trimmed);
     if (isLabel) {
-      currentSection = trimmed.toUpperCase().trim();
-      lineCountInSection = 0;
       const span = document.createElement('span');
       span.className = 'sec-label';
       span.textContent = trimmed;
       out.appendChild(span);
-    } else if (APP.showSyllables || APP.showChords) {
+    } else if (APP.showSyllables) {
       const row = document.createElement('div');
       row.className = 'lyric-line-row';
-      if (APP.showChords && APP.parsedChords) {
-        const sectionChords = getInlineSectionChords(currentSection);
-        if (sectionChords.length > 0) {
-          const chordDiv = document.createElement('div');
-          chordDiv.className = 'inline-chord';
-          chordDiv.textContent = sectionChords[lineCountInSection % sectionChords.length];
-          row.appendChild(chordDiv);
-        }
-      }
-      const txt = document.createElement('div');
+      const txt = document.createElement('span');
       txt.className = 'lyric-line-text';
       txt.textContent = line;
+      const cnt = document.createElement('span');
+      cnt.className = 'syl-count';
+      cnt.textContent = countLineSyllables(line);
       row.appendChild(txt);
-      if (APP.showSyllables) {
-        const cnt = document.createElement('span');
-        cnt.className = 'syl-count';
-        cnt.textContent = countLineSyllables(line);
-        row.appendChild(cnt);
-      }
+      row.appendChild(cnt);
       out.appendChild(row);
-      lineCountInSection++;
     } else {
       out.appendChild(document.createTextNode(line + '\n'));
     }
   });
+}
 
-  // Stats
-  const words = text.replace(/[^\w\s]/g, '').split(/\s+/).filter(Boolean).length;
-  const lyricLines = lines.filter(l => l.trim() && !/^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO)/i.test(l.trim())).length;
-  document.getElementById('wc').textContent = words;
-  document.getElementById('lc').textContent = lyricLines;
-  document.getElementById('el').textContent = Math.round(lyricLines * 2.5 / 60 * 10) / 10 + ' min';
+// Chord-mode render — shows chord names above each lyric line (lead-sheet style)
+function renderLyricsChordMode(text, out) {
+  // Build flat chord list from all sections in order
+  const chordList = [];
+  if (APP.parsedChords) {
+    for (const chords of Object.values(APP.parsedChords.sections)) {
+      for (const c of chords) {
+        chordList.push(APP.transposeOffset ? transposeChord(c, APP.transposeOffset) : c);
+      }
+    }
+  }
 
-  document.getElementById('rpScroll').scrollTop = 0;
+  const lines = text.split('\n');
+  let lyricIdx = 0;
+
+  lines.forEach(line => {
+    const trimmed = line.trim();
+
+    // Blank line → small gap
+    if (!trimmed) {
+      const gap = document.createElement('div');
+      gap.style.height = '10px';
+      out.appendChild(gap);
+      return;
+    }
+
+    // Section label
+    const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(trimmed);
+    if (isLabel) {
+      const span = document.createElement('span');
+      span.className = 'sec-label';
+      span.textContent = trimmed;
+      out.appendChild(span);
+      return;
+    }
+
+    // Lyric line — wrap in a block with chord stacked above
+    const block = document.createElement('div');
+    block.style.cssText = 'margin-top:8px;line-height:1';
+
+    if (chordList.length > 0) {
+      const chordEl = document.createElement('div');
+      chordEl.style.cssText = [
+        'display:block',
+        'font-family:"DM Mono",monospace',
+        'font-size:11.5px',
+        'font-weight:700',
+        'color:#9a6010',
+        'letter-spacing:.1em',
+        'line-height:1.3',
+        'margin-bottom:1px',
+        'user-select:text'
+      ].join(';');
+      chordEl.textContent = chordList[lyricIdx % chordList.length];
+      block.appendChild(chordEl);
+    }
+
+    const textEl = document.createElement('div');
+    textEl.style.cssText = [
+      'display:block',
+      'color:#1a140e',
+      'font-family:"DM Sans",sans-serif',
+      'font-size:15px',
+      'line-height:1.75'
+    ].join(';');
+    textEl.textContent = line;
+    block.appendChild(textEl);
+
+    out.appendChild(block);
+    lyricIdx++;
+  });
 }
 
 function renderTitles(titles) {
