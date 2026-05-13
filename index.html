@@ -360,6 +360,32 @@ select option{background:var(--surface3)}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
+/* ── SETTINGS MODAL ── */
+.settings-modal{max-width:540px;padding:0;display:flex;flex-direction:column;max-height:90vh}
+.settings-header{padding:24px 28px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.settings-header .modal-h{margin-bottom:0;font-size:24px}
+.settings-close-btn{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;padding:0 4px;line-height:1;transition:color .15s}
+.settings-close-btn:hover{color:var(--text)}
+.settings-body{padding:22px 28px;overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.settings-section-title{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--gold);font-weight:600;margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.settings-section-title:first-child{margin-top:0}
+.settings-row{margin-bottom:14px}
+.settings-label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);font-weight:600;margin-bottom:6px}
+.settings-row select,.settings-row input[type=text]{width:100%;background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:9px 32px 9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .2s}
+.settings-row select:focus,.settings-row input[type=text]:focus{border-color:var(--gold-border)}
+.settings-row input[readonly]{color:var(--text3);cursor:default}
+.settings-row input[readonly]:focus{border-color:var(--border)}
+.settings-mood-grid{display:flex;flex-wrap:wrap;gap:6px}
+.settings-mood-chip{background:var(--surface3);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text2);cursor:pointer;transition:all .15s;user-select:none}
+.settings-mood-chip:hover{border-color:var(--gold-border);color:var(--text)}
+.settings-mood-chip.on{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);font-weight:500}
+.settings-plan-row{display:flex;align-items:center;gap:12px}
+.settings-plan-badge{background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.settings-upgrade-btn{background:var(--gold);border:none;border-radius:6px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:#07060a;cursor:pointer;transition:all .2s}
+.settings-upgrade-btn:hover{background:var(--gold2)}
+.settings-footer{padding:16px 28px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;flex-shrink:0}
+.settings-saving{font-size:12px;color:var(--text3);align-self:center;margin-right:auto}
+
 /* ── HISTORY PANEL ── */
 .history-panel{width:380px;min-width:380px;background:var(--surface);border-right:1px solid var(--border);display:none;flex-direction:column;overflow:hidden}
 .history-panel.active{display:flex}
@@ -1084,7 +1110,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
       <div class="sb-icon" id="sbHistory" title="History" onclick="showView('history')">🕐</div>
       <div class="sb-divider"></div>
       <div class="sb-spacer"></div>
-      <div class="sb-icon" title="Settings" onclick="toast('Settings — coming soon!')">⚙️</div>
+      <div class="sb-icon" title="Settings" onclick="openSettings()">⚙️</div>
       <div class="sb-avatar" id="sbAvatar" onclick="showLogout()" title="Account">S</div>
     </div>
 
@@ -2201,6 +2227,8 @@ function enterApp(profile) {
   setNavLoggedIn(profile.plan);
   updateUsage();
   showPage('app');
+  // Apply saved studio defaults after DOM is ready
+  requestAnimationFrame(() => applyStudioDefaults(profile));
 }
 
 function setNavLoggedIn(plan) {
@@ -2641,6 +2669,149 @@ function toast(msg) {
   t.classList.add('on');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('on'), 3000);
+}
+
+// ── SETTINGS ──
+
+function openSettings() {
+  if (!APP.user) { toast('Sign in to access settings.'); return; }
+  const p = APP.profile || {};
+
+  // Populate genre
+  const sg = document.getElementById('setGenre');
+  if (sg) sg.value = p.default_genre || '';
+
+  // Populate mood chips
+  const savedMoods = p.default_moods ? p.default_moods.split(',').map(s => s.trim()) : [];
+  document.querySelectorAll('#setMoodGrid .settings-mood-chip').forEach(chip => {
+    chip.classList.toggle('on', savedMoods.includes(chip.dataset.v));
+  });
+
+  // Populate tempo
+  const st = document.getElementById('setTempo');
+  if (st) st.value = p.default_tempo || '';
+
+  // Populate structure
+  const ss = document.getElementById('setStructure');
+  if (ss) ss.value = p.default_structure || '';
+
+  // Populate pov
+  const sp = document.getElementById('setPov');
+  if (sp) sp.value = p.default_pov || '';
+
+  // Populate language
+  const sl = document.getElementById('setLanguage');
+  if (sl) sl.value = p.default_language || '';
+
+  // Populate account fields
+  const dn = document.getElementById('setDisplayName');
+  if (dn) dn.value = p.name || '';
+
+  const em = document.getElementById('setEmail');
+  if (em) em.value = p.email || APP.user.email || '';
+
+  // Plan badge + upgrade button
+  const badge = document.getElementById('setPlanBadge');
+  const upgradeBtn = document.getElementById('setPlanUpgradeBtn');
+  const plan = APP.plan || 'free';
+  if (badge) badge.textContent = plan === 'unlimited' ? 'Unlimited' : plan === 'pro' ? 'Pro' : 'Free';
+  if (upgradeBtn) upgradeBtn.style.display = plan === 'unlimited' ? 'none' : 'inline-block';
+
+  document.getElementById('settingsSavingMsg').style.display = 'none';
+  document.getElementById('settingsBg').classList.add('on');
+}
+
+function toggleSettingsMood(chip) {
+  chip.classList.toggle('on');
+}
+
+async function saveSettings() {
+  if (!APP.user) return;
+  const savingMsg = document.getElementById('settingsSavingMsg');
+  savingMsg.style.display = 'inline';
+
+  const selectedMoods = [...document.querySelectorAll('#setMoodGrid .settings-mood-chip.on')]
+    .map(c => c.dataset.v);
+
+  const body = {
+    display_name:      document.getElementById('setDisplayName').value.trim(),
+    default_genre:     document.getElementById('setGenre').value || null,
+    default_moods:     selectedMoods.length ? selectedMoods.join(',') : null,
+    default_tempo:     document.getElementById('setTempo').value || null,
+    default_structure: document.getElementById('setStructure').value || null,
+    default_pov:       document.getElementById('setPov').value || null,
+    default_language:  document.getElementById('setLanguage').value || null,
+  };
+
+  try {
+    const updated = await authFetch('/api/user', { method: 'PATCH', body: JSON.stringify(body) });
+    // Merge into APP.profile
+    APP.profile = { ...APP.profile, ...updated };
+    if (updated.name) APP.profile.name = updated.name;
+    // Update avatar initial
+    const av = document.getElementById('sbAvatar');
+    if (av && updated.name) av.textContent = updated.name.charAt(0).toUpperCase();
+    savingMsg.style.display = 'none';
+    closeModal('settingsBg');
+    toast('Settings saved.');
+  } catch (e) {
+    savingMsg.style.display = 'none';
+    toast('Save failed — ' + e.message);
+  }
+}
+
+// Apply saved defaults to studio fields when a user logs in
+function applyStudioDefaults(profile) {
+  if (!profile) return;
+
+  // Genre
+  if (profile.default_genre) {
+    document.querySelectorAll('#genreGrid .pick-btn').forEach(b => {
+      const isMatch = b.classList.toggle('on', b.dataset.v === profile.default_genre);
+    });
+    APP.genre = profile.default_genre;
+  }
+
+  // Moods
+  if (profile.default_moods) {
+    const moods = profile.default_moods.split(',').map(s => s.trim());
+    document.querySelectorAll('#moodGrid .mood-chip').forEach(b => {
+      if (moods.includes(b.dataset.v)) {
+        b.classList.add('on');
+      }
+    });
+    APP.moods = moods;
+  }
+
+  // Tempo
+  if (profile.default_tempo) {
+    document.querySelectorAll('#tempoGrid .pick-btn').forEach(b => {
+      b.classList.toggle('on', b.dataset.v === profile.default_tempo);
+    });
+    APP.tempo = profile.default_tempo;
+  }
+
+  // Structure
+  if (profile.default_structure) {
+    const sel = document.getElementById('structure');
+    if (sel) sel.value = profile.default_structure;
+  }
+
+  // POV
+  if (profile.default_pov) {
+    const sel = document.getElementById('pov');
+    if (sel) sel.value = profile.default_pov;
+  }
+
+  // Language
+  if (profile.default_language) {
+    const sel = document.getElementById('languageSel');
+    if (sel) {
+      sel.value = profile.default_language;
+      APP.language = profile.default_language;
+      if (typeof onLanguageChange === 'function') onLanguageChange();
+    }
+  }
 }
 
 // ── TEMPLATES ──
@@ -5010,5 +5181,138 @@ document.addEventListener('DOMContentLoaded', async () => {
     </div>
   </div>
 </div>
+
+<!-- ── SETTINGS MODAL ── -->
+<div class="modal-bg" id="settingsBg" onclick="bgClose(event,'settingsBg')">
+  <div class="modal settings-modal">
+    <div class="settings-header">
+      <div class="modal-h">Settings</div>
+      <button class="settings-close-btn" onclick="closeModal('settingsBg')" title="Close">✕</button>
+    </div>
+    <div class="settings-body">
+
+      <div class="settings-section-title">Studio Defaults</div>
+
+      <div class="settings-row">
+        <label class="settings-label">Default Genre</label>
+        <select id="setGenre">
+          <option value="">— No default —</option>
+          <option value="Country">Country</option>
+          <option value="Hip Hop">Hip Hop</option>
+          <option value="Pop">Pop</option>
+          <option value="Rock">Rock</option>
+          <option value="R&B">R&amp;B</option>
+          <option value="Blues">Blues</option>
+          <option value="Folk">Folk</option>
+          <option value="Military / Patriotic">Military / Patriotic</option>
+          <option value="Gospel">Gospel</option>
+          <option value="Americana">Americana</option>
+          <option value="Outlaw Country">Outlaw Country</option>
+          <option value="Trap">Trap</option>
+          <option value="Singer-Songwriter">Singer-Songwriter</option>
+          <option value="Metal">Metal</option>
+          <option value="Alternative">Alternative</option>
+          <option value="EDM">EDM</option>
+          <option value="Latin">Latin</option>
+        </select>
+      </div>
+
+      <div class="settings-row">
+        <label class="settings-label">Default Mood <span style="font-size:11px;color:var(--text3);text-transform:none;letter-spacing:0">(select multiple)</span></label>
+        <div class="settings-mood-grid" id="setMoodGrid">
+          <button class="settings-mood-chip" data-v="Happy" onclick="toggleSettingsMood(this)">Happy</button>
+          <button class="settings-mood-chip" data-v="Sad" onclick="toggleSettingsMood(this)">Sad</button>
+          <button class="settings-mood-chip" data-v="Angry" onclick="toggleSettingsMood(this)">Angry</button>
+          <button class="settings-mood-chip" data-v="Nostalgic" onclick="toggleSettingsMood(this)">Nostalgic</button>
+          <button class="settings-mood-chip" data-v="Hopeful" onclick="toggleSettingsMood(this)">Hopeful</button>
+          <button class="settings-mood-chip" data-v="Heartbroken" onclick="toggleSettingsMood(this)">Heartbroken</button>
+          <button class="settings-mood-chip" data-v="Defiant" onclick="toggleSettingsMood(this)">Defiant</button>
+          <button class="settings-mood-chip" data-v="Celebratory" onclick="toggleSettingsMood(this)">Celebratory</button>
+          <button class="settings-mood-chip" data-v="Melancholy" onclick="toggleSettingsMood(this)">Melancholy</button>
+          <button class="settings-mood-chip" data-v="Reflective" onclick="toggleSettingsMood(this)">Reflective</button>
+          <button class="settings-mood-chip" data-v="Raw" onclick="toggleSettingsMood(this)">Raw</button>
+          <button class="settings-mood-chip" data-v="Tender" onclick="toggleSettingsMood(this)">Tender</button>
+        </div>
+      </div>
+
+      <div class="settings-row">
+        <label class="settings-label">Default Tempo</label>
+        <select id="setTempo">
+          <option value="">— No default —</option>
+          <option value="Slow ballad">Slow Ballad</option>
+          <option value="Mid tempo">Mid Tempo</option>
+          <option value="Uptempo">Uptempo</option>
+          <option value="Driving fast">Driving Fast</option>
+        </select>
+      </div>
+
+      <div class="settings-row">
+        <label class="settings-label">Default Song Structure</label>
+        <select id="setStructure">
+          <option value="">— No default —</option>
+          <option value="Verse / Chorus / Verse / Chorus / Bridge / Chorus">Verse / Chorus / Verse / Chorus / Bridge / Chorus</option>
+          <option value="Verse / Chorus / Verse / Chorus">Verse / Chorus / Verse / Chorus (short)</option>
+          <option value="Verse / Verse / Chorus / Verse / Chorus">Verse / Verse / Chorus / Verse / Chorus</option>
+          <option value="Intro / Verse / Pre-Chorus / Chorus / Verse / Pre-Chorus / Chorus / Bridge / Chorus">Full Production</option>
+        </select>
+      </div>
+
+      <div class="settings-row">
+        <label class="settings-label">Default Point of View</label>
+        <select id="setPov">
+          <option value="">— No default —</option>
+          <option value="First person (I / me / my)">First person — I / me / my</option>
+          <option value="Second person (you / your)">Second person — you / your</option>
+          <option value="Third person (he / she / they)">Third person</option>
+          <option value="Shifting perspective">Shifting perspective</option>
+        </select>
+      </div>
+
+      <div class="settings-row">
+        <label class="settings-label">Default Language</label>
+        <select id="setLanguage">
+          <option value="">— No default —</option>
+          <option value="English">English</option>
+          <option value="Spanish">Spanish</option>
+          <option value="French">French</option>
+          <option value="Portuguese">Portuguese</option>
+          <option value="German">German</option>
+          <option value="Italian">Italian</option>
+          <option value="Japanese">Japanese</option>
+          <option value="Korean">Korean</option>
+          <option value="Arabic">Arabic</option>
+          <option value="Hindi">Hindi</option>
+        </select>
+      </div>
+
+      <div class="settings-section-title">Account</div>
+
+      <div class="settings-row">
+        <label class="settings-label">Display Name</label>
+        <input type="text" id="setDisplayName" placeholder="Name shown in Gallery and Co-writer" maxlength="80">
+      </div>
+
+      <div class="settings-row">
+        <label class="settings-label">Email</label>
+        <input type="text" id="setEmail" readonly>
+      </div>
+
+      <div class="settings-row">
+        <label class="settings-label">Current Plan</label>
+        <div class="settings-plan-row">
+          <span class="settings-plan-badge" id="setPlanBadge">Free</span>
+          <button class="settings-upgrade-btn" id="setPlanUpgradeBtn" onclick="closeModal('settingsBg');showUpgrade()" style="display:none">Upgrade Plan</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="settings-footer">
+      <span class="settings-saving" id="settingsSavingMsg" style="display:none">Saving…</span>
+      <button class="m-cancel" onclick="closeModal('settingsBg')">Cancel</button>
+      <button class="m-confirm" onclick="saveSettings()">Save Settings</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
