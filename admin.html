@@ -174,6 +174,12 @@ nav{padding:0 40px;height:64px;display:flex;align-items:center;justify-content:s
   <div class="panel">
     <div id="recentSignups"><div class="loading-pulse">Loading…</div></div>
   </div>
+
+  <!-- FEEDBACK -->
+  <div class="section-title">Recent Feedback</div>
+  <div class="panel">
+    <div id="recentFeedback"><div class="loading-pulse">Loading…</div></div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -215,9 +221,10 @@ if (sessionStorage.getItem('wml_admin') === '1') showDashboard();
 async function loadDashboard() {
   clearError();
 
-  const [statsRes, signupsRes] = await Promise.all([
+  const [statsRes, signupsRes, feedbackRes] = await Promise.all([
     sb.rpc('admin_get_stats'),
-    sb.rpc('admin_get_recent_signups')
+    sb.rpc('admin_get_recent_signups'),
+    sb.rpc('admin_get_feedback')
   ]);
 
   if (statsRes.error) {
@@ -231,6 +238,7 @@ async function loadDashboard() {
 
   const s = statsRes.data;
   const signups = signupsRes.data || [];
+  const feedback = feedbackRes?.data || [];
 
   renderRevenueStats(s);
   renderUserStats(s);
@@ -238,6 +246,7 @@ async function loadDashboard() {
   renderPlanBreakdown(s);
   renderTopGenres(s);
   renderRecentSignups(signups);
+  renderRecentFeedback(feedback);
 }
 
 // ── RENDER HELPERS ────────────────────────────────────────────────────────────
@@ -353,6 +362,34 @@ function renderRecentSignups(signups) {
         <th>Plan</th>
         <th>Signed Up</th>
         <th style="text-align:right">Songs</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+function renderRecentFeedback(items) {
+  const el = document.getElementById('recentFeedback');
+  if (!items || !items.length) {
+    el.innerHTML = '<div class="loading-pulse">No feedback yet. Run supabase-feedback.sql to enable this feature.</div>';
+    return;
+  }
+  const rows = items.map(f => {
+    const stars = '★'.repeat(f.rating) + '☆'.repeat(5 - f.rating);
+    return `
+      <tr>
+        <td class="email-cell">${esc(f.email || 'Anonymous')}</td>
+        <td style="color:#e8b84b;letter-spacing:.05em;font-size:13px">${stars}</td>
+        <td style="max-width:320px;font-size:13px;color:#9b9490">${esc(f.comment || '—')}</td>
+        <td class="date-cell">${fmtDate(f.created_at)}</td>
+      </tr>`;
+  }).join('');
+  el.innerHTML = `
+    <table class="signups-table">
+      <thead><tr>
+        <th>User</th>
+        <th>Rating</th>
+        <th>Comment</th>
+        <th>Date</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;

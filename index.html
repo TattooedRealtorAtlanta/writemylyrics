@@ -302,6 +302,51 @@ select option{background:var(--surface3)}
 .m-confirm-2{background:var(--surface3);border:1px solid var(--gold-border);border-radius:6px;padding:10px 24px;color:var(--gold);font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;transition:all .15s}
 .m-confirm-2:hover{background:var(--gold-dim)}
 .nav-plan-badge{background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);pointer-events:none;white-space:nowrap}
+
+/* ── LANGUAGE SELECTOR ── */
+.lang-selector{position:relative}
+.lang-btn{background:none;border:1px solid var(--border);border-radius:6px;color:var(--text2);cursor:pointer;padding:5px 9px;font-size:15px;display:flex;align-items:center;transition:all .2s;line-height:1}
+.lang-btn:hover{border-color:var(--gold-border);color:var(--text)}
+.lang-dropdown{position:absolute;top:calc(100% + 6px);right:0;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:6px;min-width:150px;box-shadow:0 20px 40px rgba(0,0,0,.5);z-index:200;display:none}
+.lang-dropdown.open{display:block}
+.lang-option{display:block;width:100%;background:none;border:none;text-align:left;padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);cursor:pointer;border-radius:6px;transition:all .15s}
+.lang-option:hover{background:var(--surface3);color:var(--text)}
+.lang-option.active{color:var(--gold)}
+
+/* ── CHORD SHOW TOGGLE + TRANSPOSE ── */
+.chord-toggle-btn{background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap}
+.chord-toggle-btn:hover,.chord-toggle-btn.on{border-color:var(--gold-border);color:var(--gold);background:var(--gold-dim)}
+.transpose-ctrl{display:flex;align-items:center;gap:5px}
+.tr-btn{background:var(--surface3);border:1px solid var(--border);border-radius:4px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;color:var(--text2);transition:all .15s;padding:0;line-height:1}
+.tr-btn:hover{border-color:var(--gold-border);color:var(--gold)}
+.tr-key{min-width:26px;text-align:center;font-family:'DM Mono',monospace;font-size:13px;color:var(--gold);font-weight:600}
+.inline-chord{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold2);font-weight:600;letter-spacing:.08em;padding-top:6px;line-height:1.1}
+.lyric-line-text{color:var(--text);font-family:inherit;font-size:inherit}
+
+/* ── CHORD GUIDE DIAGRAMS ── */
+.chord-guide{margin-top:12px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.chord-guide-head{padding:10px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.chord-guide-title{font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:var(--gold);font-weight:600}
+.chord-diagrams-grid{padding:16px 20px;display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end}
+.chord-diagram-item{display:flex;flex-direction:column;align-items:center;gap:4px}
+.chord-diagram-label{font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);text-align:center;letter-spacing:.04em}
+.chord-unknown{width:70px;height:90px;background:var(--surface3);border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text3)}
+
+/* ── FEEDBACK FAB + MODAL ── */
+.feedback-fab{position:fixed;bottom:80px;right:24px;background:var(--surface2);border:1px solid var(--gold-border);border-radius:8px;padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--gold);cursor:pointer;z-index:50;display:none;align-items:center;gap:6px;transition:all .2s;letter-spacing:.02em;white-space:nowrap}
+.feedback-fab:hover{background:var(--gold-dim);transform:translateY(-2px)}
+.feedback-fab.visible{display:flex}
+.feedback-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;align-items:center;justify-content:center}
+.feedback-modal-bg.on{display:flex}
+.feedback-modal{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:32px;width:100%;max-width:420px;box-shadow:0 40px 80px rgba(0,0,0,.6)}
+.feedback-modal-h{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;margin-bottom:6px}
+.feedback-modal-sub{font-size:13px;color:var(--text2);margin-bottom:20px}
+.feedback-star-row{display:flex;gap:6px;margin-bottom:18px}
+.feedback-star{background:none;border:none;font-size:26px;cursor:pointer;color:var(--text3);transition:color .15s;padding:0;line-height:1}
+.feedback-star.on{color:var(--gold2)}
+.feedback-comment{width:100%;background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);resize:vertical;min-height:80px;outline:none;transition:border-color .2s;margin-bottom:20px;display:block}
+.feedback-comment:focus{border-color:var(--gold-border)}
+.feedback-modal-btns{display:flex;gap:10px;justify-content:flex-end}
 .nav-signout{background:none;border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);cursor:pointer;transition:all .2s}
 .nav-signout:hover{border-color:var(--red);color:var(--red)}
 
@@ -715,11 +760,22 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 <nav>
   <div class="nav-logo" onclick="showPage('landing')">Write<span>My</span>Lyrics</div>
   <div class="nav-center">
-    <button class="nav-gallery-link" onclick="showGallery()">🔥 Gallery</button>
+    <button class="nav-gallery-link" id="navGalleryBtn" onclick="showGallery()" data-i18n="nav.gallery">🔥 Gallery</button>
   </div>
   <div class="nav-right" id="navRight">
-    <button class="nav-link" onclick="showPage('auth')">Sign In</button>
-    <button class="nav-cta" onclick="showAuthTab('signup')">Start Free</button>
+    <div class="lang-selector" id="langSelector">
+      <button class="lang-btn" id="langBtn" onclick="toggleLangDropdown(event)" title="Language / Idioma / Langue">🌐</button>
+      <div class="lang-dropdown" id="langDropdown">
+        <button class="lang-option" data-lang="en" onclick="setUILang('en')">🇺🇸 English</button>
+        <button class="lang-option" data-lang="es" onclick="setUILang('es')">🇪🇸 Español</button>
+        <button class="lang-option" data-lang="pt" onclick="setUILang('pt')">🇧🇷 Português</button>
+        <button class="lang-option" data-lang="fr" onclick="setUILang('fr')">🇫🇷 Français</button>
+        <button class="lang-option" data-lang="de" onclick="setUILang('de')">🇩🇪 Deutsch</button>
+        <button class="lang-option" data-lang="ja" onclick="setUILang('ja')">🇯🇵 日本語</button>
+      </div>
+    </div>
+    <button class="nav-link" id="navSignInBtn" onclick="showPage('auth')" data-i18n="nav.signin">Sign In</button>
+    <button class="nav-cta" id="navStartFreeBtn" onclick="showAuthTab('signup')" data-i18n="nav.start_free">Start Free</button>
   </div>
 </nav>
 
@@ -1027,8 +1083,8 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
     <div class="left-panel">
       <div class="lp-head">
         <div class="lp-title">Song<em>Writer</em></div>
-        <div class="lp-sub">AI Lyrics Studio</div>
-        <button class="tmpl-btn" onclick="openTemplates()">📋 Start from a Template</button>
+        <div class="lp-sub" data-i18n="studio.title">AI Lyrics Studio</div>
+        <button class="tmpl-btn" id="tmplBtn" onclick="openTemplates()" data-i18n="btn.template">📋 Start from a Template</button>
         <div class="usage-bar-wrap" id="usageWrap">
           <div class="usage-label">
             <span id="usageLabel">0 / 5 songs used this month</span>
@@ -1040,12 +1096,12 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 
       <div class="lp-scroll">
         <div class="field">
-          <label class="field-label">Topic / Concept</label>
-          <textarea id="topic" rows="4" placeholder="What is this song about? A person, a feeling, a moment — describe it in your own words."></textarea>
+          <label class="field-label" data-i18n="studio.topic">Topic / Concept</label>
+          <textarea id="topic" rows="4" data-i18n-placeholder="studio.topic_ph" placeholder="What is this song about? A person, a feeling, a moment — describe it in your own words."></textarea>
         </div>
 
         <div class="field">
-          <label class="field-label">Genre</label>
+          <label class="field-label" data-i18n="studio.genre">Genre</label>
           <div class="genre-grid" id="genreGrid">
             <button class="pick-btn" data-v="Country">Country</button>
             <button class="pick-btn" data-v="Hip Hop">Hip Hop</button>
@@ -1068,7 +1124,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
 
         <div class="field">
-          <label class="field-label">Mood <span>(select multiple)</span></label>
+          <label class="field-label" data-i18n="studio.mood">Mood <span data-i18n="studio.mood_sub">(select multiple)</span></label>
           <div class="mood-wrap" id="moodGrid">
             <button class="mood-chip" data-v="Happy">Happy</button>
             <button class="mood-chip" data-v="Sad">Sad</button>
@@ -1086,7 +1142,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
 
         <div class="field">
-          <label class="field-label">Song Structure</label>
+          <label class="field-label" data-i18n="studio.structure">Song Structure</label>
           <select id="structure">
             <option value="Verse / Chorus / Verse / Chorus / Bridge / Chorus">Verse / Chorus / Verse / Chorus / Bridge / Chorus</option>
             <option value="Verse / Chorus / Verse / Chorus">Verse / Chorus / Verse / Chorus (short)</option>
@@ -1096,7 +1152,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
 
         <div class="field">
-          <label class="field-label">Tempo</label>
+          <label class="field-label" data-i18n="studio.tempo">Tempo</label>
           <div class="tempo-grid" id="tempoGrid">
             <button class="pick-btn" data-v="Slow ballad">Slow Ballad</button>
             <button class="pick-btn on" data-v="Mid tempo">Mid Tempo</button>
@@ -1106,7 +1162,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
 
         <div class="field">
-          <label class="field-label">Rhyme Scheme</label>
+          <label class="field-label" data-i18n="studio.rhyme">Rhyme Scheme</label>
           <select id="rhyme">
             <option value="AABB couplets">AABB — Couplets</option>
             <option value="ABAB alternating">ABAB — Alternating</option>
@@ -1117,7 +1173,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
 
         <div class="field">
-          <label class="field-label">Point of View</label>
+          <label class="field-label" data-i18n="studio.pov">Point of View</label>
           <select id="pov">
             <option value="First person (I / me / my)">First person — I / me / my</option>
             <option value="Second person (you / your)">Second person — you / your</option>
@@ -1127,22 +1183,22 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
 
         <div class="field">
-          <label class="field-label">Words to Include <span>(optional)</span></label>
-          <input type="text" id="words" placeholder="Phrases, names, lines — comma separated">
+          <label class="field-label" data-i18n="studio.words">Words to Include <span data-i18n="studio.words_sub">(optional)</span></label>
+          <input type="text" id="words" data-i18n-placeholder="studio.words_ph" placeholder="Phrases, names, lines — comma separated">
         </div>
 
         <div class="field">
-          <label class="field-label">Style Notes <span>(optional)</span></label>
-          <textarea id="tone" rows="2" placeholder="Raw and honest, poetic, conversational, storytelling..."></textarea>
+          <label class="field-label" data-i18n="studio.style_notes">Style Notes <span data-i18n="studio.style_notes_sub">(optional)</span></label>
+          <textarea id="tone" rows="2" data-i18n-placeholder="studio.style_notes_ph" placeholder="Raw and honest, poetic, conversational, storytelling..."></textarea>
         </div>
 
         <div class="field">
-          <label class="field-label">Write in the style of <span>(optional)</span></label>
-          <input type="text" id="artistStyleInput" placeholder="e.g. Morgan Wallen, Eminem, Taylor Swift...">
+          <label class="field-label" data-i18n="studio.artist_style">Write in the style of <span data-i18n="studio.artist_style_sub">(optional)</span></label>
+          <input type="text" id="artistStyleInput" data-i18n-placeholder="studio.artist_style_ph" placeholder="e.g. Morgan Wallen, Eminem, Taylor Swift...">
         </div>
 
         <div class="field">
-          <label class="field-label">Language</label>
+          <label class="field-label" data-i18n="studio.language">Language</label>
           <select id="languageSel" onchange="onLanguageChange()">
             <option value="English">English</option>
             <option value="Spanish">Spanish</option>
@@ -1160,8 +1216,8 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         <div class="field" id="mixLangField" style="display:none">
           <div class="mix-toggle-row" onclick="toggleMixLanguages()">
             <div>
-              <div class="mix-toggle-label">Mix Languages</div>
-              <span class="mix-toggle-sub">Set a different language per section</span>
+              <div class="mix-toggle-label" data-i18n="studio.mix_lang">Mix Languages</div>
+              <span class="mix-toggle-sub" data-i18n="studio.mix_lang_sub">Set a different language per section</span>
             </div>
             <span class="mix-switch" id="mixSwitch"></span>
           </div>
@@ -1185,7 +1241,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 
       <div class="lp-footer">
         <button class="gen-btn" id="genBtn" onclick="generate()">
-          <span class="btn-norm">✍ WRITE THIS SONG</span>
+          <span class="btn-norm" data-i18n="btn.write_song">✍ WRITE THIS SONG</span>
           <span class="btn-spin"><span class="spinner"></span><span id="btnMsg">Finding the words...</span></span>
         </button>
       </div>
@@ -1194,11 +1250,11 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
     <!-- History Panel -->
     <div class="history-panel" id="historyPanel">
       <div class="hp-head">
-        <div class="hp-title">Song<em>History</em></div>
-        <div class="hp-sub">Your saved songs</div>
+        <div class="hp-title" data-i18n="history.title">Song<em>History</em></div>
+        <div class="hp-sub" data-i18n="history.sub">Your saved songs</div>
       </div>
       <div class="hp-scroll" id="hpScroll">
-        <div class="hi-loading" id="hpLoading">Loading songs...</div>
+        <div class="hi-loading" id="hpLoading" data-i18n="history.loading">Loading songs...</div>
       </div>
     </div>
 
@@ -1210,15 +1266,15 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
           <span class="status-badge status-draft" id="rpStatus" style="display:none;flex-shrink:0">Draft</span>
         </div>
         <div class="rp-actions" id="rpActions" style="display:none">
-          <button class="act-btn gold" onclick="generate()">↺ Regenerate</button>
-          <button class="act-btn" onclick="copyLyrics()">Copy</button>
+          <button class="act-btn gold" onclick="generate()" data-i18n="btn.regenerate">↺ Regenerate</button>
+          <button class="act-btn" onclick="copyLyrics()" data-i18n="btn.copy">Copy</button>
           <button class="act-btn" onclick="exportToSuno()">⚡ Suno</button>
           <button class="act-btn" id="versionsBtn" onclick="openVersionHistory(APP.currentSongId)" style="display:none">↩ Versions</button>
-          <button class="act-btn" id="syllableBtn" onclick="toggleSyllables()">Syllables</button>
+          <button class="act-btn" id="syllableBtn" onclick="toggleSyllables()" data-i18n="btn.syllables">Syllables</button>
           <button class="act-btn" onclick="openHooksPanel()">🎵 TikTok Hooks</button>
           <button class="act-btn" onclick="exportLyrics()">↓ TXT</button>
           <button class="act-btn" onclick="downloadPDF()">↓ PDF</button>
-          <button class="act-btn" onclick="startOver()">Clear</button>
+          <button class="act-btn" onclick="startOver()" data-i18n="btn.clear">Clear</button>
         </div>
       </div>
 
@@ -1257,9 +1313,24 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
           <div id="chordsArea" style="display:none">
             <div class="chord-block">
               <div class="chord-head">
-                <span class="chord-title">Chord Progression</span>
+                <span class="chord-title" data-i18n="chord.progression">Chord Progression</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <button class="chord-toggle-btn" id="showChordsBtn" onclick="toggleShowChords()" data-i18n="chord.show_chords">Show Chords</button>
+                  <div class="transpose-ctrl" id="transposeCtrl" style="display:none">
+                    <button class="tr-btn" onclick="transposeDown()" title="Transpose down">▼</button>
+                    <span class="tr-key" id="trKeyDisplay">C</span>
+                    <button class="tr-btn" onclick="transposeUp()" title="Transpose up">▲</button>
+                  </div>
+                </div>
               </div>
               <div class="chord-body" id="chordsDisplay"></div>
+            </div>
+            <!-- Guitar Chord Guide — shown when Show Chords is on -->
+            <div id="chordGuide" class="chord-guide" style="display:none">
+              <div class="chord-guide-head">
+                <span class="chord-guide-title" data-i18n="chord.guide">Guitar Chord Guide</span>
+              </div>
+              <div class="chord-diagrams-grid" id="chordDiagramsGrid"></div>
             </div>
           </div>
 
@@ -1524,7 +1595,15 @@ const APP = {
   sectionLanguages: {},
   artistStyle: '',
   showSyllables: false,
-  busy: false
+  busy: false,
+  // Chord features
+  rawChords: '',
+  parsedChords: null,
+  showChords: false,
+  transposeOffset: 0,
+  // i18n
+  uiLang: localStorage.getItem('wml_lang') || 'en',
+  _feedbackRating: 0
 };
 
 // ── KARAOKE STATE ──
@@ -2116,15 +2195,43 @@ function enterApp(profile) {
 function setNavLoggedIn(plan) {
   const label = plan === 'unlimited' ? 'Unlimited' : plan === 'pro' ? 'Pro' : 'Free Plan';
   document.getElementById('navRight').innerHTML = `
+    <div class="lang-selector" id="langSelector">
+      <button class="lang-btn" id="langBtn" onclick="toggleLangDropdown(event)" title="Language">🌐</button>
+      <div class="lang-dropdown" id="langDropdown">
+        <button class="lang-option" data-lang="en" onclick="setUILang('en')">🇺🇸 English</button>
+        <button class="lang-option" data-lang="es" onclick="setUILang('es')">🇪🇸 Español</button>
+        <button class="lang-option" data-lang="pt" onclick="setUILang('pt')">🇧🇷 Português</button>
+        <button class="lang-option" data-lang="fr" onclick="setUILang('fr')">🇫🇷 Français</button>
+        <button class="lang-option" data-lang="de" onclick="setUILang('de')">🇩🇪 Deutsch</button>
+        <button class="lang-option" data-lang="ja" onclick="setUILang('ja')">🇯🇵 日本語</button>
+      </div>
+    </div>
     <span class="nav-plan-badge">${label}</span>
-    <button class="nav-signout" onclick="signOut()">Sign Out</button>
+    <button class="nav-signout" onclick="signOut()" data-i18n="nav.signout">${t('nav.signout')}</button>
   `;
+  applyI18n();
+  const fab = document.getElementById('feedbackFab');
+  if (fab) fab.classList.add('visible');
 }
 function setNavLoggedOut() {
   document.getElementById('navRight').innerHTML = `
-    <button class="nav-link" onclick="showPage('auth')">Sign In</button>
-    <button class="nav-cta" onclick="showAuthTab('signup')">Start Free</button>
+    <div class="lang-selector" id="langSelector">
+      <button class="lang-btn" id="langBtn" onclick="toggleLangDropdown(event)" title="Language">🌐</button>
+      <div class="lang-dropdown" id="langDropdown">
+        <button class="lang-option" data-lang="en" onclick="setUILang('en')">🇺🇸 English</button>
+        <button class="lang-option" data-lang="es" onclick="setUILang('es')">🇪🇸 Español</button>
+        <button class="lang-option" data-lang="pt" onclick="setUILang('pt')">🇧🇷 Português</button>
+        <button class="lang-option" data-lang="fr" onclick="setUILang('fr')">🇫🇷 Français</button>
+        <button class="lang-option" data-lang="de" onclick="setUILang('de')">🇩🇪 Deutsch</button>
+        <button class="lang-option" data-lang="ja" onclick="setUILang('ja')">🇯🇵 日本語</button>
+      </div>
+    </div>
+    <button class="nav-link" id="navSignInBtn" onclick="showPage('auth')" data-i18n="nav.signin">${t('nav.signin')}</button>
+    <button class="nav-cta" id="navStartFreeBtn" onclick="showAuthTab('signup')" data-i18n="nav.start_free">${t('nav.start_free')}</button>
   `;
+  applyI18n();
+  const fab = document.getElementById('feedbackFab');
+  if (fab) fab.classList.remove('visible');
 }
 
 function updateUsage() {
@@ -2252,10 +2359,12 @@ function renderLyrics(text) {
   out.innerHTML = '';
   out.classList.toggle('syl-on', !!APP.showSyllables);
   const lines = text.split('\n');
+  let currentSection = null;
+  let lineCountInSection = 0;
   lines.forEach(line => {
     const trimmed = line.trim();
     if (!trimmed) {
-      if (APP.showSyllables) {
+      if (APP.showSyllables || APP.showChords) {
         const spacer = document.createElement('div');
         spacer.className = 'lyric-line-row spacer';
         out.appendChild(spacer);
@@ -2266,22 +2375,36 @@ function renderLyrics(text) {
     }
     const isLabel = /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(trimmed);
     if (isLabel) {
+      currentSection = trimmed.toUpperCase().trim();
+      lineCountInSection = 0;
       const span = document.createElement('span');
       span.className = 'sec-label';
       span.textContent = trimmed;
       out.appendChild(span);
-    } else if (APP.showSyllables) {
+    } else if (APP.showSyllables || APP.showChords) {
       const row = document.createElement('div');
       row.className = 'lyric-line-row';
-      const txt = document.createElement('span');
+      if (APP.showChords && APP.parsedChords) {
+        const sectionChords = getInlineSectionChords(currentSection);
+        if (sectionChords.length > 0) {
+          const chordDiv = document.createElement('div');
+          chordDiv.className = 'inline-chord';
+          chordDiv.textContent = sectionChords[lineCountInSection % sectionChords.length];
+          row.appendChild(chordDiv);
+        }
+      }
+      const txt = document.createElement('div');
       txt.className = 'lyric-line-text';
       txt.textContent = line;
-      const cnt = document.createElement('span');
-      cnt.className = 'syl-count';
-      cnt.textContent = countLineSyllables(line);
       row.appendChild(txt);
-      row.appendChild(cnt);
+      if (APP.showSyllables) {
+        const cnt = document.createElement('span');
+        cnt.className = 'syl-count';
+        cnt.textContent = countLineSyllables(line);
+        row.appendChild(cnt);
+      }
       out.appendChild(row);
+      lineCountInSection++;
     } else {
       out.appendChild(document.createTextNode(line + '\n'));
     }
@@ -2312,10 +2435,23 @@ function renderTitles(titles) {
 }
 
 function renderChords(raw) {
+  APP.rawChords = raw || '';
+  APP.transposeOffset = 0;
+  APP.parsedChords = parseChordData(raw);
+  updateChordDisplay();
   const area = document.getElementById('chordsArea');
+  if (APP.parsedChords && Object.keys(APP.parsedChords.sections).length) area.style.display = 'block';
+  // Update transpose key display
+  const keyEl = document.getElementById('trKeyDisplay');
+  if (keyEl) keyEl.textContent = APP.parsedChords?.key || 'C';
+}
+
+function updateChordDisplay() {
   const disp = document.getElementById('chordsDisplay');
+  if (!disp) return;
   disp.innerHTML = '';
-  const lines = raw.split('\n').filter(l => l.trim());
+  const raw = getTransposedChordsText();
+  const lines = (raw || '').split('\n').filter(l => l.trim());
   lines.forEach(line => {
     if (line.startsWith('KEY:') || line.startsWith('STRUMMING:')) {
       const info = document.createElement('div');
@@ -2331,7 +2467,6 @@ function renderChords(raw) {
       disp.appendChild(row);
     }
   });
-  if (disp.children.length) area.style.display = 'block';
 }
 
 // ── UI HELPERS ──
@@ -2370,6 +2505,16 @@ function startOver() {
   document.getElementById('loadState').classList.remove('on');
   document.getElementById('titleArea').style.display = 'none';
   document.getElementById('chordsArea').style.display = 'none';
+  APP.rawChords = '';
+  APP.parsedChords = null;
+  APP.showChords = false;
+  APP.transposeOffset = 0;
+  const scb = document.getElementById('showChordsBtn');
+  if (scb) { scb.classList.remove('on'); const t = I18N[APP.uiLang]||I18N.en; scb.textContent = t['chord.show_chords']||'Show Chords'; }
+  const tc = document.getElementById('transposeCtrl');
+  if (tc) tc.style.display = 'none';
+  const cg = document.getElementById('chordGuide');
+  if (cg) cg.style.display = 'none';
   document.getElementById('sunoPanel').classList.remove('on');
   document.getElementById('refinePanel').classList.remove('on');
   document.getElementById('refineBody').classList.remove('open');
@@ -4121,8 +4266,520 @@ function revertLyrics() {
   toast('Reverted to original lyrics.');
 }
 
+// ══════════════════════════════════════════════════════════
+//  CHORD PARSING + TRANSPOSE + DIAGRAMS
+// ══════════════════════════════════════════════════════════
+
+const CHROMATIC = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const FLAT_TO_SHARP = {Db:'C#',Eb:'D#',Fb:'E',Gb:'F#',Ab:'G#',Bb:'A#',Cb:'B'};
+
+function normalizeRoot(r) { return FLAT_TO_SHARP[r] || r; }
+
+function transposeChord(chord, semitones) {
+  if (!chord || !chord.trim() || semitones === 0) return chord;
+  // Match root (e.g. C#, Db, C) then quality
+  const m = chord.match(/^([A-G][#b]?)(.*)/);
+  if (!m) return chord;
+  const root = normalizeRoot(m[1]);
+  const quality = m[2];
+  const idx = CHROMATIC.indexOf(root);
+  if (idx === -1) return chord;
+  const newIdx = ((idx + semitones) % 12 + 12) % 12;
+  return CHROMATIC[newIdx] + quality;
+}
+
+function parseChordData(raw) {
+  if (!raw) return null;
+  const result = { key: '', strumming: '', sections: {} };
+  raw.split('\n').forEach(line => {
+    line = line.trim();
+    if (!line) return;
+    if (line.startsWith('KEY:')) {
+      result.key = line.replace('KEY:', '').trim();
+    } else if (line.startsWith('STRUMMING:')) {
+      result.strumming = line.replace('STRUMMING:', '').trim();
+    } else if (line.includes(':')) {
+      const ci = line.indexOf(':');
+      const sect = line.substring(0, ci).trim().toUpperCase();
+      const chordsStr = line.substring(ci + 1).trim();
+      // Split on em dash, en dash, or spaced hyphen
+      result.sections[sect] = chordsStr.split(/\s*[—–]\s*|\s+-\s+/).map(c => c.trim()).filter(Boolean);
+    }
+  });
+  return result;
+}
+
+function getTransposedChordsText() {
+  if (!APP.rawChords) return '';
+  if (APP.transposeOffset === 0) return APP.rawChords;
+  return APP.rawChords.split('\n').map(line => {
+    if (line.startsWith('KEY:')) {
+      return 'KEY: ' + transposeChord(line.replace('KEY:', '').trim(), APP.transposeOffset);
+    }
+    if (line.startsWith('STRUMMING:')) return line;
+    if (line.includes(':')) {
+      const ci = line.indexOf(':');
+      const sect = line.substring(0, ci);
+      const chordsStr = line.substring(ci + 1).trim();
+      const transposed = chordsStr.split(/\s*[—–]\s*|\s+-\s+/)
+        .map(c => transposeChord(c.trim(), APP.transposeOffset)).join(' — ');
+      return sect + ': ' + transposed;
+    }
+    return line;
+  }).join('\n');
+}
+
+function getInlineSectionChords(sectionName) {
+  if (!APP.parsedChords || !sectionName) return [];
+  const s = APP.parsedChords.sections;
+  // Exact match
+  if (s[sectionName]) return applyTransposeToChords(s[sectionName]);
+  // Prefix match: "VERSE" matches "VERSE 1", "VERSE 2"
+  const prefix = sectionName.replace(/\s+\d+$/, '').trim();
+  for (const key of Object.keys(s)) {
+    if (key === prefix || key.startsWith(prefix + ' ')) {
+      return applyTransposeToChords(s[key]);
+    }
+  }
+  return [];
+}
+
+function applyTransposeToChords(chords) {
+  if (APP.transposeOffset === 0) return chords;
+  return chords.map(c => transposeChord(c, APP.transposeOffset));
+}
+
+function toggleShowChords() {
+  APP.showChords = !APP.showChords;
+  const btn = document.getElementById('showChordsBtn');
+  const tc = document.getElementById('transposeCtrl');
+  const cg = document.getElementById('chordGuide');
+  const t = I18N[APP.uiLang] || I18N.en;
+  if (btn) {
+    btn.classList.toggle('on', APP.showChords);
+    btn.textContent = APP.showChords ? (t['chord.hide_chords']||'Hide Chords') : (t['chord.show_chords']||'Show Chords');
+  }
+  if (tc) tc.style.display = APP.showChords ? 'flex' : 'none';
+  if (cg) cg.style.display = APP.showChords ? 'block' : 'none';
+  if (APP.lyrics) renderLyrics(APP.lyrics);
+  if (APP.showChords) renderChordDiagrams();
+}
+
+function transposeUp() {
+  APP.transposeOffset = ((APP.transposeOffset + 1) % 12 + 12) % 12;
+  applyTranspose();
+}
+function transposeDown() {
+  APP.transposeOffset = ((APP.transposeOffset - 1) % 12 + 12) % 12;
+  applyTranspose();
+}
+function applyTranspose() {
+  const keyEl = document.getElementById('trKeyDisplay');
+  if (keyEl && APP.parsedChords?.key) {
+    keyEl.textContent = transposeChord(APP.parsedChords.key, APP.transposeOffset);
+  }
+  updateChordDisplay();
+  if (APP.showChords && APP.lyrics) renderLyrics(APP.lyrics);
+  if (APP.showChords) renderChordDiagrams();
+}
+
+// ── CHORD DIAGRAMS ──
+// Strings: [low-E, A, D, G, B, high-e] — -1=muted, 0=open, N=fret
+const CHORD_SHAPES = {
+  'C':    {s:[-1,3,2,0,1,0]},
+  'Cm':   {s:[-1,3,5,5,4,3],barre:{f:3,from:1,to:5},startFret:3},
+  'C7':   {s:[-1,3,2,3,1,0]},
+  'Cmaj7':{s:[-1,3,2,0,0,0]},
+  'Cm7':  {s:[-1,3,5,3,4,3],barre:{f:3,from:1,to:5},startFret:3},
+  'D':    {s:[-1,-1,0,2,3,2]},
+  'Dm':   {s:[-1,-1,0,2,3,1]},
+  'D7':   {s:[-1,-1,0,2,1,2]},
+  'Dmaj7':{s:[-1,-1,0,2,2,2]},
+  'Dm7':  {s:[-1,-1,0,2,1,1]},
+  'E':    {s:[0,2,2,1,0,0]},
+  'Em':   {s:[0,2,2,0,0,0]},
+  'E7':   {s:[0,2,0,1,0,0]},
+  'Emaj7':{s:[0,2,1,1,0,0]},
+  'Em7':  {s:[0,2,2,0,3,0]},
+  'F':    {s:[1,1,2,3,3,1],barre:{f:1,from:0,to:5}},
+  'Fm':   {s:[1,1,3,3,2,1],barre:{f:1,from:0,to:5}},
+  'F7':   {s:[1,1,2,1,1,1],barre:{f:1,from:0,to:5}},
+  'Fmaj7':{s:[-1,0,3,2,1,0]},
+  'Fm7':  {s:[1,1,3,1,2,1],barre:{f:1,from:0,to:5}},
+  'F#':   {s:[2,2,3,4,4,2],barre:{f:2,from:0,to:5},startFret:2},
+  'F#m':  {s:[2,2,4,4,3,2],barre:{f:2,from:0,to:5},startFret:2},
+  'F#7':  {s:[2,2,3,2,2,2],barre:{f:2,from:0,to:5},startFret:2},
+  'F#m7': {s:[2,2,4,2,3,2],barre:{f:2,from:0,to:5},startFret:2},
+  'G':    {s:[3,2,0,0,0,3]},
+  'Gm':   {s:[3,5,5,3,3,3],barre:{f:3,from:0,to:5},startFret:3},
+  'G7':   {s:[3,2,0,0,0,1]},
+  'Gmaj7':{s:[3,2,0,0,0,2]},
+  'G#':   {s:[4,4,6,6,6,4],barre:{f:4,from:0,to:5},startFret:4},
+  'G#m':  {s:[4,4,6,6,5,4],barre:{f:4,from:0,to:5},startFret:4},
+  'Ab':   {s:[4,4,6,6,6,4],barre:{f:4,from:0,to:5},startFret:4},
+  'Abm':  {s:[4,4,6,6,5,4],barre:{f:4,from:0,to:5},startFret:4},
+  'A':    {s:[-1,0,2,2,2,0]},
+  'Am':   {s:[-1,0,2,2,1,0]},
+  'A7':   {s:[-1,0,2,0,2,0]},
+  'Amaj7':{s:[-1,0,2,1,2,0]},
+  'Am7':  {s:[-1,0,2,0,1,0]},
+  'A#':   {s:[-1,1,3,3,3,1],barre:{f:1,from:1,to:5},startFret:1},
+  'A#m':  {s:[-1,1,3,3,2,1],barre:{f:1,from:1,to:5},startFret:1},
+  'Bb':   {s:[-1,1,3,3,3,1],barre:{f:1,from:1,to:5},startFret:1},
+  'Bbm':  {s:[-1,1,3,3,2,1],barre:{f:1,from:1,to:5},startFret:1},
+  'B':    {s:[-1,2,4,4,4,2],barre:{f:2,from:1,to:5},startFret:2},
+  'Bm':   {s:[-1,2,4,4,3,2],barre:{f:2,from:1,to:5},startFret:2},
+  'B7':   {s:[-1,2,1,2,0,2]},
+  'Bmaj7':{s:[-1,2,4,3,4,2],barre:{f:2,from:1,to:5},startFret:2},
+  'Bm7':  {s:[-1,2,4,2,3,2],barre:{f:2,from:1,to:5},startFret:2},
+  'C#':   {s:[-1,4,6,6,6,4],barre:{f:4,from:1,to:5},startFret:4},
+  'C#m':  {s:[-1,4,6,6,5,4],barre:{f:4,from:1,to:5},startFret:4},
+  'D#':   {s:[-1,1,3,3,3,1],barre:{f:1,from:1,to:5},startFret:1},
+  'D#m':  {s:[-1,1,3,3,2,1],barre:{f:1,from:1,to:5},startFret:1},
+  'Eb':   {s:[-1,1,3,3,3,1],barre:{f:1,from:1,to:5},startFret:1},
+  'Ebm':  {s:[-1,1,3,3,2,1],barre:{f:1,from:1,to:5},startFret:1},
+};
+
+function renderChordDiagramSVG(chordName) {
+  const shape = CHORD_SHAPES[chordName];
+  const W=72, H=92;
+  const pL=14, pR=8, pT=20, pB=8;
+  const gW=W-pL-pR, gH=H-pT-pB;
+  const nStr=6, nFrets=4;
+  const sSpace=gW/(nStr-1), fSpace=gH/nFrets;
+  if (!shape) {
+    return `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg"><rect width="${W}" height="${H}" fill="#1c1b22" rx="4"/><text x="${W/2}" y="${H/2+4}" text-anchor="middle" font-size="10" fill="#524e4a" font-family="DM Sans,sans-serif">?</text></svg>`;
+  }
+  const {s, barre, startFret=1} = shape;
+  let svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  // Background
+  svg += `<rect width="${W}" height="${H}" fill="#151419" rx="4"/>`;
+  // Nut (only for open position chords)
+  if (startFret === 1) svg += `<rect x="${pL}" y="${pT-3}" width="${gW}" height="3" fill="#9b9490" rx="1"/>`;
+  // Fret lines
+  for (let f=0; f<=nFrets; f++) {
+    const y = pT + f*fSpace;
+    svg += `<line x1="${pL}" y1="${y}" x2="${pL+gW}" y2="${y}" stroke="#2a2830" stroke-width="${f===0?0:'1'}"/>`;
+  }
+  // String lines
+  for (let str=0; str<nStr; str++) {
+    const x = pL + str*sSpace;
+    svg += `<line x1="${x}" y1="${pT}" x2="${x}" y2="${pT+gH}" stroke="#3a3840" stroke-width="1.2"/>`;
+  }
+  // Barre bar
+  if (barre) {
+    const relF = barre.f - startFret;
+    if (relF >= 0 && relF < nFrets) {
+      const by = pT + relF*fSpace + fSpace/2;
+      const bx1 = pL + barre.from*sSpace;
+      const bx2 = pL + barre.to*sSpace;
+      svg += `<line x1="${bx1}" y1="${by}" x2="${bx2}" y2="${by}" stroke="#c9943a" stroke-width="${fSpace*0.5}" stroke-linecap="round" opacity=".85"/>`;
+    }
+  }
+  // Open / muted indicators
+  for (let str=0; str<nStr; str++) {
+    const x = pL + str*sSpace;
+    if (s[str] === -1) {
+      svg += `<text x="${x}" y="${pT-6}" text-anchor="middle" font-size="8" fill="#524e4a" font-family="DM Sans,sans-serif">✕</text>`;
+    } else if (s[str] === 0) {
+      svg += `<circle cx="${x}" cy="${pT-7}" r="3.5" fill="none" stroke="#9b9490" stroke-width="1.2"/>`;
+    }
+  }
+  // Finger dots
+  for (let str=0; str<nStr; str++) {
+    const fret = s[str];
+    if (fret > 0) {
+      const relF = fret - startFret;
+      if (relF >= 0 && relF < nFrets) {
+        const dx = pL + str*sSpace;
+        const dy = pT + relF*fSpace + fSpace/2;
+        svg += `<circle cx="${dx}" cy="${dy}" r="${fSpace*0.27}" fill="#c9943a"/>`;
+      }
+    }
+  }
+  // Start fret label
+  if (startFret > 1) {
+    svg += `<text x="${pL-3}" y="${pT+fSpace*0.65}" text-anchor="end" font-size="7" fill="#9b9490" font-family="DM Mono,monospace">${startFret}fr</text>`;
+  }
+  svg += '</svg>';
+  return svg;
+}
+
+function getUniqueChordsFromSong() {
+  if (!APP.parsedChords) return [];
+  const seen = new Set();
+  const chords = [];
+  for (const sect of Object.values(APP.parsedChords.sections)) {
+    for (const ch of sect) {
+      const transposed = transposeChord(ch, APP.transposeOffset);
+      if (!seen.has(transposed)) { seen.add(transposed); chords.push(transposed); }
+    }
+  }
+  return chords;
+}
+
+function renderChordDiagrams() {
+  const grid = document.getElementById('chordDiagramsGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const chords = getUniqueChordsFromSong();
+  chords.forEach(chord => {
+    const item = document.createElement('div');
+    item.className = 'chord-diagram-item';
+    item.innerHTML = renderChordDiagramSVG(chord);
+    const label = document.createElement('div');
+    label.className = 'chord-diagram-label';
+    label.textContent = chord;
+    item.appendChild(label);
+    grid.appendChild(item);
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+//  i18n — MULTI-LANGUAGE UI
+// ══════════════════════════════════════════════════════════
+
+const I18N = {
+  en: {
+    'nav.signin':'Sign In','nav.start_free':'Start Free','nav.gallery':'🔥 Gallery','nav.signout':'Sign Out',
+    'studio.title':'AI Lyrics Studio','studio.topic':'Topic / Concept',
+    'studio.topic_ph':'What is this song about? A person, a feeling, a moment — describe it in your own words.',
+    'studio.genre':'Genre','studio.mood':'Mood','studio.mood_sub':'(select multiple)',
+    'studio.structure':'Song Structure','studio.tempo':'Tempo','studio.rhyme':'Rhyme Scheme',
+    'studio.pov':'Point of View','studio.words':'Words to Include','studio.words_sub':'(optional)',
+    'studio.words_ph':'Phrases, names, lines — comma separated',
+    'studio.style_notes':'Style Notes','studio.style_notes_sub':'(optional)',
+    'studio.style_notes_ph':'Raw and honest, poetic, conversational, storytelling...',
+    'studio.artist_style':'Write in the style of','studio.artist_style_sub':'(optional)',
+    'studio.artist_style_ph':'e.g. Morgan Wallen, Eminem, Taylor Swift...',
+    'studio.language':'Language','studio.mix_lang':'Mix Languages',
+    'studio.mix_lang_sub':'Set a different language per section',
+    'btn.write_song':'✍ WRITE THIS SONG','btn.regenerate':'↺ Regenerate','btn.copy':'Copy',
+    'btn.syllables':'Syllables','btn.clear':'Clear','btn.template':'📋 Start from a Template',
+    'chord.progression':'Chord Progression','chord.show_chords':'Show Chords',
+    'chord.hide_chords':'Hide Chords','chord.guide':'Guitar Chord Guide',
+    'feedback.btn':'💬 Feedback','feedback.title':'Give Feedback',
+    'feedback.sub':'How are we doing? Your input helps us improve.',
+    'feedback.placeholder':'Tell us what you think...','feedback.submit':'Submit',
+    'feedback.cancel':'Cancel','feedback.thanks':'Thanks for your feedback!',
+    'history.title':'SongHistory','history.sub':'Your saved songs','history.loading':'Loading songs...',
+  },
+  es: {
+    'nav.signin':'Iniciar sesión','nav.start_free':'Empezar gratis','nav.gallery':'🔥 Galería','nav.signout':'Cerrar sesión',
+    'studio.title':'Estudio de letras AI','studio.topic':'Tema / Concepto',
+    'studio.topic_ph':'¿De qué trata esta canción? Una persona, un sentimiento, un momento — descríbelo con tus palabras.',
+    'studio.genre':'Género','studio.mood':'Estado de ánimo','studio.mood_sub':'(seleccionar varios)',
+    'studio.structure':'Estructura de la canción','studio.tempo':'Tempo','studio.rhyme':'Esquema de rima',
+    'studio.pov':'Punto de vista','studio.words':'Palabras a incluir','studio.words_sub':'(opcional)',
+    'studio.words_ph':'Frases, nombres, versos — separados por comas',
+    'studio.style_notes':'Notas de estilo','studio.style_notes_sub':'(opcional)',
+    'studio.style_notes_ph':'Crudo y honesto, poético, conversacional, narrativo...',
+    'studio.artist_style':'Escribir al estilo de','studio.artist_style_sub':'(opcional)',
+    'studio.artist_style_ph':'ej. Bad Bunny, Shakira, Rosalía...',
+    'studio.language':'Idioma','studio.mix_lang':'Mezclar idiomas',
+    'studio.mix_lang_sub':'Asignar un idioma diferente por sección',
+    'btn.write_song':'✍ ESCRIBIR ESTA CANCIÓN','btn.regenerate':'↺ Regenerar','btn.copy':'Copiar',
+    'btn.syllables':'Sílabas','btn.clear':'Limpiar','btn.template':'📋 Empezar desde plantilla',
+    'chord.progression':'Progresión de acordes','chord.show_chords':'Ver acordes',
+    'chord.hide_chords':'Ocultar acordes','chord.guide':'Guía de acordes de guitarra',
+    'feedback.btn':'💬 Comentarios','feedback.title':'Dar opinión',
+    'feedback.sub':'¿Cómo lo estamos haciendo? Tu opinión nos ayuda a mejorar.',
+    'feedback.placeholder':'Dinos lo que piensas...','feedback.submit':'Enviar',
+    'feedback.cancel':'Cancelar','feedback.thanks':'¡Gracias por tus comentarios!',
+    'history.title':'Historial','history.sub':'Tus canciones guardadas','history.loading':'Cargando canciones...',
+  },
+  pt: {
+    'nav.signin':'Entrar','nav.start_free':'Começar grátis','nav.gallery':'🔥 Galeria','nav.signout':'Sair',
+    'studio.title':'Estúdio de letras AI','studio.topic':'Tema / Conceito',
+    'studio.topic_ph':'Sobre o que é esta música? Uma pessoa, um sentimento, um momento — descreva com suas palavras.',
+    'studio.genre':'Gênero','studio.mood':'Humor','studio.mood_sub':'(selecione vários)',
+    'studio.structure':'Estrutura da música','studio.tempo':'Tempo','studio.rhyme':'Esquema de rima',
+    'studio.pov':'Ponto de vista','studio.words':'Palavras a incluir','studio.words_sub':'(opcional)',
+    'studio.words_ph':'Frases, nomes, versos — separados por vírgula',
+    'studio.style_notes':'Notas de estilo','studio.style_notes_sub':'(opcional)',
+    'studio.style_notes_ph':'Cru e honesto, poético, conversacional, narrativo...',
+    'studio.artist_style':'Escrever no estilo de','studio.artist_style_sub':'(opcional)',
+    'studio.artist_style_ph':'ex. Anitta, Ludmilla, MC Hariel...',
+    'studio.language':'Idioma','studio.mix_lang':'Misturar idiomas',
+    'studio.mix_lang_sub':'Definir um idioma diferente por seção',
+    'btn.write_song':'✍ ESCREVER ESTA MÚSICA','btn.regenerate':'↺ Regenerar','btn.copy':'Copiar',
+    'btn.syllables':'Sílabas','btn.clear':'Limpar','btn.template':'📋 Começar de um modelo',
+    'chord.progression':'Progressão de acordes','chord.show_chords':'Ver acordes',
+    'chord.hide_chords':'Ocultar acordes','chord.guide':'Guia de acordes de guitarra',
+    'feedback.btn':'💬 Feedback','feedback.title':'Enviar feedback',
+    'feedback.sub':'Como estamos? Sua opinião nos ajuda a melhorar.',
+    'feedback.placeholder':'Diga-nos o que você acha...','feedback.submit':'Enviar',
+    'feedback.cancel':'Cancelar','feedback.thanks':'Obrigado pelo seu feedback!',
+    'history.title':'Músicas','history.sub':'Suas músicas salvas','history.loading':'Carregando músicas...',
+  },
+  fr: {
+    'nav.signin':'Connexion','nav.start_free':'Commencer gratuitement','nav.gallery':'🔥 Galerie','nav.signout':'Déconnexion',
+    'studio.title':'Studio de paroles AI','studio.topic':'Sujet / Concept',
+    'studio.topic_ph':'De quoi parle cette chanson ? Une personne, une émotion, un moment — décrivez-le avec vos mots.',
+    'studio.genre':'Genre','studio.mood':'Ambiance','studio.mood_sub':'(sélection multiple)',
+    'studio.structure':'Structure de la chanson','studio.tempo':'Tempo','studio.rhyme':'Schéma de rimes',
+    'studio.pov':'Point de vue','studio.words':'Mots à inclure','studio.words_sub':'(optionnel)',
+    'studio.words_ph':'Phrases, noms, vers — séparés par des virgules',
+    'studio.style_notes':'Notes de style','studio.style_notes_sub':'(optionnel)',
+    'studio.style_notes_ph':'Brut et sincère, poétique, conversationnel, narratif...',
+    'studio.artist_style':'Écrire dans le style de','studio.artist_style_sub':'(optionnel)',
+    'studio.artist_style_ph':'ex. Stromae, Aya Nakamura, Indochine...',
+    'studio.language':'Langue','studio.mix_lang':'Mélanger les langues',
+    'studio.mix_lang_sub':'Définir une langue différente par section',
+    'btn.write_song':'✍ ÉCRIRE CETTE CHANSON','btn.regenerate':'↺ Régénérer','btn.copy':'Copier',
+    'btn.syllables':'Syllabes','btn.clear':'Effacer','btn.template':'📋 Commencer depuis un modèle',
+    'chord.progression':"Progression d'accords",'chord.show_chords':'Afficher accords',
+    'chord.hide_chords':'Masquer accords','chord.guide':"Guide d'accords de guitare",
+    'feedback.btn':'💬 Avis','feedback.title':'Donner un avis',
+    'feedback.sub':'Comment faisons-nous ? Votre avis nous aide à améliorer.',
+    'feedback.placeholder':'Dites-nous ce que vous pensez...','feedback.submit':'Envoyer',
+    'feedback.cancel':'Annuler','feedback.thanks':'Merci pour votre avis !',
+    'history.title':'Chansons','history.sub':'Vos chansons sauvegardées','history.loading':'Chargement...',
+  },
+  de: {
+    'nav.signin':'Anmelden','nav.start_free':'Kostenlos starten','nav.gallery':'🔥 Galerie','nav.signout':'Abmelden',
+    'studio.title':'AI Lyrics Studio','studio.topic':'Thema / Konzept',
+    'studio.topic_ph':'Worum geht es in diesem Song? Eine Person, ein Gefühl, ein Moment — beschreibe es mit eigenen Worten.',
+    'studio.genre':'Genre','studio.mood':'Stimmung','studio.mood_sub':'(mehrere auswählen)',
+    'studio.structure':'Song-Struktur','studio.tempo':'Tempo','studio.rhyme':'Reimschema',
+    'studio.pov':'Perspektive','studio.words':'Zu verwendende Wörter','studio.words_sub':'(optional)',
+    'studio.words_ph':'Phrasen, Namen, Zeilen — kommagetrennt',
+    'studio.style_notes':'Stil-Notizen','studio.style_notes_sub':'(optional)',
+    'studio.style_notes_ph':'Roh und ehrlich, poetisch, gesprächig, erzählend...',
+    'studio.artist_style':'Im Stil von','studio.artist_style_sub':'(optional)',
+    'studio.artist_style_ph':'z.B. Rammstein, Cro, Mark Forster...',
+    'studio.language':'Sprache','studio.mix_lang':'Sprachen mischen',
+    'studio.mix_lang_sub':'Pro Abschnitt eine andere Sprache wählen',
+    'btn.write_song':'✍ DIESEN SONG SCHREIBEN','btn.regenerate':'↺ Neu generieren','btn.copy':'Kopieren',
+    'btn.syllables':'Silben','btn.clear':'Löschen','btn.template':'📋 Von einer Vorlage starten',
+    'chord.progression':'Akkordfolge','chord.show_chords':'Akkorde anzeigen',
+    'chord.hide_chords':'Akkorde ausblenden','chord.guide':'Gitarren-Akkordführer',
+    'feedback.btn':'💬 Feedback','feedback.title':'Feedback geben',
+    'feedback.sub':'Wie machen wir das? Ihr Feedback hilft uns, uns zu verbessern.',
+    'feedback.placeholder':'Sagen Sie uns, was Sie denken...','feedback.submit':'Absenden',
+    'feedback.cancel':'Abbrechen','feedback.thanks':'Danke für Ihr Feedback!',
+    'history.title':'Songs','history.sub':'Ihre gespeicherten Songs','history.loading':'Songs werden geladen...',
+  },
+  ja: {
+    'nav.signin':'ログイン','nav.start_free':'無料で始める','nav.gallery':'🔥 ギャラリー','nav.signout':'ログアウト',
+    'studio.title':'AI 作詞スタジオ','studio.topic':'テーマ / コンセプト',
+    'studio.topic_ph':'この曲は何について？人物、感情、瞬間 — 自分の言葉で説明してください。',
+    'studio.genre':'ジャンル','studio.mood':'ムード','studio.mood_sub':'（複数選択可）',
+    'studio.structure':'曲の構成','studio.tempo':'テンポ','studio.rhyme':'韻のスキーム',
+    'studio.pov':'視点','studio.words':'含める言葉','studio.words_sub':'（任意）',
+    'studio.words_ph':'フレーズ、名前、フレーズ — カンマ区切り',
+    'studio.style_notes':'スタイルメモ','studio.style_notes_sub':'（任意）',
+    'studio.style_notes_ph':'率直で正直、詩的、会話的、物語り...',
+    'studio.artist_style':'このアーティストのスタイルで','studio.artist_style_sub':'（任意）',
+    'studio.artist_style_ph':'例: 米津玄師、宇多田ヒカル、Ado...',
+    'studio.language':'言語','studio.mix_lang':'言語を混在',
+    'studio.mix_lang_sub':'セクションごとに異なる言語を設定',
+    'btn.write_song':'✍ この曲を書く','btn.regenerate':'↺ 再生成','btn.copy':'コピー',
+    'btn.syllables':'音節','btn.clear':'クリア','btn.template':'📋 テンプレートから始める',
+    'chord.progression':'コード進行','chord.show_chords':'コードを表示',
+    'chord.hide_chords':'コードを非表示','chord.guide':'ギターコードガイド',
+    'feedback.btn':'💬 フィードバック','feedback.title':'フィードバックを送る',
+    'feedback.sub':'ご意見をお聞かせください。改善のために活用します。',
+    'feedback.placeholder':'ご感想をお聞かせください...','feedback.submit':'送信',
+    'feedback.cancel':'キャンセル','feedback.thanks':'フィードバックありがとうございます！',
+    'history.title':'曲一覧','history.sub':'保存した曲','history.loading':'曲を読み込み中...',
+  }
+};
+
+function t(key) {
+  const lang = APP.uiLang || 'en';
+  return (I18N[lang] || I18N.en)[key] || I18N.en[key] || key;
+}
+
+function applyI18n() {
+  const lang = APP.uiLang || 'en';
+  // data-i18n text content
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = (I18N[lang] || I18N.en)[key] || I18N.en[key];
+    if (val !== undefined) el.textContent = val;
+  });
+  // data-i18n-placeholder
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    const val = (I18N[lang] || I18N.en)[key] || I18N.en[key];
+    if (val !== undefined) el.placeholder = val;
+  });
+  // Update active lang option highlight
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.lang === lang);
+  });
+  // Restore Show Chords button text if it's toggled on
+  const scb = document.getElementById('showChordsBtn');
+  if (scb) {
+    const tkey = APP.showChords ? 'chord.hide_chords' : 'chord.show_chords';
+    scb.textContent = t(tkey);
+  }
+}
+
+function setUILang(lang) {
+  APP.uiLang = lang;
+  localStorage.setItem('wml_lang', lang);
+  applyI18n();
+  closeLangDropdown();
+}
+
+function toggleLangDropdown(e) {
+  e.stopPropagation();
+  document.getElementById('langDropdown').classList.toggle('open');
+}
+function closeLangDropdown() {
+  const dd = document.getElementById('langDropdown');
+  if (dd) dd.classList.remove('open');
+}
+
+// ── FEEDBACK ──
+function openFeedbackModal() {
+  if (!APP.user) { toast('Sign in to leave feedback.'); return; }
+  APP._feedbackRating = 0;
+  document.querySelectorAll('.feedback-star').forEach(s => s.classList.remove('on'));
+  document.getElementById('feedbackComment').value = '';
+  document.getElementById('feedbackModalBg').classList.add('on');
+}
+function closeFeedbackModal() {
+  document.getElementById('feedbackModalBg').classList.remove('on');
+}
+function setFeedbackRating(r) {
+  APP._feedbackRating = r;
+  document.querySelectorAll('.feedback-star').forEach((s, i) => s.classList.toggle('on', i < r));
+}
+async function submitFeedback() {
+  const rating = APP._feedbackRating;
+  if (!rating) { toast('Please select a star rating.'); return; }
+  const comment = document.getElementById('feedbackComment').value.trim();
+  const btn = document.getElementById('feedbackSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = '...';
+  try {
+    const { error } = await sb.from('feedback').insert({ user_id: APP.user.id, rating, comment: comment || null });
+    if (error) throw error;
+    closeFeedbackModal();
+    const t = I18N[APP.uiLang] || I18N.en;
+    toast(t['feedback.thanks'] || 'Thanks for your feedback!');
+  } catch(e) {
+    toast('Error: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    const t = I18N[APP.uiLang] || I18N.en;
+    btn.textContent = t['feedback.submit'] || 'Submit';
+  }
+}
+
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', async () => {
+  // Apply i18n on load
+  applyI18n();
+  // Close lang dropdown on outside click
+  document.addEventListener('click', e => {
+    const sel = document.getElementById('langSelector');
+    if (sel && !sel.contains(e.target)) closeLangDropdown();
+  });
+
   // Detect path-based routing
   const path = window.location.pathname.replace(/\/$/, '').toLowerCase();
   const startOnGallery = path === '/gallery';
@@ -4204,5 +4861,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 });
 </script>
+
+<!-- ── FEEDBACK FAB ── -->
+<button class="feedback-fab" id="feedbackFab" onclick="openFeedbackModal()">
+  <span data-i18n="feedback.btn">💬 Feedback</span>
+</button>
+
+<!-- ── FEEDBACK MODAL ── -->
+<div class="feedback-modal-bg" id="feedbackModalBg" onclick="if(event.target===this)closeFeedbackModal()">
+  <div class="feedback-modal">
+    <div class="feedback-modal-h" data-i18n="feedback.title">Give Feedback</div>
+    <div class="feedback-modal-sub" data-i18n="feedback.sub">How are we doing? Your input helps us improve.</div>
+    <div class="feedback-star-row" id="feedbackStars">
+      <button class="feedback-star" onclick="setFeedbackRating(1)">★</button>
+      <button class="feedback-star" onclick="setFeedbackRating(2)">★</button>
+      <button class="feedback-star" onclick="setFeedbackRating(3)">★</button>
+      <button class="feedback-star" onclick="setFeedbackRating(4)">★</button>
+      <button class="feedback-star" onclick="setFeedbackRating(5)">★</button>
+    </div>
+    <textarea class="feedback-comment" id="feedbackComment" rows="3" data-i18n-placeholder="feedback.placeholder" placeholder="Tell us what you think..."></textarea>
+    <div class="feedback-modal-btns">
+      <button class="m-cancel" onclick="closeFeedbackModal()" data-i18n="feedback.cancel">Cancel</button>
+      <button class="m-confirm" id="feedbackSubmitBtn" onclick="submitFeedback()" data-i18n="feedback.submit">Submit</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
