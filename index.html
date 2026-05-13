@@ -313,15 +313,24 @@ select option{background:var(--surface3)}
 .lang-option:hover{background:var(--surface3);color:var(--text)}
 .lang-option.active{color:var(--gold)}
 
-/* ── CHORD SHOW TOGGLE + TRANSPOSE ── */
+/* ── CHORD CONTROLS BAR ── */
+.chord-controls-bar{display:flex;align-items:center;gap:8px;margin-bottom:12px}
 .chord-toggle-btn{background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap}
 .chord-toggle-btn:hover,.chord-toggle-btn.on{border-color:var(--gold-border);color:var(--gold);background:var(--gold-dim)}
 .transpose-ctrl{display:flex;align-items:center;gap:5px}
 .tr-btn{background:var(--surface3);border:1px solid var(--border);border-radius:4px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;color:var(--text2);transition:all .15s;padding:0;line-height:1}
 .tr-btn:hover{border-color:var(--gold-border);color:var(--gold)}
 .tr-key{min-width:26px;text-align:center;font-family:'DM Mono',monospace;font-size:13px;color:var(--gold);font-weight:600}
-.inline-chord{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold2);font-weight:600;letter-spacing:.08em;padding-top:6px;line-height:1.1}
-.lyric-line-text{color:var(--text);font-family:inherit;font-size:inherit}
+
+/* ── LEAD SHEET INLINE CHORD DISPLAY ── */
+/* Normal (no chord mode): lyric-line-row is horizontal for syllables */
+.lyric-line-row{display:flex;align-items:baseline;gap:10px;line-height:2;min-height:1.6em}
+.lyric-line-text{flex:1;color:#1a140e}
+/* chord-mode: stack chord above lyric text */
+.lyrics-out.chord-mode .lyric-line-row{display:block;line-height:1;margin-top:10px}
+.lyrics-out.chord-mode .lyric-line-row.spacer{display:block;height:.8em;margin-top:0}
+.inline-chord{display:block;font-family:'DM Mono',monospace;font-size:11.5px;color:#a06a10;font-weight:700;letter-spacing:.08em;line-height:1.2;margin-bottom:1px}
+.lyrics-out.chord-mode .lyric-line-text{display:block;color:#1a140e;font-size:15px;line-height:1.7;font-family:'DM Sans',sans-serif}
 
 /* ── CHORD GUIDE DIAGRAMS ── */
 .chord-guide{margin-top:12px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
@@ -1311,17 +1320,19 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
           </div>
 
           <div id="chordsArea" style="display:none">
-            <div class="chord-block">
+            <!-- Controls bar — always visible when chords exist -->
+            <div class="chord-controls-bar">
+              <button class="chord-toggle-btn" id="showChordsBtn" onclick="toggleShowChords()" data-i18n="chord.show_chords">Show Chords</button>
+              <div class="transpose-ctrl" id="transposeCtrl" style="display:none">
+                <button class="tr-btn" onclick="transposeDown()" title="Transpose down">▼</button>
+                <span class="tr-key" id="trKeyDisplay">C</span>
+                <button class="tr-btn" onclick="transposeUp()" title="Transpose up">▲</button>
+              </div>
+            </div>
+            <!-- Chord progression block — hidden when Show Chords is on -->
+            <div class="chord-block" id="chordProgressionBlock">
               <div class="chord-head">
                 <span class="chord-title" data-i18n="chord.progression">Chord Progression</span>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <button class="chord-toggle-btn" id="showChordsBtn" onclick="toggleShowChords()" data-i18n="chord.show_chords">Show Chords</button>
-                  <div class="transpose-ctrl" id="transposeCtrl" style="display:none">
-                    <button class="tr-btn" onclick="transposeDown()" title="Transpose down">▼</button>
-                    <span class="tr-key" id="trKeyDisplay">C</span>
-                    <button class="tr-btn" onclick="transposeUp()" title="Transpose up">▲</button>
-                  </div>
-                </div>
               </div>
               <div class="chord-body" id="chordsDisplay"></div>
             </div>
@@ -2358,6 +2369,7 @@ function renderLyrics(text) {
   const out = document.getElementById('lyricsOut');
   out.innerHTML = '';
   out.classList.toggle('syl-on', !!APP.showSyllables);
+  out.classList.toggle('chord-mode', !!APP.showChords);
   const lines = text.split('\n');
   let currentSection = null;
   let lineCountInSection = 0;
@@ -2510,11 +2522,15 @@ function startOver() {
   APP.showChords = false;
   APP.transposeOffset = 0;
   const scb = document.getElementById('showChordsBtn');
-  if (scb) { scb.classList.remove('on'); const t = I18N[APP.uiLang]||I18N.en; scb.textContent = t['chord.show_chords']||'Show Chords'; }
+  if (scb) { scb.classList.remove('on'); const tr = I18N[APP.uiLang]||I18N.en; scb.textContent = tr['chord.show_chords']||'Show Chords'; }
   const tc = document.getElementById('transposeCtrl');
   if (tc) tc.style.display = 'none';
   const cg = document.getElementById('chordGuide');
   if (cg) cg.style.display = 'none';
+  const cpb = document.getElementById('chordProgressionBlock');
+  if (cpb) cpb.style.display = 'block';
+  const out = document.getElementById('lyricsOut');
+  if (out) out.classList.remove('chord-mode');
   document.getElementById('sunoPanel').classList.remove('on');
   document.getElementById('refinePanel').classList.remove('on');
   document.getElementById('refineBody').classList.remove('open');
@@ -4354,13 +4370,19 @@ function toggleShowChords() {
   const btn = document.getElementById('showChordsBtn');
   const tc = document.getElementById('transposeCtrl');
   const cg = document.getElementById('chordGuide');
-  const t = I18N[APP.uiLang] || I18N.en;
+  const cpb = document.getElementById('chordProgressionBlock');
+  const out = document.getElementById('lyricsOut');
+  const tr = I18N[APP.uiLang] || I18N.en;
   if (btn) {
     btn.classList.toggle('on', APP.showChords);
-    btn.textContent = APP.showChords ? (t['chord.hide_chords']||'Hide Chords') : (t['chord.show_chords']||'Show Chords');
+    btn.textContent = APP.showChords ? (tr['chord.hide_chords']||'Hide Chords') : (tr['chord.show_chords']||'Show Chords');
   }
   if (tc) tc.style.display = APP.showChords ? 'flex' : 'none';
+  // Hide chord progression block when inline mode is on; show chord guide instead
+  if (cpb) cpb.style.display = APP.showChords ? 'none' : 'block';
   if (cg) cg.style.display = APP.showChords ? 'block' : 'none';
+  // Toggle lead-sheet class on the notebook output
+  if (out) out.classList.toggle('chord-mode', APP.showChords);
   if (APP.lyrics) renderLyrics(APP.lyrics);
   if (APP.showChords) renderChordDiagrams();
 }
