@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How-To — WriteMyLyrics</title>
+<meta name="description" content="Learn how to use WriteMyLyrics AI songwriting studio. Step-by-step guide for writing lyrics, using karaoke mode, exporting to Suno, and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#07060a;
+  --surface:#0e0d12;
+  --surface2:#151419;
+  --surface3:#1c1b22;
+  --gold:#c9943a;
+  --gold2:#e8b84b;
+  --gold-dim:rgba(201,148,58,.15);
+  --gold-border:rgba(201,148,58,.25);
+  --text:#ede8df;
+  --text2:#9b9490;
+  --text3:#524e4a;
+  --red:#e05555;
+  --green:#4ec994;
+  --border:rgba(255,255,255,.06);
+  --r:8px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden}
+
+/* ── NOISE OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(7,6,10,.85);backdrop-filter:blur(20px)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.02em;text-decoration:none;display:inline-block}
+.nav-logo span{color:var(--gold)}
+.nav-center{display:flex;align-items:center;gap:4px}
+.nav-center-link{background:none;border:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;padding:6px 12px;border-radius:6px;transition:color .2s;text-decoration:none;display:inline-block}
+.nav-center-link:hover{color:var(--text)}
+.nav-center-link.active{color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-link-btn{background:none;border:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;padding:6px 12px;border-radius:6px;transition:color .2s;text-decoration:none;display:inline-block}
+.nav-link-btn:hover{color:var(--text)}
+.nav-cta{background:var(--gold);color:#07060a;border:none;border-radius:6px;padding:8px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.nav-cta:hover{background:var(--gold2);transform:translateY(-1px)}
+
+/* ── LAYOUT ── */
+.ht-wrap{padding-top:64px;display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+
+/* ── SIDEBAR ── */
+.ht-sidebar{width:260px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.ht-sidebar::-webkit-scrollbar{width:4px}
+.ht-sidebar::-webkit-scrollbar-track{background:transparent}
+.ht-sidebar::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:4px}
+.ht-search-wrap{padding:16px 16px 12px}
+.ht-search{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;transition:border-color .2s}
+.ht-search:focus{outline:none;border-color:var(--gold-border)}
+.ht-search::placeholder{color:var(--text3)}
+.ht-nav{flex:1;padding:0 8px 16px}
+.ht-nav-item{display:block;width:100%;background:none;border:none;text-align:left;padding:8px 10px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);cursor:pointer;transition:all .2s;text-decoration:none;line-height:1.4}
+.ht-nav-item:hover{background:var(--surface2);color:var(--text)}
+.ht-nav-item.spy-active{background:var(--gold-dim);color:var(--gold)}
+.ht-sidebar-footer{padding:16px;border-top:1px solid var(--border);flex-shrink:0}
+.ht-back-btn{display:block;width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:10px 16px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text2);cursor:pointer;text-align:center;text-decoration:none;transition:all .2s}
+.ht-back-btn:hover{border-color:var(--gold-border);color:var(--gold)}
+.ht-no-results{display:none;padding:12px 10px;font-size:13px;color:var(--text3);text-align:center}
+
+/* ── MAIN CONTENT ── */
+.ht-main{padding:56px 64px 100px;max-width:900px}
+.ht-hero-h{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,5vw,60px);font-weight:700;line-height:1.05;letter-spacing:-.02em;margin-bottom:12px}
+.ht-hero-h span{color:var(--gold);font-style:italic}
+.ht-hero-sub{font-size:16px;color:var(--text2);max-width:560px;line-height:1.7;margin-bottom:56px}
+
+/* ── ACCORDION ── */
+.ht-section{border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
+.ht-section[data-visible="false"]{display:none}
+.ht-section-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;cursor:pointer;background:var(--surface);transition:background .2s;user-select:none}
+.ht-section-hdr:hover{background:var(--surface2)}
+.ht-section.open .ht-section-hdr{background:var(--surface2)}
+.ht-section-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--text)}
+.ht-chevron{color:var(--text3);transition:transform .3s;font-size:14px;flex-shrink:0}
+.ht-section.open .ht-chevron{transform:rotate(180deg);color:var(--gold)}
+.ht-section-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1)}
+.ht-section.open .ht-section-body{max-height:4000px}
+.ht-section-inner{padding:0 24px 28px}
+
+/* ── CONTENT STYLES ── */
+.ht-sub{font-family:'DM Sans',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--gold);margin:24px 0 8px}
+.ht-sub:first-child{margin-top:0}
+.ht-p{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:10px}
+.ht-ol{padding-left:20px;margin-bottom:10px}
+.ht-ol li{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:6px;padding-left:4px}
+.ht-ul{list-style:disc;padding-left:20px;margin-bottom:10px}
+.ht-ul li{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:4px;padding-left:4px}
+.ht-note{background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:var(--r);padding:12px 16px;font-size:13px;color:var(--text2);line-height:1.65;margin-top:12px}
+.ht-note strong{color:var(--gold)}
+
+/* Plan cards */
+.plan-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:10px}
+.plan-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center}
+.plan-card.featured{border-color:var(--gold-border);background:linear-gradient(135deg,var(--surface2) 0%,rgba(201,148,58,.06) 100%)}
+.plan-card-name{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);margin-bottom:6px}
+.plan-card-price{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--text);line-height:1;margin-bottom:4px}
+.plan-card-price span{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text3);font-weight:400}
+.plan-card-songs{font-size:13px;color:var(--text2);margin-bottom:8px}
+.plan-card-feat{font-size:12px;color:var(--text3)}
+
+/* Template tag grid */
+.tpl-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.tpl-tag{background:var(--surface3);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--text2)}
+
+/* Definition blocks */
+.def-block{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;margin-bottom:8px}
+.def-term{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px}
+.def-desc{font-size:13px;color:var(--text2);line-height:1.65}
+
+/* Comparison table */
+.ht-table-wrap{overflow-x:auto;margin-bottom:10px}
+.ht-table{width:100%;border-collapse:collapse;font-size:13px}
+.ht-table th{background:var(--surface2);padding:12px 16px;text-align:center;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);border-bottom:1px solid var(--border);white-space:nowrap}
+.ht-table th:first-child{text-align:left}
+.ht-table td{padding:10px 16px;border-bottom:1px solid var(--border);color:var(--text2);text-align:center}
+.ht-table td:first-child{text-align:left;color:var(--text)}
+.ht-table tr:last-child td{border-bottom:none}
+.ht-table .check{color:var(--green);font-weight:700}
+.ht-table .cross{color:var(--text3)}
+
+/* Language badges */
+.lang-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.lang-badge{background:var(--surface3);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:13px;color:var(--text2)}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .ht-wrap{grid-template-columns:1fr;padding-top:64px}
+  .ht-sidebar{position:relative;top:0;width:100%;height:auto;flex-direction:column;border-right:none;border-bottom:1px solid var(--border)}
+  .ht-search-wrap{padding:12px 16px 8px}
+  .ht-nav{display:flex;flex-direction:row;overflow-x:auto;padding:0 8px 12px;white-space:nowrap;-webkit-overflow-scrolling:touch;flex:none}
+  .ht-nav::-webkit-scrollbar{height:2px}
+  .ht-nav::-webkit-scrollbar-thumb{background:var(--surface3)}
+  .ht-nav-item{flex-shrink:0;white-space:nowrap}
+  .ht-sidebar-footer{display:none}
+  .ht-main{padding:32px 20px 80px}
+  .plan-cards{grid-template-columns:1fr}
+  .ht-table th,.ht-table td{padding:8px 10px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">Write<span>My</span>Lyrics</a>
+  <div class="nav-center">
+    <a href="/gallery" class="nav-center-link">🔥 Gallery</a>
+    <a href="/how-to" class="nav-center-link active">How-To</a>
+  </div>
+  <div class="nav-right">
+    <a href="/" class="nav-link-btn">Sign In</a>
+    <a href="/" class="nav-cta">Start Free</a>
+  </div>
+</nav>
+
+<div class="ht-wrap">
+  <!-- SIDEBAR -->
+  <aside class="ht-sidebar">
+    <div class="ht-search-wrap">
+      <input type="search" class="ht-search" id="htSearch" placeholder="Search sections…" autocomplete="off">
+    </div>
+    <nav class="ht-nav" id="htSideNav">
+      <a href="#getting-started" class="ht-nav-item spy-active" data-target="getting-started">Getting Started</a>
+      <a href="#first-song" class="ht-nav-item" data-target="first-song">Writing Your First Song</a>
+      <a href="#templates" class="ht-nav-item" data-target="templates">Templates</a>
+      <a href="#refining" class="ht-nav-item" data-target="refining">Refining Your Song</a>
+      <a href="#chords" class="ht-nav-item" data-target="chords">Chord Progressions</a>
+      <a href="#suno-export" class="ht-nav-item" data-target="suno-export">Exporting to Suno</a>
+      <a href="#karaoke" class="ht-nav-item" data-target="karaoke">Karaoke Mode</a>
+      <a href="#hooks" class="ht-nav-item" data-target="hooks">TikTok Hook Generator</a>
+      <a href="#gallery" class="ht-nav-item" data-target="gallery">Song Gallery</a>
+      <a href="#share-urls" class="ht-nav-item" data-target="share-urls">Shareable Song URLs</a>
+      <a href="#cowriter" class="ht-nav-item" data-target="cowriter">Co-writer Mode</a>
+      <a href="#billing" class="ht-nav-item" data-target="billing">Plans &amp; Billing</a>
+      <a href="#language-settings" class="ht-nav-item" data-target="language-settings">Language Settings</a>
+    </nav>
+    <div class="ht-no-results" id="htNoResults">No results</div>
+    <div class="ht-sidebar-footer">
+      <a href="/" class="ht-back-btn">← Back to Studio</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="ht-main" id="htMain">
+    <h1 class="ht-hero-h">How to Use <span>WriteMyLyrics</span></h1>
+    <p class="ht-hero-sub">Everything you need to write, refine, and share your songs — from first draft to full karaoke experience.</p>
+
+    <!-- 1. Getting Started -->
+    <div class="ht-section open" id="getting-started" data-visible="true">
+      <div class="ht-section-hdr" onclick="toggleSection(this)">
+        <span class="ht-section-title">Getting Started</span>
+        <span class="ht-chevron">▼</span>
+      </div>
+      <div class="ht-section-body">
+        <div class="ht-section-inner">
+          <div class="ht-sub">What is WriteMyLyrics?</div>
+          <p class="ht-p">An AI-powered songwriting studio. Describe your song — topic, genre, mood, style — and the AI writes professional lyrics in seconds with verses, choruses, bridges, and chord progressions.</p>
+
+          <div class="ht-sub">Plans</div>
+          <div class="plan-cards">
+            <div class="plan-card">
+              <div class="plan-card-name">Free</div>
+              <div class="plan-card-price">$0<span>/mo</span></div>
+              <div class="plan-card-songs">5 songs per month</div>
+              <div class="plan-card-feat">Basic lyrics</div>
+            </div>
+            <div class="plan-card featured">
+              <div class="plan-card-name">Pro</div>
+              <div class="plan-card-price">$9<span>/mo</span></div>
+              <div class="plan-card-songs">50 songs per month</div>
+              <div class="plan-card-feat">Chord progressions · Version history · TXT &amp; PDF export · Co-writer Mode</div>
+            </div>
+            <div class="plan-card">
+              <div class="plan-card-name">Unlimited</div>
+              <div class="plan-card-price">$19<span>/mo</span></div>
+              <div class="plan-card-songs">Unlimited songs</div>
+              <div class="plan-card-feat">All features including Karaoke Mode with Auto Sync</div>
+            </div>
+          </div>
+
+          <div class="ht-sub">Creating an Account</div>
+          <p class="ht-p">Click <strong>Start Free</strong>, enter your email and password, then confirm your email. No credit card required.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Writing Your First Song -->
+    <div class="ht-section" id="first-song" data-visible="true">
+      <div class="ht-section-hdr" onclick="toggleSection(this)">
+        <span class="ht-section-title">Writing Your First Song</span>
+        <span class="ht-chevron">▼</span>
+      </div>
+      <div class="ht-section-body">
+        <div class="ht-section-inner">
+          <div class="ht-sub">Steps</div>
+          <ol class="ht-ol">
+            <li><strong>Enter Topic / Concept</strong> — be specific. "Losing my dog after 12 years" works better than "sadness."</li>
+            <li><strong>Select Genre.</strong></li>
+            <li><strong>Select Moods</strong> — you can pick multiple.</li>
+            <li><strong>Choose Song Structure.</strong></li>
+            <li><strong>Set Tempo.</strong></li>
+            <li><strong>Choose Rhyme Scheme.</strong></li>
+            <li><strong>Set Point of View.</strong></li>
+            <li>Optionally add <strong>Words to Include</strong>, <strong>Style Notes</strong>, <strong>Write in the Style of</strong> an artist name, and <strong>Language</strong>.</li>
+            <li>Click <strong>Write This Song</strong>.</li>
+          </ol>
+
+          <div class="ht-sub">Tips</div>
+          <ul class="ht-ul">
+            <li>More specific topic = better lyrics.</li>
+            <li>Combining moods gives more nuanced results.</li>
+            <li>The <em>Style of</em> field is powerful — try different artists for the same song.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Templates -->
+    <div class="ht-section" id="templates" data-visible="true">
+      <div class="ht-section-hdr" onclick="toggleSection(this)">
+        <span class="ht-section-title">Templates</span>
+        <span class="ht-chevron">▼</span>
+      </div>
+      <div class="ht-section-body">
+        <div class="ht-section-inner">
+          <div class="ht-sub">What Are Templates?</div>
+          <p class="ht-p">Templates are pre-filled studio settings that get you started instantly.</p>
+
+          <div class="ht-sub">Available Templates</div>
+          <div class="tpl-grid">
+            <span class="tpl-tag">Classic Country Ballad</span>
+            <span class="tpl-tag">Rock Anthem</span>
+            <span class="tpl-tag">R&amp;B Love Song</span>
+            <span class="tpl-tag">Pop Love Song</span>
+            <span class="tpl-tag">Outlaw Country Story</span>
+            <span class="tpl-tag">Military / Patriotic</span>
+            <span class="tpl-tag">Blues Standard</span>
+            <span class="tpl-tag">Singer-Songwriter Confessional</span>
+            <span class="tpl-tag">Hip Hop Trap</span>
+            <span class="tpl-tag">Latin / Reggaeton</span>
+          </div>
+
+          <div class="ht-sub">How to Use</div>
+          <p class="ht-p">Click <strong>Start from a Template</strong> at the top of the studio. Pick a template. Customize any field. Click <strong>Write This Song</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Refining Your Song -->
+    <div class="ht-section" id="refining" data-visible="true">
+      <div class="ht-section-hdr" onclick="toggleSection(this)">
+        <span class="ht-section-title">Refining Your Song</span>
+        <span class="ht-chevron">▼</span>
+      </div>
+      <div class="ht-section-body">
+        <div class="ht-section-inner">
+          <div class="def-block">
+            <div class="def-term">Regenerate</div>
+            <div class="def-desc">Click <strong>Regenerate</strong> in the action bar for a completely new version using the same settings.</div>
+          </div>
+          <div class="def-block">
+            <div class="def-term">Edit Directly</div>
+            <div class="def-desc">Click anywhere in the lyrics paper area to edit text. Changes save automatically.</div>
+          </div>
+          <div class="def-block">
+            <div class="def-term">Version History</div>
+            <div class="def-desc">Click <strong>Versions</strong> in the action bar to see all previous versions of your song and restore any of them.</div>
+          </div>
+          <div class="def-block">
+            <div class="def-term">Suggested Titles</div>
+            <div class="def-desc">Three title suggestions appear above the lyrics after generating. Click any to copy to clipboard.</div>
+          </div>
+
+          <div class="ht-sub">Saving</div>
+          <p class="ht-p">Songs save automatically to Song History for Pro and Unlimited users. Access from the history icon in the sidebar.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Chord Progressions -->
+    <div class="ht-section" id="chords" data-visible="true">
+      <div class="ht-section-hdr" onclick="toggleSection(this)">
+        <span class="ht-section-title">Chord Progressions</span>
+        <span class="ht-chevron">▼</span>
+      </div>
+      <div class="ht-section-body">
+        <div class="ht-section-inner">
+          <div class="def-block">
+            <div class="def-term">Viewing Chords</div>
+            <div class="def-desc">The Chord Progression section below the lyrics shows the key, strumming pattern, and chords for each section of your song.</div>
+          </div>
+          <div class="def-block">
+            <div class="def-term">Show Chords</div>
+            <div class="def-desc">Click <strong>Show Chords</strong> to display chord names above each lyric line in lead sheet format. The chord name appears in gold above the line where the chord change happens.</div>
+          </div>
+          <div class="def-block">
+            <div class="def-term">Transposing</div>
+            <div class="def-desc">Use the ▼ ▲ arrows next to the key name to shift all chords up or down one semitone. The Guitar Chord Guide updates in real time.</div>
+          </div>
+          <div class="def-block">
+            <div class="def-term">Guitar Chord Guide</div>
+            <div class="def-desc">SVG fretboard diagrams appear below the lyrics for every unique chord in the song when Show Chords is enabled.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Exporting to Suno -->
+    <div class="ht-section" id="suno-export" data-visible="true">
+      <div class="ht-section-hdr" onclick="toggleSection(this)">
+        <span class="ht-section-title">Exporting to Suno</span>
+        <span class="ht-chevron">▼</span>
+      </div>
+      <div class="ht-section-body">
+        <div class="ht-section-inner">
+          <div class="ht-sub">What is Suno?</div>
+          <p class="ht-p">Suno (<a href="https://suno.com" target="_blank" style="color:var(--gold)">suno.com</a>) is an AI music generator. WriteMyLyrics writes the lyrics and chord progressions — Suno generates the full musical track.</p>
+
+          <div class="ht-sub">Steps</div>
+          <ol class="ht-ol">
+            <li>Generate your lyrics in WriteMyLyrics.</li>
+            <li>Click the <strong>Suno</strong> button in the action bar above the lyrics.</li>
+            <li>Copy the formatted lyrics and style prompt that appears.</li>
+            <li>Go to <a href="https://suno.com" target="_blank" style="color:var(--gold)">suno.com</a> and paste into a new song creation.</li>
+            <li>Suno generates the full song with music.</li>
+          </ol>
+
+          <div class="ht-sub">Saving Your Suno URL</div>
+          <p class="ht-p">After Suno generates your song, copy the audio URL and paste it into the <strong>Suno Audio URL</strong> field in the Song Notes panel. This saves it to your song permanently and enables the audio player in the Gallery.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Karaoke Mode -->
+    <div class="ht-section" id="karaoke" data-visible="true">
+      <div class="ht-section-hdr" onclick="toggleSection(this)">
+        <span class="ht-section-title">Karaoke Mode</span>
+        <span class="ht-chevron">▼</span>
+      </div>
+      <div class="ht-section-body">
+        <div class="ht-section-inner">
+          <div class="ht-sub">What is Karaoke Mode?</div>
+          <p class="ht-p">Karaoke Mode highlights your lyrics in real time as music plays, word by word. Requires a direct audio URL (not a Suno share page link).</p>
+
+          <div class="ht-sub">Getting a Direct URL from Suno</div>
+          <p class="ht-p">Right-click the audio player in Suno and select <strong>Copy audio address</strong> — use the direct <code style="font-family:'DM Mono',monospace;font-size:12px;color:var(--gold)">.mp3</code> URL, not the song page URL.</p>
+
+          <div class="ht-sub">Using Karaoke Mode</div>
+          <ol class="ht-ol">
+            <li>Open your song in the studio.</li>
+            <li>Click the <strong>Karaoke</strong> icon in the sidebar.</li>
+            <li>Paste the direct audio URL or upload an MP3 file.</li>
+            <li>Click <strong>Auto Sync</strong> — Whisper AI automatically matches your lyrics to the audio. Takes 10–30 seconds.</li>
+            <li>Click <strong>Play</strong> — lyrics highlight word by word in sync with the music.</li>
+            <li>Click <strong>Save Sync</strong> to save the timing permanently to your song.</li>
+          </ol>
+
+          <div class="ht-note"><strong>Note:</strong> Karaoke Mode with Auto Sync requires an Unlimited plan.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. TikTok Hook Generator -->
+    <div class="ht-section" id="hooks" data-visible="true">
+      <div class="ht-section-hdr" onclick="toggleSection(this)">
+        <span class="ht-section-title">TikTok Hook Generator</span>
+        <span class="ht-chevron">▼</span>
+      </div>
+      <div class="ht-section-body">
+        <div class="ht-section-inner">
+          <div class="ht-sub">What It Does</div>
+          <p class="ht-p">Generates 3 short, punchy hook lines based on your song. Each hook is 15 seconds or less when spoken aloud. Available on all plans.</p>
+
+          <div class="ht-sub">How to Use</div>
+          <ol class="ht-ol">
+            <li>Generate a song.</li>
+            <li>Click <strong>TikTok Hooks</strong> in the action bar above the lyrics.</li>
+            <li>Three hooks appear, each from a different emotional angle.</li>
+            <li>Click <strong>Copy</strong> on any hook to copy it to clipboard.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Song Gallery -->
+    <div class="ht-section" id="gallery" data-visible="true">
+      <div class="ht-section-hdr" onclick="toggleSection(this)">
+        <span class="ht-section-title">Song Gallery</span>
+        <span class="ht-chevron">▼</span>
+      </div>
+      <div class="ht-section-body">
+        <div class="ht-section-inner">
+          <div class="ht-sub">What is the Gallery?</div>
+          <p class="ht-p">A public space where users share songs, vote on favorites, and discover new music from around the world.</p>
+
+          <div class="ht-sub">Publishing Your Song</div>
+          <p class="ht-p">Go to Song History, find your song, and toggle the <strong>Publish</strong> button on. Your song appears in the Gallery with your username, genre, mood tags, vote count, and an audio player if you've saved a Suno audio URL.</p>
+
+          <div class="ht-sub">Voting</div>
+          <p class="ht-p">Click the flame 🔥 icon on any song to vote. Songs appear in <strong>This Week's Top 10</strong> (rolling 7-day window) and <strong>Hall of Fame</strong> (all-time top songs).</p>
+
+          <div class="ht-sub">Filtering</div>
+          <p class="ht-p">Use the genre filter tabs or search bar to find songs by title. Unpublish at any time by toggling Publish off.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. Shareable Song URLs -->
+    <div class="ht-section" id="share-urls" data-visible="true">
+      <div class="ht-section-hdr" onclick="toggleSection(this)">
+        <span class="ht-section-title">Shareable Song URLs</span>
+        <span class="ht-chevron">▼</span>
+      </div>
+      <div class="ht-section-body">
+        <div class="ht-section-inner">
+          <div class="ht-sub">Your Song's Public URL</div>
+          <p class="ht-p">Every published song gets a permanent public URL at <code style="font-family:'DM Mono',monospace;font-size:12px;color:var(--gold)">writemylyrics.ai/song/[id]</code>. No login required to view.</p>
+
+          <div class="ht-sub">How to Share</div>
+          <ol class="ht-ol">
+            <li>Publish your song (toggle <strong>Publish</strong> on in the Song Notes panel).</li>
+            <li>Go to Song History.</li>
+            <li>Click the <strong>Share</strong> button on the song card.</li>
+            <li>The URL is copied to your clipboard automatically.</li>
+          </ol>
+
+          <div class="ht-sub">What Visitors See</div>
+          <p class="ht-p">Title, author name, genre, full lyrics, vote count, audio player (if audio URL is saved), and a <em>Write Your Own</em> call to action.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11. Co-writer Mode -->
+    <div class="ht-section" id="cowriter" data-visible="true">
+      <div class="ht-section-hdr" onclick="toggleSection(this)">
+        <span class="ht-section-title">Co-writer Mode</span>
+        <span class="ht-chevron">▼</span>
+      </div>
+      <div class="ht-section-body">
+        <div class="ht-section-inner">
+          <div class="ht-sub">Plan Required</div>
+          <p class="ht-p">Co-writer Mode is available on Pro and Unlimited plans.</p>
+
+          <div class="ht-sub">Inviting a Co-writer</div>
+          <ol class="ht-ol">
+            <li>Go to Song History.</li>
+            <li>Click <strong>Co-writers</strong> on any song card.</li>
+            <li>Enter your collaborator's email address.</li>
+            <li>Send the invite. They'll see the shared song in their own Song History.</li>
+          </ol>
+
+          <div class="ht-sub">Suggesting Changes</div>
+          <p class="ht-p">Co-writers click <strong>Suggest Changes</strong> on the shared song, write their lyric revision and an optional comment, then submit.</p>
+
+          <div class="ht-sub">Reviewing Suggestions</div>
+          <p class="ht-p">The song owner clicks <strong>Suggestions</strong> on the song card to review each submission. Click <strong>Accept</strong> to apply the new lyrics or <strong>Reject</strong> to dismiss.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12. Plans & Billing -->
+    <div class="ht-section" id="billing" data-visible="true">
+      <div class="ht-section-hdr" onclick="toggleSection(this)">
+        <span class="ht-section-title">Plans &amp; Billing</span>
+        <span class="ht-chevron">▼</span>
+      </div>
+      <div class="ht-section-body">
+        <div class="ht-section-inner">
+          <div class="ht-table-wrap">
+            <table class="ht-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Free</th>
+                  <th>Pro $9/mo</th>
+                  <th>Unlimited $19/mo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Songs per month</td>
+                  <td>5</td>
+                  <td>50</td>
+                  <td>Unlimited</td>
+                </tr>
+                <tr>
+                  <td>Chord progressions</td>
+                  <td><span class="cross">✕</span></td>
+                  <td><span class="check">✓</span></td>
+                  <td><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                  <td>Version history</td>
+                  <td><span class="cross">✕</span></td>
+                  <td><span class="check">✓</span></td>
+                  <td><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                  <td>TXT &amp; PDF export</td>
+                  <td><span class="cross">✕</span></td>
+                  <td><span class="check">✓</span></td>
+                  <td><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                  <td>Co-writer Mode</td>
+                  <td><span class="cross">✕</span></td>
+                  <td><span class="check">✓</span></td>
+                  <td><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                  <td>Karaoke Mode</td>
+                  <td><span class="cross">✕</span></td>
+                  <td><span class="cross">✕</span></td>
+                  <td><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                  <td>Auto Sync (Whisper)</td>
+                  <td><span class="cross">✕</span></td>
+                  <td><span class="cross">✕</span></td>
+                  <td><span class="check">✓</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="ht-sub">Upgrading</div>
+          <p class="ht-p">Click your plan badge in the top-right corner or click <strong>Upgrade</strong> on any locked feature.</p>
+
+          <div class="ht-sub">Canceling</div>
+          <p class="ht-p">Cancel anytime from account settings. Access continues until the end of your current billing period.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 13. Language Settings -->
+    <div class="ht-section" id="language-settings" data-visible="true">
+      <div class="ht-section-hdr" onclick="toggleSection(this)">
+        <span class="ht-section-title">Language Settings</span>
+        <span class="ht-chevron">▼</span>
+      </div>
+      <div class="ht-section-body">
+        <div class="ht-section-inner">
+          <div class="ht-sub">Supported Interface Languages</div>
+          <div class="lang-badges">
+            <span class="lang-badge">🇺🇸 English</span>
+            <span class="lang-badge">🇪🇸 Español</span>
+            <span class="lang-badge">🇧🇷 Português</span>
+            <span class="lang-badge">🇫🇷 Français</span>
+            <span class="lang-badge">🇩🇪 Deutsch</span>
+            <span class="lang-badge">🇯🇵 日本語</span>
+          </div>
+
+          <div class="ht-sub">How to Change</div>
+          <p class="ht-p">Click the globe 🌐 icon in the navigation bar and select your language. Your preference saves automatically.</p>
+
+          <div class="ht-sub">Important</div>
+          <p class="ht-p">Interface language and lyrics language are separate settings. The globe icon changes the UI language. The <strong>Language</strong> field in the studio controls the language your lyrics are written in.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── ACCORDION ──
+function toggleSection(hdr) {
+  const sec = hdr.closest('.ht-section');
+  sec.classList.toggle('open');
+}
+
+// ── SCROLL SPY ──
+(function () {
+  const sections = document.querySelectorAll('.ht-section[id]');
+  const navItems = document.querySelectorAll('.ht-nav-item[data-target]');
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navItems.forEach(n => {
+          n.classList.toggle('spy-active', n.dataset.target === id);
+        });
+      }
+    });
+  }, { rootMargin: '-64px 0px -60% 0px', threshold: 0 });
+
+  sections.forEach(s => obs.observe(s));
+
+  // Smooth scroll on nav click
+  navItems.forEach(item => {
+    item.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.getElementById(item.dataset.target);
+      if (!target) return;
+      // Open if collapsed
+      if (!target.classList.contains('open')) {
+        target.classList.add('open');
+      }
+      const top = target.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
+  });
+})();
+
+// ── SEARCH ──
+(function () {
+  const input = document.getElementById('htSearch');
+  const sections = document.querySelectorAll('.ht-section[id]');
+  const navItems = document.querySelectorAll('.ht-nav-item[data-target]');
+  const noResults = document.getElementById('htNoResults');
+
+  input.addEventListener('input', function () {
+    const q = this.value.trim().toLowerCase();
+    let anyVisible = false;
+
+    sections.forEach(sec => {
+      if (!q) {
+        sec.dataset.visible = 'true';
+        sec.style.display = '';
+        return;
+      }
+      const text = sec.textContent.toLowerCase();
+      const matches = text.includes(q);
+      sec.dataset.visible = matches ? 'true' : 'false';
+      sec.style.display = matches ? '' : 'none';
+      if (matches) {
+        anyVisible = true;
+        // Un-collapse matched sections
+        sec.classList.add('open');
+      }
+    });
+
+    if (!q) {
+      noResults.style.display = 'none';
+      // Update nav visibility
+      navItems.forEach(n => n.style.display = '');
+      return;
+    }
+
+    noResults.style.display = anyVisible ? 'none' : 'block';
+
+    // Hide nav items for hidden sections
+    navItems.forEach(n => {
+      const sec = document.getElementById(n.dataset.target);
+      n.style.display = (sec && sec.dataset.visible === 'true') ? '' : 'none';
+    });
+  });
+})();
+</script>
+</body>
+</html>

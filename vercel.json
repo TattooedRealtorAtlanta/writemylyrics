@@ -19,6 +19,10 @@
       "dest": "/song.html"
     },
     {
+      "src": "/how-to",
+      "dest": "/how-to.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }

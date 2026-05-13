@@ -303,6 +303,11 @@ select option{background:var(--surface3)}
 .m-confirm-2:hover{background:var(--gold-dim)}
 .nav-plan-badge{background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);pointer-events:none;white-space:nowrap}
 
+/* ── FIELD TOOLTIPS ── */
+.field-tip{background:none;border:1px solid var(--border);border-radius:50%;width:15px;height:15px;color:var(--text3);font-size:9px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin-left:5px;flex-shrink:0;transition:all .15s;vertical-align:middle;padding:0;font-family:'DM Sans',sans-serif;line-height:1}
+.field-tip:hover{border-color:var(--gold-border);color:var(--gold)}
+#tipPopup{position:fixed;z-index:900;background:var(--surface2);border:1px solid var(--gold-border);border-radius:10px;padding:12px 16px;max-width:280px;font-size:13px;color:var(--text2);line-height:1.6;box-shadow:0 16px 48px rgba(0,0,0,.6);display:none;pointer-events:none}
+
 /* ── LANGUAGE SELECTOR ── */
 .lang-selector{position:relative}
 .lang-btn{background:none;border:1px solid var(--border);border-radius:6px;color:var(--text2);cursor:pointer;padding:5px 9px;font-size:15px;display:flex;align-items:center;transition:all .2s;line-height:1}
@@ -764,6 +769,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
   <div class="nav-logo" onclick="showPage('landing')">Write<span>My</span>Lyrics</div>
   <div class="nav-center">
     <button class="nav-gallery-link" id="navGalleryBtn" onclick="showGallery()" data-i18n="nav.gallery">🔥 Gallery</button>
+    <a href="/how-to" class="nav-link nav-howto-link" style="text-decoration:none">How-To</a>
   </div>
   <div class="nav-right" id="navRight">
     <div class="lang-selector" id="langSelector">
@@ -1099,12 +1105,12 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 
       <div class="lp-scroll">
         <div class="field">
-          <label class="field-label" data-i18n="studio.topic">Topic / Concept</label>
+          <label class="field-label" data-i18n="studio.topic">Topic / Concept <button class="field-tip" data-tip="What is your song about? Be specific. 'Losing my dog after 12 years' works better than 'sadness.' The more detail you give, the better the lyrics.">?</button></label>
           <textarea id="topic" rows="4" data-i18n-placeholder="studio.topic_ph" placeholder="What is this song about? A person, a feeling, a moment — describe it in your own words."></textarea>
         </div>
 
         <div class="field">
-          <label class="field-label" data-i18n="studio.genre">Genre</label>
+          <label class="field-label" data-i18n="studio.genre">Genre <button class="field-tip" data-tip="Choose the musical genre. This affects vocabulary, rhythm, and structure of the lyrics.">?</button></label>
           <div class="genre-grid" id="genreGrid">
             <button class="pick-btn" data-v="Country">Country</button>
             <button class="pick-btn" data-v="Hip Hop">Hip Hop</button>
@@ -1127,7 +1133,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
 
         <div class="field">
-          <label class="field-label" data-i18n="studio.mood">Mood <span data-i18n="studio.mood_sub">(select multiple)</span></label>
+          <label class="field-label" data-i18n="studio.mood">Mood <span data-i18n="studio.mood_sub">(select multiple)</span> <button class="field-tip" data-tip="Select one or more moods. Combining moods (e.g. Nostalgic + Tender) produces more nuanced lyrics.">?</button></label>
           <div class="mood-wrap" id="moodGrid">
             <button class="mood-chip" data-v="Happy">Happy</button>
             <button class="mood-chip" data-v="Sad">Sad</button>
@@ -1145,7 +1151,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
 
         <div class="field">
-          <label class="field-label" data-i18n="studio.structure">Song Structure</label>
+          <label class="field-label" data-i18n="studio.structure">Song Structure <button class="field-tip" data-tip="Controls how many verses, choruses, and bridges your song has. Verse/Chorus/Bridge is the most common structure.">?</button></label>
           <select id="structure">
             <option value="Verse / Chorus / Verse / Chorus / Bridge / Chorus">Verse / Chorus / Verse / Chorus / Bridge / Chorus</option>
             <option value="Verse / Chorus / Verse / Chorus">Verse / Chorus / Verse / Chorus (short)</option>
@@ -1155,7 +1161,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
 
         <div class="field">
-          <label class="field-label" data-i18n="studio.tempo">Tempo</label>
+          <label class="field-label" data-i18n="studio.tempo">Tempo <button class="field-tip" data-tip="Sets the energy and speed feel of the lyrics. Affects rhythm and phrasing.">?</button></label>
           <div class="tempo-grid" id="tempoGrid">
             <button class="pick-btn" data-v="Slow ballad">Slow Ballad</button>
             <button class="pick-btn on" data-v="Mid tempo">Mid Tempo</button>
@@ -1165,7 +1171,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
 
         <div class="field">
-          <label class="field-label" data-i18n="studio.rhyme">Rhyme Scheme</label>
+          <label class="field-label" data-i18n="studio.rhyme">Rhyme Scheme <button class="field-tip" data-tip="AABB: pairs of lines rhyme. ABAB: alternating lines rhyme. ABCB Ballad: only 2nd and 4th lines rhyme. Free verse: no required rhyme.">?</button></label>
           <select id="rhyme">
             <option value="AABB couplets">AABB — Couplets</option>
             <option value="ABAB alternating">ABAB — Alternating</option>
@@ -1176,7 +1182,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
 
         <div class="field">
-          <label class="field-label" data-i18n="studio.pov">Point of View</label>
+          <label class="field-label" data-i18n="studio.pov">Point of View <button class="field-tip" data-tip="First person (I/me/my) feels personal. Second person (you/your) speaks to someone. Third person (he/she/they) tells a story about someone else.">?</button></label>
           <select id="pov">
             <option value="First person (I / me / my)">First person — I / me / my</option>
             <option value="Second person (you / your)">Second person — you / your</option>
@@ -1186,22 +1192,22 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
 
         <div class="field">
-          <label class="field-label" data-i18n="studio.words">Words to Include <span data-i18n="studio.words_sub">(optional)</span></label>
+          <label class="field-label" data-i18n="studio.words">Words to Include <span data-i18n="studio.words_sub">(optional)</span> <button class="field-tip" data-tip="Enter specific words, phrases, names, or lines you want in the song, separated by commas. The AI works them in naturally.">?</button></label>
           <input type="text" id="words" data-i18n-placeholder="studio.words_ph" placeholder="Phrases, names, lines — comma separated">
         </div>
 
         <div class="field">
-          <label class="field-label" data-i18n="studio.style_notes">Style Notes <span data-i18n="studio.style_notes_sub">(optional)</span></label>
+          <label class="field-label" data-i18n="studio.style_notes">Style Notes <span data-i18n="studio.style_notes_sub">(optional)</span> <button class="field-tip" data-tip="Describe the feel, imagery, or tone. Examples: 'gritty storytelling, dust and whiskey imagery' or 'hopeful, sunrise metaphors, earned emotion.'">?</button></label>
           <textarea id="tone" rows="2" data-i18n-placeholder="studio.style_notes_ph" placeholder="Raw and honest, poetic, conversational, storytelling..."></textarea>
         </div>
 
         <div class="field">
-          <label class="field-label" data-i18n="studio.artist_style">Write in the style of <span data-i18n="studio.artist_style_sub">(optional)</span></label>
+          <label class="field-label" data-i18n="studio.artist_style">Write in the style of <span data-i18n="studio.artist_style_sub">(optional)</span> <button class="field-tip" data-tip="Enter any artist name. The AI matches their lyrical style and vocabulary. Examples: Chris Stapleton, Drake, Taylor Swift, Kendrick Lamar.">?</button></label>
           <input type="text" id="artistStyleInput" data-i18n-placeholder="studio.artist_style_ph" placeholder="e.g. Morgan Wallen, Eminem, Taylor Swift...">
         </div>
 
         <div class="field">
-          <label class="field-label" data-i18n="studio.language">Language</label>
+          <label class="field-label" data-i18n="studio.language">Language <button class="field-tip" data-tip="The language your lyrics will be written in. Interface language is set separately with the globe icon in the nav bar.">?</button></label>
           <select id="languageSel" onchange="onLanguageChange()">
             <option value="English">English</option>
             <option value="Spanish">Spanish</option>
@@ -1316,7 +1322,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
           <div id="chordsArea" style="display:none">
             <!-- Controls bar — always visible when chords exist -->
             <div class="chord-controls-bar">
-              <button class="chord-toggle-btn" id="showChordsBtn" onclick="toggleShowChords()" data-i18n="chord.show_chords">Show Chords</button>
+              <button class="chord-toggle-btn" id="showChordsBtn" onclick="toggleShowChords()" data-i18n="chord.show_chords">Show Chords</button><button class="field-tip" data-tip="Displays chord names above each lyric line in lead sheet format. Use ▼▲ arrows to transpose to a different key.">?</button>
               <div class="transpose-ctrl" id="transposeCtrl" style="display:none">
                 <button class="tr-btn" onclick="transposeDown()" title="Transpose down">▼</button>
                 <span class="tr-key" id="trKeyDisplay">C</span>
@@ -1399,11 +1405,11 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
             </div>
             <textarea class="notes-area" id="notesText" rows="4" placeholder="Inspiration, melody ideas, Suno prompts that worked, co-writer feedback..." oninput="onNotesInput()"></textarea>
           <div class="notes-audio-row" id="notesAudioRow" style="display:none">
-            <label class="notes-audio-label">Suno Audio URL</label>
+            <label class="notes-audio-label">Suno Audio URL <button class="field-tip" data-tip="Paste the direct audio URL from your Suno song here. Must be a direct .mp3 link, not a Suno share page URL. Right-click the Suno audio player and select Copy audio address.">?</button></label>
             <input type="text" id="studioAudioUrl" class="notes-audio-input" placeholder="Paste your Suno link here..." onblur="saveStudioAudioUrl()">
           </div>
           <div class="notes-pub-row" id="notesPubRow" style="display:none">
-            <span class="notes-pub-label">Gallery</span>
+            <span class="notes-pub-label">Gallery <button class="field-tip" data-tip="Publishes your song to the public Song Gallery. Toggle off to unpublish at any time.">?</button></span>
             <button class="pub-btn" id="notesPubBtn" data-published="false" onclick="togglePublish(this)">📤 Publish to Gallery</button>
           </div>
           </div>
@@ -1525,7 +1531,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
     <span style="color:rgba(255,255,255,.3);font-size:12px">or</span>
     <button class="kar-audio-btn" onclick="document.getElementById('karAudioFile').click()">Upload File</button>
     <input type="file" class="kar-audio-file" id="karAudioFile" accept="audio/*" onchange="karLoadFile(this)">
-    <button class="kar-audio-btn kar-autosync-btn" id="karAutoSyncBtn" onclick="autoSync()" style="display:none">✨ Auto Sync</button>
+    <button class="kar-audio-btn kar-autosync-btn" id="karAutoSyncBtn" onclick="autoSync()" style="display:none">✨ Auto Sync</button><button class="field-tip" data-tip="Sends your audio to Whisper AI to automatically detect when each lyric line is sung. Takes 10–30 seconds. Only need to sync once." style="display:none" id="autoSyncTip">?</button>
   </div>
   <div class="kar-body">
     <div class="kar-lines" id="karLines"></div>
@@ -4860,6 +4866,33 @@ async function submitFeedback() {
     btn.textContent = t['feedback.submit'] || 'Submit';
   }
 }
+
+// ── FIELD TOOLTIPS ──
+(function(){
+  const pop = document.createElement('div');
+  pop.id = 'tipPopup';
+  document.body.appendChild(pop);
+  let cur = null;
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.field-tip');
+    if (btn) {
+      e.stopPropagation();
+      if (cur === btn) { hideTip(); return; }
+      cur = btn;
+      pop.textContent = btn.dataset.tip;
+      pop.style.display = 'block';
+      const r = btn.getBoundingClientRect();
+      let left = r.left, top = r.bottom + 8;
+      if (left + 288 > window.innerWidth - 8) left = window.innerWidth - 288 - 8;
+      if (left < 8) left = 8;
+      pop.style.left = left + 'px';
+      pop.style.top = top + 'px';
+      return;
+    }
+    hideTip();
+  });
+  function hideTip(){ cur = null; pop.style.display = 'none'; }
+})();
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', async () => {
