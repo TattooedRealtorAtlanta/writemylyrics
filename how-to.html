@@ -166,42 +166,42 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
   <!-- SIDEBAR -->
   <aside class="ht-sidebar">
     <div class="ht-search-wrap">
-      <input type="search" class="ht-search" id="htSearch" placeholder="Search sections…" autocomplete="off">
+      <input type="search" class="ht-search" id="htSearch" data-i18n-ph="ht.search_ph" placeholder="Search sections…" autocomplete="off">
     </div>
     <nav class="ht-nav" id="htSideNav">
-      <a href="#getting-started" class="ht-nav-item spy-active" data-target="getting-started">Getting Started</a>
-      <a href="#first-song" class="ht-nav-item" data-target="first-song">Writing Your First Song</a>
-      <a href="#templates" class="ht-nav-item" data-target="templates">Templates</a>
-      <a href="#refining" class="ht-nav-item" data-target="refining">Refining Your Song</a>
-      <a href="#chords" class="ht-nav-item" data-target="chords">Chord Progressions</a>
-      <a href="#suno-export" class="ht-nav-item" data-target="suno-export">Exporting to Suno</a>
-      <a href="#karaoke" class="ht-nav-item" data-target="karaoke">Karaoke Mode</a>
-      <a href="#hooks" class="ht-nav-item" data-target="hooks">TikTok Hook Generator</a>
-      <a href="#gallery" class="ht-nav-item" data-target="gallery">Song Gallery</a>
-      <a href="#share-urls" class="ht-nav-item" data-target="share-urls">Shareable Song URLs</a>
-      <a href="#cowriter" class="ht-nav-item" data-target="cowriter">Co-writer Mode</a>
-      <a href="#billing" class="ht-nav-item" data-target="billing">Plans &amp; Billing</a>
-      <a href="#language-settings" class="ht-nav-item" data-target="language-settings">Language Settings</a>
+      <a href="#getting-started" class="ht-nav-item spy-active" data-target="getting-started" data-i18n="ht.nav.s1">Getting Started</a>
+      <a href="#first-song" class="ht-nav-item" data-target="first-song" data-i18n="ht.nav.s2">Writing Your First Song</a>
+      <a href="#templates" class="ht-nav-item" data-target="templates" data-i18n="ht.nav.s3">Templates</a>
+      <a href="#refining" class="ht-nav-item" data-target="refining" data-i18n="ht.nav.s4">Refining Your Song</a>
+      <a href="#chords" class="ht-nav-item" data-target="chords" data-i18n="ht.nav.s5">Chord Progressions</a>
+      <a href="#suno-export" class="ht-nav-item" data-target="suno-export" data-i18n="ht.nav.s6">Exporting to Suno</a>
+      <a href="#karaoke" class="ht-nav-item" data-target="karaoke" data-i18n="ht.nav.s7">Karaoke Mode</a>
+      <a href="#hooks" class="ht-nav-item" data-target="hooks" data-i18n="ht.nav.s8">TikTok Hook Generator</a>
+      <a href="#gallery" class="ht-nav-item" data-target="gallery" data-i18n="ht.nav.s9">Song Gallery</a>
+      <a href="#share-urls" class="ht-nav-item" data-target="share-urls" data-i18n="ht.nav.s10">Shareable Song URLs</a>
+      <a href="#cowriter" class="ht-nav-item" data-target="cowriter" data-i18n="ht.nav.s11">Co-writer Mode</a>
+      <a href="#billing" class="ht-nav-item" data-target="billing" data-i18n="ht.nav.s12">Plans &amp; Billing</a>
+      <a href="#language-settings" class="ht-nav-item" data-target="language-settings" data-i18n="ht.nav.s13">Language Settings</a>
     </nav>
-    <div class="ht-no-results" id="htNoResults">No results</div>
+    <div class="ht-no-results" id="htNoResults" data-i18n="ht.no_results">No results</div>
     <div class="ht-sidebar-footer">
-      <a href="/" class="ht-back-btn">← Back to Studio</a>
+      <a href="/" class="ht-back-btn" data-i18n="ht.back">← Back to Studio</a>
     </div>
   </aside>
 
   <!-- MAIN CONTENT -->
   <main class="ht-main" id="htMain">
-    <h1 class="ht-hero-h">How to Use <span>WriteMyLyrics</span></h1>
-    <p class="ht-hero-sub">Everything you need to write, refine, and share your songs — from first draft to full karaoke experience.</p>
+    <h1 class="ht-hero-h" data-i18n-inner="ht.hero_h">How to Use <span>WriteMyLyrics</span></h1>
+    <p class="ht-hero-sub" data-i18n="ht.hero_sub">Everything you need to write, refine, and share your songs — from first draft to full karaoke experience.</p>
 
     <!-- 1. Getting Started -->
     <div class="ht-section open" id="getting-started" data-visible="true">
       <div class="ht-section-hdr" onclick="toggleSection(this)">
-        <span class="ht-section-title">Getting Started</span>
+        <span class="ht-section-title" data-i18n="ht.s1.title">Getting Started</span>
         <span class="ht-chevron">▼</span>
       </div>
       <div class="ht-section-body">
-        <div class="ht-section-inner">
+        <div class="ht-section-inner" data-i18n-inner="ht.s1.body">
           <div class="ht-sub">What is WriteMyLyrics?</div>
           <p class="ht-p">An AI-powered songwriting studio. Describe your song — topic, genre, mood, style — and the AI writes professional lyrics in seconds with verses, choruses, bridges, and chord progressions.</p>
 
@@ -236,11 +236,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
     <!-- 2. Writing Your First Song -->
     <div class="ht-section" id="first-song" data-visible="true">
       <div class="ht-section-hdr" onclick="toggleSection(this)">
-        <span class="ht-section-title">Writing Your First Song</span>
+        <span class="ht-section-title" data-i18n="ht.s2.title">Writing Your First Song</span>
         <span class="ht-chevron">▼</span>
       </div>
       <div class="ht-section-body">
-        <div class="ht-section-inner">
+        <div class="ht-section-inner" data-i18n-inner="ht.s2.body">
           <div class="ht-sub">Steps</div>
           <ol class="ht-ol">
             <li><strong>Enter Topic / Concept</strong> — be specific. "Losing my dog after 12 years" works better than "sadness."</li>
@@ -267,11 +267,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
     <!-- 3. Templates -->
     <div class="ht-section" id="templates" data-visible="true">
       <div class="ht-section-hdr" onclick="toggleSection(this)">
-        <span class="ht-section-title">Templates</span>
+        <span class="ht-section-title" data-i18n="ht.s3.title">Templates</span>
         <span class="ht-chevron">▼</span>
       </div>
       <div class="ht-section-body">
-        <div class="ht-section-inner">
+        <div class="ht-section-inner" data-i18n-inner="ht.s3.body">
           <div class="ht-sub">What Are Templates?</div>
           <p class="ht-p">Templates are pre-filled studio settings that get you started instantly.</p>
 
@@ -298,11 +298,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
     <!-- 4. Refining Your Song -->
     <div class="ht-section" id="refining" data-visible="true">
       <div class="ht-section-hdr" onclick="toggleSection(this)">
-        <span class="ht-section-title">Refining Your Song</span>
+        <span class="ht-section-title" data-i18n="ht.s4.title">Refining Your Song</span>
         <span class="ht-chevron">▼</span>
       </div>
       <div class="ht-section-body">
-        <div class="ht-section-inner">
+        <div class="ht-section-inner" data-i18n-inner="ht.s4.body">
           <div class="def-block">
             <div class="def-term">Regenerate</div>
             <div class="def-desc">Click <strong>Regenerate</strong> in the action bar for a completely new version using the same settings.</div>
@@ -329,11 +329,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
     <!-- 5. Chord Progressions -->
     <div class="ht-section" id="chords" data-visible="true">
       <div class="ht-section-hdr" onclick="toggleSection(this)">
-        <span class="ht-section-title">Chord Progressions</span>
+        <span class="ht-section-title" data-i18n="ht.s5.title">Chord Progressions</span>
         <span class="ht-chevron">▼</span>
       </div>
       <div class="ht-section-body">
-        <div class="ht-section-inner">
+        <div class="ht-section-inner" data-i18n-inner="ht.s5.body">
           <div class="def-block">
             <div class="def-term">Viewing Chords</div>
             <div class="def-desc">The Chord Progression section below the lyrics shows the key, strumming pattern, and chords for each section of your song.</div>
@@ -357,11 +357,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
     <!-- 6. Exporting to Suno -->
     <div class="ht-section" id="suno-export" data-visible="true">
       <div class="ht-section-hdr" onclick="toggleSection(this)">
-        <span class="ht-section-title">Exporting to Suno</span>
+        <span class="ht-section-title" data-i18n="ht.s6.title">Exporting to Suno</span>
         <span class="ht-chevron">▼</span>
       </div>
       <div class="ht-section-body">
-        <div class="ht-section-inner">
+        <div class="ht-section-inner" data-i18n-inner="ht.s6.body">
           <div class="ht-sub">What is Suno?</div>
           <p class="ht-p">Suno (<a href="https://suno.com" target="_blank" style="color:var(--gold)">suno.com</a>) is an AI music generator. WriteMyLyrics writes the lyrics and chord progressions — Suno generates the full musical track.</p>
 
@@ -383,11 +383,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
     <!-- 7. Karaoke Mode -->
     <div class="ht-section" id="karaoke" data-visible="true">
       <div class="ht-section-hdr" onclick="toggleSection(this)">
-        <span class="ht-section-title">Karaoke Mode</span>
+        <span class="ht-section-title" data-i18n="ht.s7.title">Karaoke Mode</span>
         <span class="ht-chevron">▼</span>
       </div>
       <div class="ht-section-body">
-        <div class="ht-section-inner">
+        <div class="ht-section-inner" data-i18n-inner="ht.s7.body">
           <div class="ht-sub">What is Karaoke Mode?</div>
           <p class="ht-p">Karaoke Mode highlights your lyrics in real time as music plays, word by word. Requires a direct audio URL (not a Suno share page link).</p>
 
@@ -412,11 +412,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
     <!-- 8. TikTok Hook Generator -->
     <div class="ht-section" id="hooks" data-visible="true">
       <div class="ht-section-hdr" onclick="toggleSection(this)">
-        <span class="ht-section-title">TikTok Hook Generator</span>
+        <span class="ht-section-title" data-i18n="ht.s8.title">TikTok Hook Generator</span>
         <span class="ht-chevron">▼</span>
       </div>
       <div class="ht-section-body">
-        <div class="ht-section-inner">
+        <div class="ht-section-inner" data-i18n-inner="ht.s8.body">
           <div class="ht-sub">What It Does</div>
           <p class="ht-p">Generates 3 short, punchy hook lines based on your song. Each hook is 15 seconds or less when spoken aloud. Available on all plans.</p>
 
@@ -434,11 +434,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
     <!-- 9. Song Gallery -->
     <div class="ht-section" id="gallery" data-visible="true">
       <div class="ht-section-hdr" onclick="toggleSection(this)">
-        <span class="ht-section-title">Song Gallery</span>
+        <span class="ht-section-title" data-i18n="ht.s9.title">Song Gallery</span>
         <span class="ht-chevron">▼</span>
       </div>
       <div class="ht-section-body">
-        <div class="ht-section-inner">
+        <div class="ht-section-inner" data-i18n-inner="ht.s9.body">
           <div class="ht-sub">What is the Gallery?</div>
           <p class="ht-p">A public space where users share songs, vote on favorites, and discover new music from around the world.</p>
 
@@ -457,11 +457,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
     <!-- 10. Shareable Song URLs -->
     <div class="ht-section" id="share-urls" data-visible="true">
       <div class="ht-section-hdr" onclick="toggleSection(this)">
-        <span class="ht-section-title">Shareable Song URLs</span>
+        <span class="ht-section-title" data-i18n="ht.s10.title">Shareable Song URLs</span>
         <span class="ht-chevron">▼</span>
       </div>
       <div class="ht-section-body">
-        <div class="ht-section-inner">
+        <div class="ht-section-inner" data-i18n-inner="ht.s10.body">
           <div class="ht-sub">Your Song's Public URL</div>
           <p class="ht-p">Every published song gets a permanent public URL at <code style="font-family:'DM Mono',monospace;font-size:12px;color:var(--gold)">writemylyrics.ai/song/[id]</code>. No login required to view.</p>
 
@@ -482,11 +482,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
     <!-- 11. Co-writer Mode -->
     <div class="ht-section" id="cowriter" data-visible="true">
       <div class="ht-section-hdr" onclick="toggleSection(this)">
-        <span class="ht-section-title">Co-writer Mode</span>
+        <span class="ht-section-title" data-i18n="ht.s11.title">Co-writer Mode</span>
         <span class="ht-chevron">▼</span>
       </div>
       <div class="ht-section-body">
-        <div class="ht-section-inner">
+        <div class="ht-section-inner" data-i18n-inner="ht.s11.body">
           <div class="ht-sub">Plan Required</div>
           <p class="ht-p">Co-writer Mode is available on Pro and Unlimited plans.</p>
 
@@ -510,11 +510,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
     <!-- 12. Plans & Billing -->
     <div class="ht-section" id="billing" data-visible="true">
       <div class="ht-section-hdr" onclick="toggleSection(this)">
-        <span class="ht-section-title">Plans &amp; Billing</span>
+        <span class="ht-section-title" data-i18n="ht.s12.title">Plans &amp; Billing</span>
         <span class="ht-chevron">▼</span>
       </div>
       <div class="ht-section-body">
-        <div class="ht-section-inner">
+        <div class="ht-section-inner" data-i18n-inner="ht.s12.body">
           <div class="ht-table-wrap">
             <table class="ht-table">
               <thead>
@@ -584,11 +584,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
     <!-- 13. Language Settings -->
     <div class="ht-section" id="language-settings" data-visible="true">
       <div class="ht-section-hdr" onclick="toggleSection(this)">
-        <span class="ht-section-title">Language Settings</span>
+        <span class="ht-section-title" data-i18n="ht.s13.title">Language Settings</span>
         <span class="ht-chevron">▼</span>
       </div>
       <div class="ht-section-body">
-        <div class="ht-section-inner">
+        <div class="ht-section-inner" data-i18n-inner="ht.s13.body">
           <div class="ht-sub">Supported Interface Languages</div>
           <div class="lang-badges">
             <span class="lang-badge">🇺🇸 English</span>
@@ -612,6 +612,148 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 </div>
 
 <script>
+// ── i18n ──
+const HT_LANG = localStorage.getItem('wml_lang') || 'en';
+
+const HT_STRINGS = {
+  en: {
+    'ht.search_ph':'Search sections…','ht.back':'← Back to Studio','ht.no_results':'No results',
+    'ht.hero_h':'How to Use <span>WriteMyLyrics</span>',
+    'ht.hero_sub':'Everything you need to write, refine, and share your songs — from first draft to full karaoke experience.',
+    'ht.nav.s1':'Getting Started','ht.nav.s2':'Writing Your First Song','ht.nav.s3':'Templates',
+    'ht.nav.s4':'Refining Your Song','ht.nav.s5':'Chord Progressions','ht.nav.s6':'Exporting to Suno',
+    'ht.nav.s7':'Karaoke Mode','ht.nav.s8':'TikTok Hook Generator','ht.nav.s9':'Song Gallery',
+    'ht.nav.s10':'Shareable Song URLs','ht.nav.s11':'Co-writer Mode','ht.nav.s12':'Plans & Billing',
+    'ht.nav.s13':'Language Settings',
+    'ht.s1.title':'Getting Started','ht.s2.title':'Writing Your First Song','ht.s3.title':'Templates',
+    'ht.s4.title':'Refining Your Song','ht.s5.title':'Chord Progressions','ht.s6.title':'Exporting to Suno',
+    'ht.s7.title':'Karaoke Mode','ht.s8.title':'TikTok Hook Generator','ht.s9.title':'Song Gallery',
+    'ht.s10.title':'Shareable Song URLs','ht.s11.title':'Co-writer Mode','ht.s12.title':'Plans & Billing',
+    'ht.s13.title':'Language Settings',
+  },
+  es: {
+    'ht.search_ph':'Buscar secciones\u2026','ht.back':'\u2190 Volver al Estudio','ht.no_results':'Sin resultados',
+    'ht.hero_h':'C\u00f3mo usar <span>WriteMyLyrics</span>',
+    'ht.hero_sub':'Todo lo que necesitas para escribir, refinar y compartir tus canciones \u2014 desde el primer borrador hasta la experiencia completa de karaoke.',
+    'ht.nav.s1':'Primeros pasos','ht.nav.s2':'Escribir tu primera canci\u00f3n','ht.nav.s3':'Plantillas',
+    'ht.nav.s4':'Refinar tu canci\u00f3n','ht.nav.s5':'Progresiones de acordes','ht.nav.s6':'Exportar a Suno',
+    'ht.nav.s7':'Modo Karaoke','ht.nav.s8':'Generador de Hooks para TikTok','ht.nav.s9':'Galer\u00eda de canciones',
+    'ht.nav.s10':'URLs compartibles','ht.nav.s11':'Modo co-escritor','ht.nav.s12':'Planes y facturaci\u00f3n',
+    'ht.nav.s13':'Configuraci\u00f3n de idioma',
+    'ht.s1.title':'Primeros pasos','ht.s2.title':'Escribir tu primera canci\u00f3n','ht.s3.title':'Plantillas',
+    'ht.s4.title':'Refinar tu canci\u00f3n','ht.s5.title':'Progresiones de acordes','ht.s6.title':'Exportar a Suno',
+    'ht.s7.title':'Modo Karaoke','ht.s8.title':'Generador de Hooks para TikTok','ht.s9.title':'Galer\u00eda de canciones',
+    'ht.s10.title':'URLs compartibles','ht.s11.title':'Modo co-escritor','ht.s12.title':'Planes y facturaci\u00f3n',
+    'ht.s13.title':'Configuraci\u00f3n de idioma',
+    'ht.s1.body':'<div class="ht-sub">\u00bfQu\u00e9 es WriteMyLyrics?</div><p class="ht-p">Un estudio de composici\u00f3n impulsado por IA. Describe tu canci\u00f3n \u2014 tema, g\u00e9nero, estado de \u00e1nimo, estilo \u2014 y la IA escribe letras profesionales en segundos con versos, coros, puentes y progresiones de acordes.</p><div class="ht-sub">Planes</div><div class="plan-cards"><div class="plan-card"><div class="plan-card-name">Gratis</div><div class="plan-card-price">$0<span>/mes</span></div><div class="plan-card-songs">5 canciones por mes</div><div class="plan-card-feat">Letras b\u00e1sicas</div></div><div class="plan-card featured"><div class="plan-card-name">Pro</div><div class="plan-card-price">$9<span>/mes</span></div><div class="plan-card-songs">50 canciones por mes</div><div class="plan-card-feat">Progresiones de acordes \u00b7 Historial de versiones \u00b7 Exportar TXT y PDF \u00b7 Modo co-escritor</div></div><div class="plan-card"><div class="plan-card-name">Ilimitado</div><div class="plan-card-price">$19<span>/mes</span></div><div class="plan-card-songs">Canciones ilimitadas</div><div class="plan-card-feat">Todas las funciones incluido Modo Karaoke con sincronizaci\u00f3n autom\u00e1tica</div></div></div><div class="ht-sub">Crear una cuenta</div><p class="ht-p">Haz clic en <strong>Empezar gratis</strong>, ingresa tu correo y contrase\u00f1a, luego confirma tu correo. No se requiere tarjeta de cr\u00e9dito.</p>',
+    'ht.s2.body':'<div class="ht-sub">Pasos</div><ol class="ht-ol"><li><strong>Introduce el tema / concepto</strong> \u2014 s\u00e9 espec\u00edfico. &ldquo;Perder a mi perro despu\u00e9s de 12 a\u00f1os&rdquo; funciona mejor que &ldquo;tristeza.&rdquo;</li><li><strong>Selecciona el g\u00e9nero.</strong></li><li><strong>Selecciona los estados de \u00e1nimo</strong> \u2014 puedes elegir varios.</li><li><strong>Elige la estructura de la canci\u00f3n.</strong></li><li><strong>Establece el tempo.</strong></li><li><strong>Elige el esquema de rima.</strong></li><li><strong>Establece el punto de vista.</strong></li><li>Opcionalmente agrega <strong>Palabras a incluir</strong>, <strong>Notas de estilo</strong>, <strong>Escribir al estilo de</strong> un artista, e <strong>Idioma</strong>.</li><li>Haz clic en <strong>Escribir esta canci\u00f3n</strong>.</li></ol><div class="ht-sub">Consejos</div><ul class="ht-ul"><li>Un tema m\u00e1s espec\u00edfico = mejores letras.</li><li>Combinar estados de \u00e1nimo da resultados m\u00e1s matizados.</li><li>El campo <em>Estilo de</em> es poderoso \u2014 prueba diferentes artistas para la misma canci\u00f3n.</li></ul>',
+    'ht.s3.body':'<div class="ht-sub">\u00bfQu\u00e9 son las plantillas?</div><p class="ht-p">Las plantillas son configuraciones predefinidas del estudio que te ponen en marcha al instante.</p><div class="ht-sub">Plantillas disponibles</div><div class="tpl-grid"><span class="tpl-tag">Balada Country Cl\u00e1sica</span><span class="tpl-tag">Himno Rock</span><span class="tpl-tag">Canci\u00f3n de Amor R&amp;B</span><span class="tpl-tag">Canci\u00f3n de Amor Pop</span><span class="tpl-tag">Historia Outlaw Country</span><span class="tpl-tag">Militar / Patri\u00f3tico</span><span class="tpl-tag">Blues Est\u00e1ndar</span><span class="tpl-tag">Confesional Singer-Songwriter</span><span class="tpl-tag">Trap Hip Hop</span><span class="tpl-tag">Latin / Reggaeton</span></div><div class="ht-sub">C\u00f3mo usar</div><p class="ht-p">Haz clic en <strong>Empezar desde una plantilla</strong> en la parte superior del estudio. Elige una plantilla. Personaliza cualquier campo. Haz clic en <strong>Escribir esta canci\u00f3n</strong>.</p>',
+    'ht.s4.body':'<div class="def-block"><div class="def-term">Regenerar</div><div class="def-desc">Haz clic en <strong>Regenerar</strong> en la barra de acciones para obtener una versi\u00f3n completamente nueva con los mismos ajustes.</div></div><div class="def-block"><div class="def-term">Editar directamente</div><div class="def-desc">Haz clic en cualquier lugar del \u00e1rea de letras para editar el texto. Los cambios se guardan autom\u00e1ticamente.</div></div><div class="def-block"><div class="def-term">Historial de versiones</div><div class="def-desc">Haz clic en <strong>Versiones</strong> en la barra de acciones para ver todas las versiones anteriores de tu canci\u00f3n y restaurar cualquiera de ellas.</div></div><div class="def-block"><div class="def-term">T\u00edtulos sugeridos</div><div class="def-desc">Tres sugerencias de t\u00edtulos aparecen sobre las letras despu\u00e9s de generar. Haz clic en cualquiera para copiar al portapapeles.</div></div><div class="ht-sub">Guardar</div><p class="ht-p">Las canciones se guardan autom\u00e1ticamente en el Historial de canciones para usuarios Pro e Ilimitados. Accede desde el \u00edcono de historial en la barra lateral.</p>',
+    'ht.s5.body':'<div class="def-block"><div class="def-term">Ver acordes</div><div class="def-desc">La secci\u00f3n de Progresi\u00f3n de acordes debajo de las letras muestra la tonalidad, el patr\u00f3n de rasgueo y los acordes de cada secci\u00f3n de tu canci\u00f3n.</div></div><div class="def-block"><div class="def-term">Mostrar acordes</div><div class="def-desc">Haz clic en <strong>Ver acordes</strong> para mostrar los nombres de los acordes sobre cada l\u00ednea de la letra en formato de partitura.</div></div><div class="def-block"><div class="def-term">Transponer</div><div class="def-desc">Usa las flechas \u25bc \u25b2 junto al nombre de la tonalidad para subir o bajar todos los acordes un semitono.</div></div><div class="def-block"><div class="def-term">Gu\u00eda de acordes de guitarra</div><div class="def-desc">Diagramas SVG del m\u00e1stil aparecen debajo de las letras para cada acorde \u00fanico de la canci\u00f3n cuando Ver acordes est\u00e1 activado.</div></div>',
+    'ht.s6.body':'<div class="ht-sub">\u00bfQu\u00e9 es Suno?</div><p class="ht-p">Suno (<a href="https://suno.com" target="_blank" style="color:var(--gold)">suno.com</a>) es un generador de m\u00fasica con IA. WriteMyLyrics escribe las letras \u2014 Suno genera la pista musical completa.</p><div class="ht-sub">Pasos</div><ol class="ht-ol"><li>Genera tus letras en WriteMyLyrics.</li><li>Haz clic en el bot\u00f3n <strong>Suno</strong> en la barra de acciones.</li><li>Copia las letras formateadas y el prompt de estilo.</li><li>Ve a <a href="https://suno.com" target="_blank" style="color:var(--gold)">suno.com</a> y p\u00e9galo en una nueva canci\u00f3n.</li><li>Suno genera la canci\u00f3n completa con m\u00fasica.</li></ol><div class="ht-sub">Guardar tu URL de Suno</div><p class="ht-p">Despu\u00e9s de que Suno genere tu canci\u00f3n, copia la URL del audio y p\u00e9gala en el campo <strong>URL de audio Suno</strong> en el panel de Notas de la canci\u00f3n.</p>',
+    'ht.s7.body':'<div class="ht-sub">\u00bfQu\u00e9 es el Modo Karaoke?</div><p class="ht-p">El Modo Karaoke resalta tus letras en tiempo real mientras suena la m\u00fasica, palabra por palabra. Requiere una URL de audio directa.</p><div class="ht-sub">Obtener una URL directa de Suno</div><p class="ht-p">Haz clic derecho en el reproductor de audio en Suno y selecciona <strong>Copiar direcci\u00f3n de audio</strong> \u2014 usa la URL directa <code style="font-family:\'DM Mono\',monospace;font-size:12px;color:var(--gold)">.mp3</code>.</p><div class="ht-sub">Usar el Modo Karaoke</div><ol class="ht-ol"><li>Abre tu canci\u00f3n en el estudio.</li><li>Haz clic en el \u00edcono de <strong>Karaoke</strong> en la barra lateral.</li><li>Pega la URL de audio directa o sube un archivo MP3.</li><li>Haz clic en <strong>Sincronizaci\u00f3n autom\u00e1tica</strong> \u2014 Whisper AI empareja tus letras con el audio en 10\u201330 segundos.</li><li>Haz clic en <strong>Reproducir</strong> \u2014 las letras se resaltan palabra por palabra.</li><li>Haz clic en <strong>Guardar sincronizaci\u00f3n</strong> para guardar el timing permanentemente.</li></ol><div class="ht-note"><strong>Nota:</strong> El Modo Karaoke con sincronizaci\u00f3n autom\u00e1tica requiere un plan Ilimitado.</div>',
+    'ht.s8.body':'<div class="ht-sub">Qu\u00e9 hace</div><p class="ht-p">Genera 3 frases de enganche cortas y contundentes basadas en tu canci\u00f3n. Disponible en todos los planes.</p><div class="ht-sub">C\u00f3mo usar</div><ol class="ht-ol"><li>Genera una canci\u00f3n.</li><li>Haz clic en <strong>Hooks de TikTok</strong> en la barra de acciones.</li><li>Aparecen tres hooks desde diferentes \u00e1ngulos emocionales.</li><li>Haz clic en <strong>Copiar</strong> para copiarlo al portapapeles.</li></ol>',
+    'ht.s9.body':'<div class="ht-sub">\u00bfQu\u00e9 es la Galer\u00eda?</div><p class="ht-p">Un espacio p\u00fablico donde los usuarios comparten canciones, votan por sus favoritas y descubren nueva m\u00fasica.</p><div class="ht-sub">Publicar tu canci\u00f3n</div><p class="ht-p">Ve al Historial de canciones, encuentra tu canci\u00f3n y activa el bot\u00f3n <strong>Publicar</strong>.</p><div class="ht-sub">Votar</div><p class="ht-p">Haz clic en el \u00edcono de llama \ud83d\udd25 en cualquier canci\u00f3n para votar.</p><div class="ht-sub">Filtrar</div><p class="ht-p">Usa las pesta\u00f1as de filtro por g\u00e9nero o la barra de b\u00fasqueda para encontrar canciones.</p>',
+    'ht.s10.body':'<div class="ht-sub">La URL p\u00fablica de tu canci\u00f3n</div><p class="ht-p">Cada canci\u00f3n publicada obtiene una URL permanente en <code style="font-family:\'DM Mono\',monospace;font-size:12px;color:var(--gold)">writemylyrics.ai/song/[id]</code>. No se requiere inicio de sesi\u00f3n.</p><div class="ht-sub">C\u00f3mo compartir</div><ol class="ht-ol"><li>Publica tu canci\u00f3n.</li><li>Ve al Historial de canciones.</li><li>Haz clic en el bot\u00f3n <strong>Compartir</strong>.</li><li>La URL se copia autom\u00e1ticamente.</li></ol><div class="ht-sub">Lo que ven los visitantes</div><p class="ht-p">T\u00edtulo, autor, g\u00e9nero, letras completas, votos y reproductor de audio.</p>',
+    'ht.s11.body':'<div class="ht-sub">Plan requerido</div><p class="ht-p">El Modo co-escritor est\u00e1 disponible en los planes Pro e Ilimitado.</p><div class="ht-sub">Invitar a un co-escritor</div><ol class="ht-ol"><li>Ve al Historial de canciones.</li><li>Haz clic en <strong>Co-escritores</strong>.</li><li>Introduce el correo del colaborador.</li><li>Env\u00eda la invitaci\u00f3n.</li></ol><div class="ht-sub">Sugerir cambios</div><p class="ht-p">Los co-escritores hacen clic en <strong>Sugerir cambios</strong>, escriben su revisi\u00f3n y la env\u00edan.</p><div class="ht-sub">Revisar sugerencias</div><p class="ht-p">El due\u00f1o hace clic en <strong>Sugerencias</strong> para revisar. Haz clic en <strong>Aceptar</strong> o <strong>Rechazar</strong>.</p>',
+    'ht.s12.body':'<div class="ht-table-wrap"><table class="ht-table"><thead><tr><th></th><th>Gratis</th><th>Pro $9/mes</th><th>Ilimitado $19/mes</th></tr></thead><tbody><tr><td>Canciones por mes</td><td>5</td><td>50</td><td>Ilimitado</td></tr><tr><td>Progresiones de acordes</td><td><span class="cross">\u2715</span></td><td><span class="check">\u2713</span></td><td><span class="check">\u2713</span></td></tr><tr><td>Historial de versiones</td><td><span class="cross">\u2715</span></td><td><span class="check">\u2713</span></td><td><span class="check">\u2713</span></td></tr><tr><td>Exportar TXT y PDF</td><td><span class="cross">\u2715</span></td><td><span class="check">\u2713</span></td><td><span class="check">\u2713</span></td></tr><tr><td>Modo co-escritor</td><td><span class="cross">\u2715</span></td><td><span class="check">\u2713</span></td><td><span class="check">\u2713</span></td></tr><tr><td>Modo Karaoke</td><td><span class="cross">\u2715</span></td><td><span class="cross">\u2715</span></td><td><span class="check">\u2713</span></td></tr><tr><td>Sincronizaci\u00f3n autom\u00e1tica</td><td><span class="cross">\u2715</span></td><td><span class="cross">\u2715</span></td><td><span class="check">\u2713</span></td></tr></tbody></table></div><div class="ht-sub">Mejorar de plan</div><p class="ht-p">Haz clic en tu insignia de plan o en <strong>Mejorar</strong> en cualquier funci\u00f3n bloqueada.</p><div class="ht-sub">Cancelar</div><p class="ht-p">Cancela en cualquier momento desde la configuraci\u00f3n de la cuenta.</p>',
+    'ht.s13.body':'<div class="ht-sub">Idiomas de interfaz compatibles</div><div class="lang-badges"><span class="lang-badge">\ud83c\uddfa\ud83c\uddf8 English</span><span class="lang-badge">\ud83c\uddea\ud83c\uddf8 Espa\u00f1ol</span><span class="lang-badge">\ud83c\udde7\ud83c\uddf7 Portugu\u00eas</span><span class="lang-badge">\ud83c\uddeb\ud83c\uddf7 Fran\u00e7ais</span><span class="lang-badge">\ud83c\udde9\ud83c\uddea Deutsch</span><span class="lang-badge">\ud83c\uddef\ud83c\uddf5 \u65e5\u672c\u8a9e</span></div><div class="ht-sub">C\u00f3mo cambiar</div><p class="ht-p">Haz clic en el \u00edcono de globo \ud83c\udf10 y selecciona tu idioma. Tu preferencia se guarda autom\u00e1ticamente.</p><div class="ht-sub">Importante</div><p class="ht-p">El idioma de la interfaz y el idioma de las letras son configuraciones separadas. El campo <strong>Idioma</strong> en el estudio controla el idioma de las letras.</p>',
+  },
+  pt: {
+    'ht.search_ph':'Buscar se\u00e7\u00f5es\u2026','ht.back':'\u2190 Voltar ao Est\u00fadio','ht.no_results':'Sem resultados',
+    'ht.hero_h':'Como usar <span>WriteMyLyrics</span>',
+    'ht.hero_sub':'Tudo que voc\u00ea precisa para escrever, refinar e compartilhar suas m\u00fasicas \u2014 do primeiro rascunho \u00e0 experi\u00eancia completa de karaoke.',
+    'ht.nav.s1':'Primeiros passos','ht.nav.s2':'Escrevendo sua primeira m\u00fasica','ht.nav.s3':'Modelos',
+    'ht.nav.s4':'Refinando sua m\u00fasica','ht.nav.s5':'Progress\u00f5es de acordes','ht.nav.s6':'Exportando para Suno',
+    'ht.nav.s7':'Modo Karaoke','ht.nav.s8':'Gerador de Hooks para TikTok','ht.nav.s9':'Galeria de m\u00fasicas',
+    'ht.nav.s10':'URLs compartilh\u00e1veis','ht.nav.s11':'Modo co-autor','ht.nav.s12':'Planos e cobran\u00e7a',
+    'ht.nav.s13':'Configura\u00e7\u00f5es de idioma',
+    'ht.s1.title':'Primeiros passos','ht.s2.title':'Escrevendo sua primeira m\u00fasica','ht.s3.title':'Modelos',
+    'ht.s4.title':'Refinando sua m\u00fasica','ht.s5.title':'Progress\u00f5es de acordes','ht.s6.title':'Exportando para Suno',
+    'ht.s7.title':'Modo Karaoke','ht.s8.title':'Gerador de Hooks para TikTok','ht.s9.title':'Galeria de m\u00fasicas',
+    'ht.s10.title':'URLs compartilh\u00e1veis','ht.s11.title':'Modo co-autor','ht.s12.title':'Planos e cobran\u00e7a',
+    'ht.s13.title':'Configura\u00e7\u00f5es de idioma',
+    'ht.s1.body':'<div class="ht-sub">O que \u00e9 WriteMyLyrics?</div><p class="ht-p">Um est\u00fadio de composi\u00e7\u00e3o com IA. Descreva sua m\u00fasica \u2014 tema, g\u00eanero, humor, estilo \u2014 e a IA escreve letras profissionais em segundos.</p><div class="ht-sub">Planos</div><div class="plan-cards"><div class="plan-card"><div class="plan-card-name">Gratuito</div><div class="plan-card-price">$0<span>/m\u00eas</span></div><div class="plan-card-songs">5 m\u00fasicas por m\u00eas</div><div class="plan-card-feat">Letras b\u00e1sicas</div></div><div class="plan-card featured"><div class="plan-card-name">Pro</div><div class="plan-card-price">$9<span>/m\u00eas</span></div><div class="plan-card-songs">50 m\u00fasicas por m\u00eas</div><div class="plan-card-feat">Progress\u00f5es de acordes \u00b7 Hist\u00f3rico \u00b7 Export TXT e PDF \u00b7 Co-autor</div></div><div class="plan-card"><div class="plan-card-name">Ilimitado</div><div class="plan-card-price">$19<span>/m\u00eas</span></div><div class="plan-card-songs">M\u00fasicas ilimitadas</div><div class="plan-card-feat">Todos os recursos incluindo Modo Karaoke com sincroniza\u00e7\u00e3o autom\u00e1tica</div></div></div><div class="ht-sub">Criando uma conta</div><p class="ht-p">Clique em <strong>Come\u00e7ar gr\u00e1tis</strong>, insira seu email e senha e confirme seu email.</p>',
+    'ht.s13.body':'<div class="ht-sub">Idiomas de interface suportados</div><div class="lang-badges"><span class="lang-badge">\ud83c\uddfa\ud83c\uddf8 English</span><span class="lang-badge">\ud83c\uddea\ud83c\uddf8 Espa\u00f1ol</span><span class="lang-badge">\ud83c\udde7\ud83c\uddf7 Portugu\u00eas</span><span class="lang-badge">\ud83c\uddeb\ud83c\uddf7 Fran\u00e7ais</span><span class="lang-badge">\ud83c\udde9\ud83c\uddea Deutsch</span><span class="lang-badge">\ud83c\uddef\ud83c\uddf5 \u65e5\u672c\u8a9e</span></div><div class="ht-sub">Como mudar</div><p class="ht-p">Clique no \u00edcone de globo \ud83c\udf10 na barra de navega\u00e7\u00e3o e selecione seu idioma.</p><div class="ht-sub">Importante</div><p class="ht-p">O idioma da interface e o idioma das letras s\u00e3o configura\u00e7\u00f5es separadas. O campo <strong>Idioma</strong> no est\u00fadio controla o idioma das letras.</p>',
+  },
+  fr: {
+    'ht.search_ph':'Rechercher des sections\u2026','ht.back':'\u2190 Retour au Studio','ht.no_results':'Aucun r\u00e9sultat',
+    'ht.hero_h':'Comment utiliser <span>WriteMyLyrics</span>',
+    'ht.hero_sub':'Tout ce dont vous avez besoin pour \u00e9crire, affiner et partager vos chansons.',
+    'ht.nav.s1':'Premiers pas','ht.nav.s2':'\u00c9crire votre premi\u00e8re chanson','ht.nav.s3':'Mod\u00e8les',
+    'ht.nav.s4':'Affiner votre chanson','ht.nav.s5':'Progressions d\'accords','ht.nav.s6':'Exporter vers Suno',
+    'ht.nav.s7':'Mode Karaok\u00e9','ht.nav.s8':'G\u00e9n\u00e9rateur de Hooks TikTok','ht.nav.s9':'Galerie de chansons',
+    'ht.nav.s10':'URLs partageables','ht.nav.s11':'Mode co-auteur','ht.nav.s12':'Plans et facturation',
+    'ht.nav.s13':'Param\u00e8tres de langue',
+    'ht.s1.title':'Premiers pas','ht.s2.title':'\u00c9crire votre premi\u00e8re chanson','ht.s3.title':'Mod\u00e8les',
+    'ht.s4.title':'Affiner votre chanson','ht.s5.title':'Progressions d\'accords','ht.s6.title':'Exporter vers Suno',
+    'ht.s7.title':'Mode Karaok\u00e9','ht.s8.title':'G\u00e9n\u00e9rateur de Hooks TikTok','ht.s9.title':'Galerie de chansons',
+    'ht.s10.title':'URLs partageables','ht.s11.title':'Mode co-auteur','ht.s12.title':'Plans et facturation',
+    'ht.s13.title':'Param\u00e8tres de langue',
+    'ht.s1.body':'<div class="ht-sub">Qu\'est-ce que WriteMyLyrics\u00a0?</div><p class="ht-p">Un studio de composition propuls\u00e9 par l\'IA. D\u00e9crivez votre chanson \u2014 sujet, genre, ambiance, style \u2014 et l\'IA \u00e9crit des paroles professionnelles en quelques secondes.</p><div class="ht-sub">Plans</div><div class="plan-cards"><div class="plan-card"><div class="plan-card-name">Gratuit</div><div class="plan-card-price">$0<span>/mois</span></div><div class="plan-card-songs">5 chansons par mois</div><div class="plan-card-feat">Paroles de base</div></div><div class="plan-card featured"><div class="plan-card-name">Pro</div><div class="plan-card-price">$9<span>/mois</span></div><div class="plan-card-songs">50 chansons par mois</div><div class="plan-card-feat">Progressions d\'accords \u00b7 Historique \u00b7 Export TXT et PDF \u00b7 Co-auteur</div></div><div class="plan-card"><div class="plan-card-name">Illimit\u00e9</div><div class="plan-card-price">$19<span>/mois</span></div><div class="plan-card-songs">Chansons illimit\u00e9es</div><div class="plan-card-feat">Toutes les fonctionnalit\u00e9s incluant le Mode Karaok\u00e9</div></div></div><div class="ht-sub">Cr\u00e9er un compte</div><p class="ht-p">Cliquez sur <strong>Commencer gratuitement</strong>, entrez votre e-mail et votre mot de passe.</p>',
+    'ht.s13.body':'<div class="ht-sub">Langues d\'interface support\u00e9es</div><div class="lang-badges"><span class="lang-badge">\ud83c\uddfa\ud83c\uddf8 English</span><span class="lang-badge">\ud83c\uddea\ud83c\uddf8 Espa\u00f1ol</span><span class="lang-badge">\ud83c\udde7\ud83c\uddf7 Portugu\u00eas</span><span class="lang-badge">\ud83c\uddeb\ud83c\uddf7 Fran\u00e7ais</span><span class="lang-badge">\ud83c\udde9\ud83c\uddea Deutsch</span><span class="lang-badge">\ud83c\uddef\ud83c\uddf5 \u65e5\u672c\u8a9e</span></div><div class="ht-sub">Comment changer</div><p class="ht-p">Cliquez sur l\'ic\u00f4ne de globe \ud83c\udf10 dans la barre de navigation et s\u00e9lectionnez votre langue.</p><div class="ht-sub">Important</div><p class="ht-p">La langue de l\'interface et la langue des paroles sont des param\u00e8tres distincts. Le champ <strong>Langue</strong> dans le studio contr\u00f4le la langue des paroles.</p>',
+  },
+  de: {
+    'ht.search_ph':'Abschnitte suchen\u2026','ht.back':'\u2190 Zur\u00fcck zum Studio','ht.no_results':'Keine Ergebnisse',
+    'ht.hero_h':'So verwenden Sie <span>WriteMyLyrics</span>',
+    'ht.hero_sub':'Alles, was Sie brauchen, um Ihre Songs zu schreiben, zu verfeinern und zu teilen.',
+    'ht.nav.s1':'Erste Schritte','ht.nav.s2':'Ihren ersten Song schreiben','ht.nav.s3':'Vorlagen',
+    'ht.nav.s4':'Ihren Song verfeinern','ht.nav.s5':'Akkordfolgen','ht.nav.s6':'Nach Suno exportieren',
+    'ht.nav.s7':'Karaoke-Modus','ht.nav.s8':'TikTok Hook-Generator','ht.nav.s9':'Song-Galerie',
+    'ht.nav.s10':'Teilbare Song-URLs','ht.nav.s11':'Co-Autor-Modus','ht.nav.s12':'Pl\u00e4ne und Abrechnung',
+    'ht.nav.s13':'Spracheinstellungen',
+    'ht.s1.title':'Erste Schritte','ht.s2.title':'Ihren ersten Song schreiben','ht.s3.title':'Vorlagen',
+    'ht.s4.title':'Ihren Song verfeinern','ht.s5.title':'Akkordfolgen','ht.s6.title':'Nach Suno exportieren',
+    'ht.s7.title':'Karaoke-Modus','ht.s8.title':'TikTok Hook-Generator','ht.s9.title':'Song-Galerie',
+    'ht.s10.title':'Teilbare Song-URLs','ht.s11.title':'Co-Autor-Modus','ht.s12.title':'Pl\u00e4ne und Abrechnung',
+    'ht.s13.title':'Spracheinstellungen',
+    'ht.s1.body':'<div class="ht-sub">Was ist WriteMyLyrics?</div><p class="ht-p">Ein KI-gest\u00fctztes Songwriting-Studio. Beschreiben Sie Ihren Song \u2014 Thema, Genre, Stimmung, Stil \u2014 und die KI schreibt professionelle Lyrics in Sekunden.</p><div class="ht-sub">Pl\u00e4ne</div><div class="plan-cards"><div class="plan-card"><div class="plan-card-name">Kostenlos</div><div class="plan-card-price">$0<span>/Monat</span></div><div class="plan-card-songs">5 Songs pro Monat</div><div class="plan-card-feat">Basis-Lyrics</div></div><div class="plan-card featured"><div class="plan-card-name">Pro</div><div class="plan-card-price">$9<span>/Monat</span></div><div class="plan-card-songs">50 Songs pro Monat</div><div class="plan-card-feat">Akkordfolgen \u00b7 Versionsverlauf \u00b7 TXT- und PDF-Export \u00b7 Co-Autor</div></div><div class="plan-card"><div class="plan-card-name">Unbegrenzt</div><div class="plan-card-price">$19<span>/Monat</span></div><div class="plan-card-songs">Unbegrenzte Songs</div><div class="plan-card-feat">Alle Funktionen einschlie\u00dflich Karaoke-Modus</div></div></div><div class="ht-sub">Ein Konto erstellen</div><p class="ht-p">Klicken Sie auf <strong>Kostenlos starten</strong>, geben Sie Ihre E-Mail-Adresse und Ihr Passwort ein.</p>',
+    'ht.s13.body':'<div class="ht-sub">Unterst\u00fctzte Oberfl\u00e4chensprachen</div><div class="lang-badges"><span class="lang-badge">\ud83c\uddfa\ud83c\uddf8 English</span><span class="lang-badge">\ud83c\uddea\ud83c\uddf8 Espa\u00f1ol</span><span class="lang-badge">\ud83c\udde7\ud83c\uddf7 Portugu\u00eas</span><span class="lang-badge">\ud83c\uddeb\ud83c\uddf7 Fran\u00e7ais</span><span class="lang-badge">\ud83c\udde9\ud83c\uddea Deutsch</span><span class="lang-badge">\ud83c\uddef\ud83c\uddf5 \u65e5\u672c\u8a9e</span></div><div class="ht-sub">Wie man wechselt</div><p class="ht-p">Klicken Sie auf das Globus-Symbol \ud83c\udf10 in der Navigationsleiste und w\u00e4hlen Sie Ihre Sprache.</p><div class="ht-sub">Wichtig</div><p class="ht-p">Oberfl\u00e4chensprache und Lyrics-Sprache sind separate Einstellungen. Das Feld <strong>Sprache</strong> im Studio steuert die Lyrics-Sprache.</p>',
+  },
+  ja: {
+    'ht.search_ph':'\u30bb\u30af\u30b7\u30e7\u30f3\u3092\u691c\u7d22\u2026','ht.back':'\u2190 \u30b9\u30bf\u30b8\u30aa\u306b\u623b\u308b','ht.no_results':'\u7d50\u679c\u306a\u3057',
+    'ht.hero_h':'<span>WriteMyLyrics</span> \u306e\u4f7f\u3044\u65b9',
+    'ht.hero_sub':'\u4f5c\u8a5e\u3001\u6539\u5584\u3001\u5171\u6709\u306b\u5fc5\u8981\u306a\u3059\u3079\u3066\u2014\u6700\u521d\u306e\u4e0b\u66f8\u304d\u304b\u3089\u5b8c\u5168\u306a\u30ab\u30e9\u30aa\u30b1\u4f53\u9a13\u307e\u3067\u3002',
+    'ht.nav.s1':'\u306f\u3058\u3081\u306b','ht.nav.s2':'\u6700\u521d\u306e\u66f2\u3092\u66f8\u304f','ht.nav.s3':'\u30c6\u30f3\u30d7\u30ec\u30fc\u30c8',
+    'ht.nav.s4':'\u66f2\u3092\u6539\u5584\u3059\u308b','ht.nav.s5':'\u30b3\u30fc\u30c9\u9032\u884c','ht.nav.s6':'Suno\u306b\u30a8\u30af\u30b9\u30dd\u30fc\u30c8',
+    'ht.nav.s7':'\u30ab\u30e9\u30aa\u30b1\u30e2\u30fc\u30c9','ht.nav.s8':'TikTok\u30d5\u30c3\u30af\u30b8\u30a7\u30cd\u30ec\u30fc\u30bf\u30fc','ht.nav.s9':'\u66f2\u30ae\u30e3\u30e9\u30ea\u30fc',
+    'ht.nav.s10':'\u5171\u6709\u53ef\u80fdURL','ht.nav.s11':'\u5171\u540c\u4f5c\u8005\u30e2\u30fc\u30c9','ht.nav.s12':'\u30d7\u30e9\u30f3\u3068\u6599\u91d1',
+    'ht.nav.s13':'\u8a00\u8a9e\u8a2d\u5b9a',
+    'ht.s1.title':'\u306f\u3058\u3081\u306b','ht.s2.title':'\u6700\u521d\u306e\u66f2\u3092\u66f8\u304f','ht.s3.title':'\u30c6\u30f3\u30d7\u30ec\u30fc\u30c8',
+    'ht.s4.title':'\u66f2\u3092\u6539\u5584\u3059\u308b','ht.s5.title':'\u30b3\u30fc\u30c9\u9032\u884c','ht.s6.title':'Suno\u306b\u30a8\u30af\u30b9\u30dd\u30fc\u30c8',
+    'ht.s7.title':'\u30ab\u30e9\u30aa\u30b1\u30e2\u30fc\u30c9','ht.s8.title':'TikTok\u30d5\u30c3\u30af\u30b8\u30a7\u30cd\u30ec\u30fc\u30bf\u30fc','ht.s9.title':'\u66f2\u30ae\u30e3\u30e9\u30ea\u30fc',
+    'ht.s10.title':'\u5171\u6709\u53ef\u80fdURL','ht.s11.title':'\u5171\u540c\u4f5c\u8005\u30e2\u30fc\u30c9','ht.s12.title':'\u30d7\u30e9\u30f3\u3068\u6599\u91d1',
+    'ht.s13.title':'\u8a00\u8a9e\u8a2d\u5b9a',
+    'ht.s1.body':'<div class="ht-sub">WriteMyLyrics\u3068\u306f\uff1f</div><p class="ht-p">AI\u3092\u642d\u8f09\u3057\u305f\u4f5c\u8a5e\u30b9\u30bf\u30b8\u30aa\u3067\u3059\u3002\u66f2\u306e\u30c6\u30fc\u30de\u3001\u30b8\u30e3\u30f3\u30eb\u3001\u30e0\u30fc\u30c9\u3001\u30b9\u30bf\u30a4\u30eb\u3092\u8aac\u660e\u3059\u308b\u3068\u3001AI\u304c\u6570\u79d2\u3067\u30d7\u30ed\u8ce6\u306e\u6b4c\u8a5e\u3092\u4f5c\u6210\u3057\u307e\u3059\u3002</p><div class="ht-sub">\u30d7\u30e9\u30f3</div><div class="plan-cards"><div class="plan-card"><div class="plan-card-name">\u7121\u6599</div><div class="plan-card-price">$0<span>/\u6708</span></div><div class="plan-card-songs">\u67085\u66f2</div><div class="plan-card-feat">\u57fa\u672c\u6b4c\u8a5e</div></div><div class="plan-card featured"><div class="plan-card-name">Pro</div><div class="plan-card-price">$9<span>/\u6708</span></div><div class="plan-card-songs">\u670850\u66f2</div><div class="plan-card-feat">\u30b3\u30fc\u30c9\u9032\u884c\u30fb\u30d0\u30fc\u30b8\u30e7\u30f3\u5c65\u6b74\u30fbTXT&PDF\u30a8\u30af\u30b9\u30dd\u30fc\u30c8\u30fb\u5171\u540c\u4f5c\u8005</div></div><div class="plan-card"><div class="plan-card-name">\u7121\u5236\u9650</div><div class="plan-card-price">$19<span>/\u6708</span></div><div class="plan-card-songs">\u7121\u5236\u9650</div><div class="plan-card-feat">\u81ea\u52d5\u540c\u671f\u30ab\u30e9\u30aa\u30b1\u30e2\u30fc\u30c9\u3092\u542b\u3080\u5168\u6a5f\u80fd</div></div></div><div class="ht-sub">\u30a2\u30ab\u30a6\u30f3\u30c8\u4f5c\u6210</div><p class="ht-p"><strong>\u7121\u6599\u3067\u59cb\u3081\u308b</strong>\u3092\u30af\u30ea\u30c3\u30af\u3057\u3001\u30e1\u30fc\u30eb\u30a2\u30c9\u30ec\u30b9\u3068\u30d1\u30b9\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u30e1\u30fc\u30eb\u3092\u78ba\u8a8d\u3057\u3066\u304f\u3060\u3055\u3044\u3002</p>',
+    'ht.s13.body':'<div class="ht-sub">\u30b5\u30dd\u30fc\u30c8\u3055\u308c\u308b\u30a4\u30f3\u30bf\u30fc\u30d5\u30a7\u30fc\u30b9\u8a00\u8a9e</div><div class="lang-badges"><span class="lang-badge">\ud83c\uddfa\ud83c\uddf8 English</span><span class="lang-badge">\ud83c\uddea\ud83c\uddf8 Espa\u00f1ol</span><span class="lang-badge">\ud83c\udde7\ud83c\uddf7 Portugu\u00eas</span><span class="lang-badge">\ud83c\uddeb\ud83c\uddf7 Fran\u00e7ais</span><span class="lang-badge">\ud83c\udde9\ud83c\uddea Deutsch</span><span class="lang-badge">\ud83c\uddef\ud83c\uddf5 \u65e5\u672c\u8a9e</span></div><div class="ht-sub">\u5909\u66f4\u65b9\u6cd5</div><p class="ht-p">\u30ca\u30d3\u30b2\u30fc\u30b7\u30e7\u30f3\u30d0\u30fc\u306e\u5730\u7403\u30a2\u30a4\u30b3\u30f3 \ud83c\udf10 \u3092\u30af\u30ea\u30c3\u30af\u3057\u3066\u8a00\u8a9e\u3092\u9078\u629e\u3057\u3066\u304f\u3060\u3055\u3044\u3002</p><div class="ht-sub">\u91cd\u8981</div><p class="ht-p">\u30a4\u30f3\u30bf\u30fc\u30d5\u30a7\u30fc\u30b9\u8a00\u8a9e\u3068\u6b4c\u8a5e\u306e\u8a00\u8a9e\u306f\u5225\u3005\u306e\u8a2d\u5b9a\u3067\u3059\u3002\u30b9\u30bf\u30b8\u30aa\u306e<strong>\u8a00\u8a9e</strong>\u30d5\u30a3\u30fc\u30eb\u30c9\u304c\u6b4c\u8a5e\u306e\u8a00\u8a9e\u3092\u5236\u5fa1\u3057\u307e\u3059\u3002</p>',
+  }
+};
+
+function htT(key) {
+  const d = HT_STRINGS[HT_LANG] || {};
+  return d[key] !== undefined ? d[key] : (HT_STRINGS.en[key] !== undefined ? HT_STRINGS.en[key] : null);
+}
+
+function applyHtI18n() {
+  if (HT_LANG === 'en') return;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = htT(el.getAttribute('data-i18n'));
+    if (v !== null) el.textContent = v;
+  });
+  document.querySelectorAll('[data-i18n-inner]').forEach(el => {
+    const v = htT(el.getAttribute('data-i18n-inner'));
+    if (v !== null) el.innerHTML = v;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const v = htT(el.getAttribute('data-i18n-ph'));
+    if (v !== null) el.placeholder = v;
+  });
+  const titles = {es:'C\u00f3mo usar \u2014 WriteMyLyrics',pt:'Como usar \u2014 WriteMyLyrics',fr:'Comment utiliser \u2014 WriteMyLyrics',de:'So verwenden \u2014 WriteMyLyrics',ja:'\u4f7f\u3044\u65b9 \u2014 WriteMyLyrics'};
+  if (titles[HT_LANG]) document.title = titles[HT_LANG];
+}
+
+document.addEventListener('DOMContentLoaded', applyHtI18n);
+
 // ── ACCORDION ──
 function toggleSection(hdr) {
   const sec = hdr.closest('.ht-section');

@@ -1161,18 +1161,18 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         <div class="field">
           <label class="field-label" data-i18n="studio.mood">Mood <span data-i18n="studio.mood_sub">(select multiple)</span> <button class="field-tip" data-tip="Select one or more moods. Combining moods (e.g. Nostalgic + Tender) produces more nuanced lyrics.">?</button></label>
           <div class="mood-wrap" id="moodGrid">
-            <button class="mood-chip" data-v="Happy">Happy</button>
-            <button class="mood-chip" data-v="Sad">Sad</button>
-            <button class="mood-chip" data-v="Angry">Angry</button>
-            <button class="mood-chip" data-v="Nostalgic">Nostalgic</button>
-            <button class="mood-chip" data-v="Hopeful">Hopeful</button>
-            <button class="mood-chip" data-v="Heartbroken">Heartbroken</button>
-            <button class="mood-chip" data-v="Defiant">Defiant</button>
-            <button class="mood-chip" data-v="Celebratory">Celebratory</button>
-            <button class="mood-chip" data-v="Melancholy">Melancholy</button>
-            <button class="mood-chip" data-v="Reflective">Reflective</button>
-            <button class="mood-chip" data-v="Raw">Raw</button>
-            <button class="mood-chip" data-v="Tender">Tender</button>
+            <button class="mood-chip" data-v="Happy" data-i18n="mood.happy">Happy</button>
+            <button class="mood-chip" data-v="Sad" data-i18n="mood.sad">Sad</button>
+            <button class="mood-chip" data-v="Angry" data-i18n="mood.angry">Angry</button>
+            <button class="mood-chip" data-v="Nostalgic" data-i18n="mood.nostalgic">Nostalgic</button>
+            <button class="mood-chip" data-v="Hopeful" data-i18n="mood.hopeful">Hopeful</button>
+            <button class="mood-chip" data-v="Heartbroken" data-i18n="mood.heartbroken">Heartbroken</button>
+            <button class="mood-chip" data-v="Defiant" data-i18n="mood.defiant">Defiant</button>
+            <button class="mood-chip" data-v="Celebratory" data-i18n="mood.celebratory">Celebratory</button>
+            <button class="mood-chip" data-v="Melancholy" data-i18n="mood.melancholy">Melancholy</button>
+            <button class="mood-chip" data-v="Reflective" data-i18n="mood.reflective">Reflective</button>
+            <button class="mood-chip" data-v="Raw" data-i18n="mood.raw">Raw</button>
+            <button class="mood-chip" data-v="Tender" data-i18n="mood.tender">Tender</button>
           </div>
         </div>
 
@@ -1297,7 +1297,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
     <div class="right-panel">
       <div class="rp-head">
         <div style="display:flex;align-items:center;gap:10px;min-width:0;overflow:hidden">
-          <div class="rp-label" id="rpLabel" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Your lyrics will appear here</div>
+          <div class="rp-label" id="rpLabel" data-i18n="rp.label" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Your lyrics will appear here</div>
           <span class="status-badge status-draft" id="rpStatus" style="display:none;flex-shrink:0">Draft</span>
         </div>
         <div class="rp-actions" id="rpActions" style="display:none">
@@ -1316,8 +1316,8 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
       <div class="rp-scroll" id="rpScroll">
         <div class="empty-state" id="emptyState">
           <div class="empty-icon">♪</div>
-          <div class="empty-h">The page is blank.</div>
-          <div class="empty-p">Fill in the details on the left and press Write This Song to generate your lyrics.</div>
+          <div class="empty-h" data-i18n="empty.h">The page is blank.</div>
+          <div class="empty-p" data-i18n="empty.p">Fill in the details on the left and press Write This Song to generate your lyrics.</div>
         </div>
 
         <div class="loading-state" id="loadState">
@@ -1396,20 +1396,20 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
           <div id="refinePanel" class="refine-panel">
             <button class="refine-toggle" id="refineToggle" onclick="toggleRefine()">
               <span class="refine-toggle-icon">▶</span>
-              <span>Tweak &amp; Refine</span>
+              <span data-i18n="refine.title">Tweak &amp; Refine</span>
             </button>
             <div class="refine-body" id="refineBody">
               <div id="refineGate" class="plan-gate" style="display:none">
-                <div class="plan-gate-h">Pro Feature</div>
-                <div class="plan-gate-p">Tweak &amp; Refine requires a Pro or Unlimited plan. Upgrade to instantly refine your lyrics with AI.</div>
-                <button class="plan-gate-btn" onclick="showUpgrade()">Upgrade Now</button>
+                <div class="plan-gate-h" data-i18n="refine.gate_h">Pro Feature</div>
+                <div class="plan-gate-p" data-i18n="refine.gate_p">Tweak &amp; Refine requires a Pro or Unlimited plan. Upgrade to instantly refine your lyrics with AI.</div>
+                <button class="plan-gate-btn" onclick="showUpgrade()" data-i18n="btn.upgrade_now">Upgrade Now</button>
               </div>
               <div id="refineForm" style="display:none">
-                <span class="refine-label">What to change?</span>
-                <textarea id="refineInstructions" rows="3" placeholder="Make the chorus more hopeful. Tighten the rhymes in verse 2. Change the ending to be more upbeat..."></textarea>
+                <span class="refine-label" data-i18n="refine.what">What to change?</span>
+                <textarea id="refineInstructions" rows="3" data-i18n-placeholder="refine.ph" placeholder="Make the chorus more hopeful. Tighten the rhymes in verse 2. Change the ending to be more upbeat..."></textarea>
                 <div class="refine-row">
-                  <button class="refine-apply" id="refineApplyBtn" onclick="submitRefine()">Apply Changes</button>
-                  <button class="refine-revert" id="refineRevertBtn" onclick="revertLyrics()">↩ Revert</button>
+                  <button class="refine-apply" id="refineApplyBtn" onclick="submitRefine()" data-i18n="refine.apply">Apply Changes</button>
+                  <button class="refine-revert" id="refineRevertBtn" onclick="revertLyrics()" data-i18n="refine.revert">↩ Revert</button>
                 </div>
               </div>
             </div>
@@ -1418,24 +1418,24 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
           <!-- Song Notes Panel -->
           <div id="notesPanel" class="notes-panel">
             <div class="notes-head">
-              <span class="notes-label">Song Notes</span>
+              <span class="notes-label" data-i18n="notes.label">Song Notes</span>
               <div class="notes-head-right">
                 <select class="status-sel" id="studioStatusSel" onchange="updateCurrentSongStatus(this.value, this)">
-                  <option value="draft">Draft</option>
-                  <option value="in-progress">In Progress</option>
-                  <option value="sent-to-suno">Sent to Suno</option>
-                  <option value="published">Published</option>
+                  <option value="draft" data-i18n="status.draft">Draft</option>
+                  <option value="in-progress" data-i18n="status.in_progress">In Progress</option>
+                  <option value="sent-to-suno" data-i18n="status.sent_to_suno">Sent to Suno</option>
+                  <option value="published" data-i18n="status.published">Published</option>
                 </select>
                 <span class="notes-save-status" id="notesSaveStatus"></span>
               </div>
             </div>
-            <textarea class="notes-area" id="notesText" rows="4" placeholder="Inspiration, melody ideas, Suno prompts that worked, co-writer feedback..." oninput="onNotesInput()"></textarea>
+            <textarea class="notes-area" id="notesText" rows="4" data-i18n-placeholder="notes.ph" placeholder="Inspiration, melody ideas, Suno prompts that worked, co-writer feedback..." oninput="onNotesInput()"></textarea>
           <div class="notes-audio-row" id="notesAudioRow" style="display:none">
-            <label class="notes-audio-label">Suno Audio URL <button class="field-tip" data-tip="Paste the direct audio URL from your Suno song here. Must be a direct .mp3 link, not a Suno share page URL. Right-click the Suno audio player and select Copy audio address.">?</button></label>
-            <input type="text" id="studioAudioUrl" class="notes-audio-input" placeholder="Paste your Suno link here..." onblur="saveStudioAudioUrl()">
+            <label class="notes-audio-label"><span data-i18n="notes.suno_url">Suno Audio URL</span> <button class="field-tip" data-tip="Paste the direct audio URL from your Suno song here. Must be a direct .mp3 link, not a Suno share page URL. Right-click the Suno audio player and select Copy audio address.">?</button></label>
+            <input type="text" id="studioAudioUrl" class="notes-audio-input" data-i18n-placeholder="notes.suno_ph" placeholder="Paste your Suno link here..." onblur="saveStudioAudioUrl()">
           </div>
           <div class="notes-pub-row" id="notesPubRow" style="display:none">
-            <span class="notes-pub-label">Gallery <button class="field-tip" data-tip="Publishes your song to the public Song Gallery. Toggle off to unpublish at any time.">?</button></span>
+            <span class="notes-pub-label"><span data-i18n="notes.gallery_label">Gallery</span> <button class="field-tip" data-tip="Publishes your song to the public Song Gallery. Toggle off to unpublish at any time.">?</button></span>
             <button class="pub-btn" id="notesPubBtn" data-published="false" onclick="togglePublish(this)">📤 Publish to Gallery</button>
           </div>
           </div>
@@ -2063,8 +2063,8 @@ function setPublishBtn(btn, published) {
   btn.dataset.published = String(published);
   btn.classList.toggle('on', published);
   btn.textContent = published
-    ? '✓ Published'
-    : (btn.id === 'notesPubBtn' ? '📤 Publish to Gallery' : '📤 Publish');
+    ? t('notes.published')
+    : (btn.id === 'notesPubBtn' ? t('notes.publish') : '📤 Publish');
 }
 
 // Single toggle handler for both history cards and studio button
@@ -2415,6 +2415,19 @@ function renderLyrics(text) {
   document.getElementById('rpScroll').scrollTop = 0;
 }
 
+// Translate a section label keyword (VERSE→VERSO etc.) based on current UI language
+function translateSectionLabel(label) {
+  const lang = APP.uiLang || 'en';
+  if (lang === 'en') return label;
+  const map = {
+    VERSE: t('section.verse'), CHORUS: t('section.chorus'), BRIDGE: t('section.bridge'),
+    'PRE-CHORUS': t('section.prechorus'), 'PRE CHORUS': t('section.prechorus'),
+    INTRO: t('section.intro'), OUTRO: t('section.outro'), HOOK: t('section.hook'), TAG: t('section.tag'),
+  };
+  return label.replace(/^(PRE-CHORUS|PRE CHORUS|VERSE|CHORUS|BRIDGE|INTRO|OUTRO|HOOK|TAG|REFRAIN)/i,
+    m => map[m.toUpperCase()] || m);
+}
+
 // Normal lyrics render (no chords) — handles plain text and syllable mode
 function renderLyricsNormal(text, out) {
   const lines = text.split('\n');
@@ -2438,7 +2451,7 @@ function renderLyricsNormal(text, out) {
     if (isLabel) {
       const span = document.createElement('span');
       span.className = 'sec-label';
-      span.textContent = innerLabel || trimmed;
+      span.textContent = translateSectionLabel(innerLabel || trimmed);
       out.appendChild(span);
     } else if (APP.showSyllables) {
       const row = document.createElement('div');
@@ -2493,7 +2506,7 @@ function renderLyricsChordMode(text, out) {
     if (isLabel) {
       const span = document.createElement('span');
       span.className = 'sec-label';
-      span.textContent = innerText || trimmed;
+      span.textContent = translateSectionLabel(innerText || trimmed);
       out.appendChild(span);
       return; // do NOT increment lyricIdx
     }
@@ -2567,11 +2580,13 @@ function updateChordDisplay() {
   disp.innerHTML = '';
   const raw = getTransposedChordsText();
   const lines = (raw || '').split('\n').filter(l => l.trim());
+  const keyLabel = t('chord.key');
+  const strumLabel = t('chord.strumming');
   lines.forEach(line => {
     if (line.startsWith('KEY:') || line.startsWith('STRUMMING:')) {
       const info = document.createElement('div');
       info.style.cssText = 'font-size:12px;color:var(--text2);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)';
-      info.textContent = line;
+      info.textContent = line.replace(/^KEY:/, keyLabel + ':').replace(/^STRUMMING:/, strumLabel + ':');
       disp.appendChild(info);
     } else if (line.includes(':')) {
       const row = document.createElement('div');
@@ -2616,7 +2631,7 @@ function startOver() {
   document.getElementById('outContent').style.display = 'none';
   document.getElementById('rpActions').style.display = 'none';
   document.getElementById('emptyState').style.display = 'flex';
-  document.getElementById('rpLabel').textContent = 'Your lyrics will appear here';
+  document.getElementById('rpLabel').textContent = t('rp.label');
   document.getElementById('loadState').classList.remove('on');
   document.getElementById('titleArea').style.display = 'none';
   document.getElementById('chordsArea').style.display = 'none';
@@ -3148,7 +3163,8 @@ async function saveNotes(val) {
 
 // ── STATUS ──
 function statusLabel(s) {
-  return { draft: 'Draft', 'in-progress': 'In Progress', 'sent-to-suno': 'Sent to Suno', published: 'Published' }[s] || 'Draft';
+  const map = { draft: t('status.draft'), 'in-progress': t('status.in_progress'), 'sent-to-suno': t('status.sent_to_suno'), published: t('status.published') };
+  return map[s] || t('status.draft');
 }
 
 function getCurrentSongIdx() {
@@ -4831,6 +4847,23 @@ const I18N = {
     'feedback.placeholder':'Tell us what you think...','feedback.submit':'Submit',
     'feedback.cancel':'Cancel','feedback.thanks':'Thanks for your feedback!',
     'history.title':'SongHistory','history.sub':'Your saved songs','history.loading':'Loading songs...',
+    'rp.label':'Your lyrics will appear here',
+    'empty.h':'The page is blank.','empty.p':'Fill in the details on the left and press Write This Song to generate your lyrics.',
+    'notes.label':'Song Notes','notes.ph':'Inspiration, melody ideas, Suno prompts that worked, co-writer feedback...',
+    'notes.suno_url':'Suno Audio URL','notes.suno_ph':'Paste your Suno link here...',
+    'notes.gallery_label':'Gallery','notes.publish':'📤 Publish to Gallery','notes.published':'✓ Published',
+    'status.draft':'Draft','status.in_progress':'In Progress','status.sent_to_suno':'Sent to Suno','status.published':'Published',
+    'refine.title':'Tweak & Refine','refine.gate_h':'Pro Feature',
+    'refine.gate_p':'Tweak & Refine requires a Pro or Unlimited plan. Upgrade to instantly refine your lyrics with AI.',
+    'refine.what':'What to change?','refine.ph':'Make the chorus more hopeful. Tighten the rhymes in verse 2. Change the ending to be more upbeat...',
+    'refine.apply':'Apply Changes','refine.revert':'↩ Revert',
+    'btn.upgrade_now':'Upgrade Now',
+    'chord.key':'KEY','chord.strumming':'STRUMMING',
+    'mood.happy':'Happy','mood.sad':'Sad','mood.angry':'Angry','mood.nostalgic':'Nostalgic','mood.hopeful':'Hopeful',
+    'mood.heartbroken':'Heartbroken','mood.defiant':'Defiant','mood.celebratory':'Celebratory',
+    'mood.melancholy':'Melancholy','mood.reflective':'Reflective','mood.raw':'Raw','mood.tender':'Tender',
+    'section.verse':'VERSE','section.chorus':'CHORUS','section.bridge':'BRIDGE','section.prechorus':'PRE-CHORUS',
+    'section.intro':'INTRO','section.outro':'OUTRO','section.hook':'HOOK','section.tag':'TAG',
   },
   es: {
     'nav.signin':'Iniciar sesión','nav.start_free':'Empezar gratis','nav.gallery':'🔥 Galería','nav.signout':'Cerrar sesión',
@@ -4855,6 +4888,23 @@ const I18N = {
     'feedback.placeholder':'Dinos lo que piensas...','feedback.submit':'Enviar',
     'feedback.cancel':'Cancelar','feedback.thanks':'¡Gracias por tus comentarios!',
     'history.title':'Historial','history.sub':'Tus canciones guardadas','history.loading':'Cargando canciones...',
+    'rp.label':'Tus letras aparecerán aquí',
+    'empty.h':'La página está en blanco.','empty.p':'Completa los detalles a la izquierda y presiona Escribir esta canción para generar tus letras.',
+    'notes.label':'Notas de la canción','notes.ph':'Inspiración, ideas de melodía, prompts de Suno que funcionaron, comentarios del co-escritor...',
+    'notes.suno_url':'URL de audio Suno','notes.suno_ph':'Pega tu enlace de Suno aquí...',
+    'notes.gallery_label':'Galería','notes.publish':'📤 Publicar en Galería','notes.published':'✓ Publicado',
+    'status.draft':'Borrador','status.in_progress':'En progreso','status.sent_to_suno':'Enviado a Suno','status.published':'Publicado',
+    'refine.title':'Ajustar y Refinar','refine.gate_h':'Función Pro',
+    'refine.gate_p':'Ajustar y Refinar requiere un plan Pro o Ilimitado. Mejora tu plan para refinar tus letras con IA al instante.',
+    'refine.what':'¿Qué cambiar?','refine.ph':'Haz el coro más esperanzador. Ajusta las rimas en el verso 2. Cambia el final para que sea más animado...',
+    'refine.apply':'Aplicar cambios','refine.revert':'↩ Revertir',
+    'btn.upgrade_now':'Mejorar plan',
+    'chord.key':'TONALIDAD','chord.strumming':'RASGUEO',
+    'mood.happy':'Feliz','mood.sad':'Triste','mood.angry':'Enojado','mood.nostalgic':'Nostálgico','mood.hopeful':'Esperanzador',
+    'mood.heartbroken':'Destrozado','mood.defiant':'Desafiante','mood.celebratory':'Festivo',
+    'mood.melancholy':'Melancólico','mood.reflective':'Reflexivo','mood.raw':'Crudo','mood.tender':'Tierno',
+    'section.verse':'VERSO','section.chorus':'CORO','section.bridge':'PUENTE','section.prechorus':'PRE-CORO',
+    'section.intro':'INTRO','section.outro':'OUTRO','section.hook':'GANCHO','section.tag':'TAG',
   },
   pt: {
     'nav.signin':'Entrar','nav.start_free':'Começar grátis','nav.gallery':'🔥 Galeria','nav.signout':'Sair',
@@ -4879,6 +4929,23 @@ const I18N = {
     'feedback.placeholder':'Diga-nos o que você acha...','feedback.submit':'Enviar',
     'feedback.cancel':'Cancelar','feedback.thanks':'Obrigado pelo seu feedback!',
     'history.title':'Músicas','history.sub':'Suas músicas salvas','history.loading':'Carregando músicas...',
+    'rp.label':'Suas letras aparecerão aqui',
+    'empty.h':'A página está em branco.','empty.p':'Preencha os detalhes à esquerda e clique em Escrever esta música para gerar suas letras.',
+    'notes.label':'Notas da música','notes.ph':'Inspiração, ideias de melodia, prompts do Suno que funcionaram, feedback do co-autor...',
+    'notes.suno_url':'URL de áudio Suno','notes.suno_ph':'Cole seu link do Suno aqui...',
+    'notes.gallery_label':'Galeria','notes.publish':'📤 Publicar na Galeria','notes.published':'✓ Publicado',
+    'status.draft':'Rascunho','status.in_progress':'Em progresso','status.sent_to_suno':'Enviado ao Suno','status.published':'Publicado',
+    'refine.title':'Ajustar e Refinar','refine.gate_h':'Recurso Pro',
+    'refine.gate_p':'Ajustar e Refinar requer um plano Pro ou Ilimitado. Faça upgrade para refinar suas letras com IA instantaneamente.',
+    'refine.what':'O que mudar?','refine.ph':'Torne o refrão mais esperançoso. Aperte as rimas no verso 2. Mude o final para ser mais animado...',
+    'refine.apply':'Aplicar mudanças','refine.revert':'↩ Reverter',
+    'btn.upgrade_now':'Fazer upgrade',
+    'chord.key':'TOM','chord.strumming':'BATIDA',
+    'mood.happy':'Feliz','mood.sad':'Triste','mood.angry':'Irritado','mood.nostalgic':'Nostálgico','mood.hopeful':'Esperançoso',
+    'mood.heartbroken':'De coração partido','mood.defiant':'Desafiador','mood.celebratory':'Festivo',
+    'mood.melancholy':'Melancólico','mood.reflective':'Reflexivo','mood.raw':'Cru','mood.tender':'Terno',
+    'section.verse':'VERSO','section.chorus':'CORO','section.bridge':'PONTE','section.prechorus':'PRÉ-CORO',
+    'section.intro':'INTRO','section.outro':'OUTRO','section.hook':'REFRÃO','section.tag':'TAG',
   },
   fr: {
     'nav.signin':'Connexion','nav.start_free':'Commencer gratuitement','nav.gallery':'🔥 Galerie','nav.signout':'Déconnexion',
@@ -4903,6 +4970,23 @@ const I18N = {
     'feedback.placeholder':'Dites-nous ce que vous pensez...','feedback.submit':'Envoyer',
     'feedback.cancel':'Annuler','feedback.thanks':'Merci pour votre avis !',
     'history.title':'Chansons','history.sub':'Vos chansons sauvegardées','history.loading':'Chargement...',
+    'rp.label':'Vos paroles apparaîtront ici',
+    'empty.h':'La page est vierge.','empty.p':'Remplissez les détails à gauche et cliquez sur Écrire cette chanson pour générer vos paroles.',
+    'notes.label':'Notes de chanson','notes.ph':'Inspiration, idées de mélodie, prompts Suno qui ont fonctionné, retours du co-auteur...',
+    'notes.suno_url':'URL audio Suno','notes.suno_ph':'Collez votre lien Suno ici...',
+    'notes.gallery_label':'Galerie','notes.publish':'📤 Publier dans la Galerie','notes.published':'✓ Publié',
+    'status.draft':'Brouillon','status.in_progress':'En cours','status.sent_to_suno':'Envoyé à Suno','status.published':'Publié',
+    'refine.title':'Ajuster et Affiner','refine.gate_h':'Fonctionnalité Pro',
+    'refine.gate_p':'Ajuster et Affiner nécessite un plan Pro ou Illimité. Passez à un plan supérieur pour affiner vos paroles avec l\'IA instantanément.',
+    'refine.what':'Que changer ?','refine.ph':'Rendez le refrain plus optimiste. Resserrez les rimes dans le couplet 2. Changez la fin pour être plus entraînant...',
+    'refine.apply':'Appliquer les changements','refine.revert':'↩ Rétablir',
+    'btn.upgrade_now':'Passer à un plan supérieur',
+    'chord.key':'TONALITÉ','chord.strumming':'STRUMMING',
+    'mood.happy':'Joyeux','mood.sad':'Triste','mood.angry':'En colère','mood.nostalgic':'Nostalgique','mood.hopeful':'Plein d\'espoir',
+    'mood.heartbroken':'Le cœur brisé','mood.defiant':'Défiant','mood.celebratory':'Festif',
+    'mood.melancholy':'Mélancolique','mood.reflective':'Réfléchi','mood.raw':'Brut','mood.tender':'Tendre',
+    'section.verse':'COUPLET','section.chorus':'REFRAIN','section.bridge':'PONT','section.prechorus':'PRÉ-REFRAIN',
+    'section.intro':'INTRO','section.outro':'OUTRO','section.hook':'ACCROCHE','section.tag':'TAG',
   },
   de: {
     'nav.signin':'Anmelden','nav.start_free':'Kostenlos starten','nav.gallery':'🔥 Galerie','nav.signout':'Abmelden',
@@ -4927,6 +5011,23 @@ const I18N = {
     'feedback.placeholder':'Sagen Sie uns, was Sie denken...','feedback.submit':'Absenden',
     'feedback.cancel':'Abbrechen','feedback.thanks':'Danke für Ihr Feedback!',
     'history.title':'Songs','history.sub':'Ihre gespeicherten Songs','history.loading':'Songs werden geladen...',
+    'rp.label':'Ihre Lyrics erscheinen hier',
+    'empty.h':'Die Seite ist leer.','empty.p':'Füllen Sie die Details links aus und klicken Sie auf Diesen Song schreiben, um Ihre Lyrics zu generieren.',
+    'notes.label':'Song-Notizen','notes.ph':'Inspiration, Melodieideen, Suno-Prompts die funktioniert haben, Co-Autor-Feedback...',
+    'notes.suno_url':'Suno Audio-URL','notes.suno_ph':'Ihren Suno-Link hier einfügen...',
+    'notes.gallery_label':'Galerie','notes.publish':'📤 In Galerie veröffentlichen','notes.published':'✓ Veröffentlicht',
+    'status.draft':'Entwurf','status.in_progress':'In Bearbeitung','status.sent_to_suno':'An Suno gesendet','status.published':'Veröffentlicht',
+    'refine.title':'Anpassen & Verfeinern','refine.gate_h':'Pro-Funktion',
+    'refine.gate_p':'Anpassen & Verfeinern erfordert einen Pro- oder Unlimitiert-Plan. Upgraden Sie, um Ihre Lyrics sofort mit KI zu verfeinern.',
+    'refine.what':'Was ändern?','refine.ph':'Den Refrain optimistischer machen. Die Reime in Strophe 2 straffen. Das Ende schwungvoller gestalten...',
+    'refine.apply':'Änderungen übernehmen','refine.revert':'↩ Rückgängig',
+    'btn.upgrade_now':'Upgraden',
+    'chord.key':'TONART','chord.strumming':'ANSCHLAG',
+    'mood.happy':'Fröhlich','mood.sad':'Traurig','mood.angry':'Wütend','mood.nostalgic':'Nostalgisch','mood.hopeful':'Hoffnungsvoll',
+    'mood.heartbroken':'Herzgebrochen','mood.defiant':'Trotzig','mood.celebratory':'Feierlich',
+    'mood.melancholy':'Melancholisch','mood.reflective':'Nachdenklich','mood.raw':'Roh','mood.tender':'Zärtlich',
+    'section.verse':'STROPHE','section.chorus':'REFRAIN','section.bridge':'BRÜCKE','section.prechorus':'VOR-REFRAIN',
+    'section.intro':'INTRO','section.outro':'OUTRO','section.hook':'HOOK','section.tag':'TAG',
   },
   ja: {
     'nav.signin':'ログイン','nav.start_free':'無料で始める','nav.gallery':'🔥 ギャラリー','nav.signout':'ログアウト',
@@ -4951,6 +5052,23 @@ const I18N = {
     'feedback.placeholder':'ご感想をお聞かせください...','feedback.submit':'送信',
     'feedback.cancel':'キャンセル','feedback.thanks':'フィードバックありがとうございます！',
     'history.title':'曲一覧','history.sub':'保存した曲','history.loading':'曲を読み込み中...',
+    'rp.label':'ここに歌詞が表示されます',
+    'empty.h':'ページが空白です。','empty.p':'左側に詳細を入力して「この曲を書く」をクリックすると歌詞が生成されます。',
+    'notes.label':'曲メモ','notes.ph':'インスピレーション、メロディアイデア、うまくいったSunoプロンプト、共同作者のフィードバック...',
+    'notes.suno_url':'Sunoオーディオ URL','notes.suno_ph':'SunoのリンクをここにペーストP...',
+    'notes.gallery_label':'ギャラリー','notes.publish':'📤 ギャラリーに公開','notes.published':'✓ 公開済み',
+    'status.draft':'下書き','status.in_progress':'進行中','status.sent_to_suno':'Sunoに送信済み','status.published':'公開済み',
+    'refine.title':'調整と洗練','refine.gate_h':'Proプラン機能',
+    'refine.gate_p':'調整と洗練にはProまたは無制限プランが必要です。アップグレードしてAIで歌詞を即座に改善しましょう。',
+    'refine.what':'何を変更しますか？','refine.ph':'コーラスをより前向きに。バース2の韻をタイトに。エンディングをより明るく...',
+    'refine.apply':'変更を適用','refine.revert':'↩ 元に戻す',
+    'btn.upgrade_now':'アップグレード',
+    'chord.key':'キー','chord.strumming':'ストラミング',
+    'mood.happy':'ハッピー','mood.sad':'悲しい','mood.angry':'怒り','mood.nostalgic':'ノスタルジック','mood.hopeful':'希望に満ちた',
+    'mood.heartbroken':'失恋','mood.defiant':'反抗的','mood.celebratory':'お祝い',
+    'mood.melancholy':'メランコリー','mood.reflective':'内省的','mood.raw':'ロー','mood.tender':'テンダー',
+    'section.verse':'バース','section.chorus':'コーラス','section.bridge':'ブリッジ','section.prechorus':'プリコーラス',
+    'section.intro':'イントロ','section.outro':'アウトロ','section.hook':'フック','section.tag':'タグ',
   }
 };
 
@@ -4972,6 +5090,12 @@ function applyI18n() {
     const key = el.getAttribute('data-i18n-placeholder');
     const val = (I18N[lang] || I18N.en)[key] || I18N.en[key];
     if (val !== undefined) el.placeholder = val;
+  });
+  // Select option labels (data-i18n on option elements)
+  document.querySelectorAll('option[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = (I18N[lang] || I18N.en)[key] || I18N.en[key];
+    if (val !== undefined) el.textContent = val;
   });
   // Update active lang option highlight
   document.querySelectorAll('.lang-option').forEach(opt => {
