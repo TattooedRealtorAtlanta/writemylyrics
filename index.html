@@ -5437,9 +5437,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     </div>
     <div class="settings-footer">
-      <span class="settings-saving" id="settingsSavingMsg" style="display:none">Saving…</span>
-      <button class="m-cancel" onclick="closeModal('settingsBg')">Cancel</button>
-      <button class="m-confirm" onclick="saveSettings()">Save Settings</button>
+      <div style="display:flex;align-items:center;gap:14px;font-size:12px">
+        <a href="/privacy" target="_blank" style="color:var(--text3);text-decoration:none" onmouseover="this.style.color='var(--text2)'" onmouseout="this.style.color='var(--text3)'">Privacy Policy</a>
+        <a href="/terms" target="_blank" style="color:var(--text3);text-decoration:none" onmouseover="this.style.color='var(--text2)'" onmouseout="this.style.color='var(--text3)'">Terms of Service</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="settings-saving" id="settingsSavingMsg" style="display:none">Saving…</span>
+        <button class="m-cancel" onclick="closeModal('settingsBg')">Cancel</button>
+        <button class="m-confirm" onclick="saveSettings()">Save Settings</button>
+      </div>
     </div>
   </div>
 </div>
