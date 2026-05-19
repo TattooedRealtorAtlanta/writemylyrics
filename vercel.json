@@ -23,6 +23,14 @@
       "dest": "/how-to.html"
     },
     {
+      "src": "/privacy",
+      "dest": "/privacy-policy.html"
+    },
+    {
+      "src": "/terms",
+      "dest": "/terms-of-service.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }

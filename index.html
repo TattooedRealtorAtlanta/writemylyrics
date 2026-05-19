@@ -989,6 +989,10 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
   <footer>
     <div class="foot-logo">Write<span>My</span>Lyrics</div>
     <div class="foot-copy">© 2026 WriteMyLyrics. All rights reserved.</div>
+    <div style="font-size:13px;color:var(--text2)">
+      <a href="/privacy" style="color:var(--text2);text-decoration:none;margin-right:16px" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text2)'">Privacy Policy</a>
+      <a href="/terms" style="color:var(--text2);text-decoration:none" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text2)'">Terms of Service</a>
+    </div>
   </footer>
 </div>
 
@@ -1379,7 +1383,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
             </div>
             <div class="suno-body">
               <div class="suno-text" id="sunoText"></div>
-              <button class="suno-copy" onclick="copySuno()">Copy for Suno</button>
+              <button class="suno-copy" onclick="copySuno()">Copy &amp; Open Suno</button>
             </div>
           </div>
 
@@ -3683,7 +3687,8 @@ function closeSunoPanel() {
 function copySuno() {
   const text = document.getElementById('sunoText').textContent;
   navigator.clipboard.writeText(text);
-  toast('Suno prompt copied!');
+  window.open('https://suno.com', '_blank');
+  toast('Lyrics copied — Suno is opening!');
 }
 
 // ── SHARE ──
@@ -3930,7 +3935,8 @@ function sunoExportSong(idx) {
     styleNotes: song.style_notes || ''
   });
   navigator.clipboard.writeText(prompt);
-  toast('Suno prompt copied!');
+  window.open('https://suno.com', '_blank');
+  toast('Lyrics copied — Suno is opening!');
 }
 
 // ── AUTO SYNC ──
