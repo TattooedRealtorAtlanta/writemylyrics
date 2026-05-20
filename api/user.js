@@ -74,7 +74,7 @@ module.exports = async function handler(req, res) {
     const daysSinceReset = (now - resetAt) / (1000 * 60 * 60 * 24);
     let usageCount = profile.usage_count;
 
-    if (daysSinceReset >= 30 && profile.plan !== 'unlimited') {
+    if (daysSinceReset >= 30 && profile.plan === 'free') {
       await supabase
         .from('profiles')
         .update({ usage_count: 0, usage_reset_at: now.toISOString() })

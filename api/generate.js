@@ -25,7 +25,7 @@ module.exports = async function handler(req, res) {
   const daysSinceReset = (now - resetAt) / (1000 * 60 * 60 * 24);
   let currentUsage = profile.usage_count;
 
-  if (daysSinceReset >= 30 && profile.plan !== 'unlimited') {
+  if (daysSinceReset >= 30 && profile.plan === 'free') {
     await supabase
       .from('profiles')
       .update({ usage_count: 0, usage_reset_at: now.toISOString() })
@@ -35,7 +35,7 @@ module.exports = async function handler(req, res) {
 
   // Enforce plan limit
   const limit = PLAN_LIMITS[profile.plan] ?? 5;
-  if (profile.plan !== 'unlimited' && currentUsage >= limit) {
+  if (currentUsage >= limit) {
     return res.status(429).json({
       error: 'Monthly generation limit reached',
       plan: profile.plan,

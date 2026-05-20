@@ -3,8 +3,7 @@ const { supabase, getUser, getProfile } = require('./_lib/supabase');
 const { getJsonBody } = require('./_lib/body');
 
 const PRICE_IDS = {
-  pro: process.env.STRIPE_PRO_PRICE_ID,
-  unlimited: process.env.STRIPE_UNLIMITED_PRICE_ID
+  pro: process.env.STRIPE_PRO_PRICE_ID
 };
 
 module.exports = async function handler(req, res) {
@@ -24,7 +23,7 @@ module.exports = async function handler(req, res) {
 
   const { plan } = body;
   if (!plan || !PRICE_IDS[plan]) {
-    return res.status(400).json({ error: 'plan must be "pro" or "unlimited"' });
+    return res.status(400).json({ error: 'plan must be "pro"' });
   }
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);

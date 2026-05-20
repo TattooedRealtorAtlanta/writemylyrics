@@ -19,7 +19,7 @@ const supabase = createClient(
   { auth: { persistSession: false } }
 );
 
-const PLAN_LIMITS = { free: 5, pro: 100, unlimited: Infinity };
+const PLAN_LIMITS = { free: 5, pro: Infinity, unlimited: Infinity };
 
 /**
  * Verify a Supabase JWT and return the authenticated user.

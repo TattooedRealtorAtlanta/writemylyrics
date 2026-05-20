@@ -55,7 +55,7 @@ const handler = async function transcribeHandler(req, res) {
 
   const profile = await getProfile(user.id, user.email, user.user_metadata?.name);
   if (profile.plan === 'free') {
-    return res.status(403).json({ error: 'Karaoke requires Pro or Unlimited plan' });
+    return res.status(403).json({ error: 'Karaoke requires a Pro plan' });
   }
 
   const contentType = (req.headers['content-type'] || '').toLowerCase();

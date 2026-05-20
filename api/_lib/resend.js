@@ -139,10 +139,10 @@ async function scheduleFollowupEmail(toEmail, name, signupTime) {
   const html = emailWrapper(`
     <p style="margin:0 0 16px;font-size:17px;font-weight:600;color:#f0edf8">Hey ${firstName},</p>
     <p style="margin:0 0 16px">It's been a week since you joined WriteMyLyrics. How's it going?</p>
-    <p style="margin:0 0 16px">If you've been using it regularly, you might be bumping into the 5-song limit. Upgrading to <strong style="color:#f0edf8">Pro</strong> gives you 100 songs a month and unlocks <strong style="color:#f0edf8">Tweak &amp; Refine</strong> — an AI editing layer where you tell it what to change and it rewrites just that part while keeping the rest intact. Most people find that's where the real work happens.</p>
-    <p style="margin:0 0 16px">Pro is $9/month. No contract, cancel anytime. <strong style="color:#f0edf8">Unlimited</strong> is $19/month if you want to write without limits.</p>
-    <p style="margin:0 0 0">Either way — keep writing.</p>
-    ${ctaButton('See Plans →', `${APP_URL}#pricing`)}
+    <p style="margin:0 0 16px">If you've been using it regularly, you might be bumping into the 5-song limit. <strong style="color:#f0edf8">Pro</strong> removes that limit entirely — unlimited songs, plus <strong style="color:#f0edf8">Tweak &amp; Refine</strong> (an AI editing layer where you tell it what to change and it rewrites just that part while keeping everything else intact), Karaoke Mode, full song history, and a commercial use license.</p>
+    <p style="margin:0 0 16px">Pro is $15/month. No contract, cancel anytime.</p>
+    <p style="margin:0 0 0">Keep writing.</p>
+    ${ctaButton('Upgrade to Pro →', `${APP_URL}/pricing`)}
     <p style="margin:32px 0 0;color:#a09ab8">— Scott<br><span style="font-size:13px;color:#6b6480">Founder, WriteMyLyrics</span></p>
   `);
 

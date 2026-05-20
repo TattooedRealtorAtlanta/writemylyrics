@@ -932,57 +932,46 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
     <div class="section-tag">Simple pricing</div>
     <h2 class="section-h">Start free. Upgrade when ready.</h2>
     <p class="section-sub" style="margin:0 auto 0">No credit card required to get started.</p>
-    <div class="pricing-grid" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="pricing-grid">
       <div class="price-card">
         <div class="price-plan">Free</div>
         <div class="price-amount">$0</div>
         <div class="price-period">forever</div>
         <ul class="price-features">
           <li>5 songs per month</li>
-          <li>All 13 genres</li>
+          <li>All 16 genres</li>
           <li>Chord progressions</li>
           <li>Song title suggestions</li>
-          <li class="no">Karaoke Mode</li>
+          <li>TikTok hook generator</li>
           <li>Suno export</li>
           <li class="no">Song history</li>
           <li class="no">Tweak &amp; refine</li>
+          <li class="no">Karaoke Mode</li>
+          <li class="no">Co-writer Mode</li>
         </ul>
         <button class="price-btn outline" onclick="showAuthTab('signup')">Get Started Free</button>
       </div>
       <div class="price-card featured">
-        <div class="price-badge">Most Popular</div>
+        <div class="price-badge">Everything Unlocked</div>
         <div class="price-plan">Pro</div>
-        <div class="price-amount">$9<span>/mo</span></div>
-        <div class="price-period">billed monthly</div>
-        <ul class="price-features">
-          <li>100 songs per month</li>
-          <li>All 13 genres</li>
-          <li>Chord progressions</li>
-          <li>Song title suggestions</li>
-          <li>Karaoke Mode</li>
-          <li>Suno export</li>
-          <li>Full song history</li>
-          <li>Tweak &amp; refine</li>
-        </ul>
-        <button class="price-btn solid" onclick="startCheckout('pro')">Start Pro — $9/mo</button>
-      </div>
-      <div class="price-card">
-        <div class="price-plan">Unlimited</div>
-        <div class="price-amount">$19<span>/mo</span></div>
+        <div class="price-amount">$15<span>/mo</span></div>
         <div class="price-period">billed monthly</div>
         <ul class="price-features">
           <li>Unlimited songs</li>
-          <li>All 13 genres</li>
+          <li>All 16 genres</li>
           <li>Chord progressions</li>
           <li>Song title suggestions</li>
-          <li>Karaoke Mode</li>
+          <li>TikTok hook generator</li>
           <li>Suno export</li>
           <li>Full song history</li>
           <li>Tweak &amp; refine</li>
-          <li>Priority generation</li>
+          <li>Karaoke Mode</li>
+          <li>Co-writer Mode</li>
+          <li>Publish to gallery</li>
           <li>Commercial use license</li>
+          <li>All future features</li>
         </ul>
-        <button class="price-btn outline" onclick="startCheckout('unlimited')">Go Unlimited — $19/mo</button>
+        <button class="price-btn solid" onclick="startCheckout('pro')">Start Pro — $15/mo</button>
       </div>
     </div>
   </div>
@@ -1071,7 +1060,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
     </div>
     <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,52px);font-weight:700;text-align:center;margin:0 0 12px;color:var(--text)">Start free. Upgrade when ready.</h1>
     <p style="text-align:center;color:var(--text2);font-size:16px;margin:0 0 48px">No credit card required. Cancel anytime.</p>
-    <div class="pricing-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="pricing-grid">
       <div class="price-card" id="pricingFreeCard">
         <div class="price-plan">Free</div>
         <div class="price-amount">$0</div>
@@ -1092,28 +1081,9 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         <button class="price-btn outline" id="pricingFreeBtn" onclick="pricingAction('free')">Get Started Free</button>
       </div>
       <div class="price-card featured" id="pricingProCard">
-        <div class="price-badge">Most Popular</div>
+        <div class="price-badge">Everything Unlocked</div>
         <div class="price-plan">Pro</div>
-        <div class="price-amount">$9<span>/mo</span></div>
-        <div class="price-period">billed monthly</div>
-        <ul class="price-features">
-          <li>100 songs per month</li>
-          <li>All 16 genres</li>
-          <li>Chord progressions</li>
-          <li>Song title suggestions</li>
-          <li>TikTok hook generator</li>
-          <li>Suno export</li>
-          <li>Full song history</li>
-          <li>Tweak &amp; refine</li>
-          <li>Karaoke Mode</li>
-          <li>Co-writer Mode</li>
-          <li>Publish to gallery</li>
-        </ul>
-        <button class="price-btn solid" id="pricingProBtn" onclick="pricingAction('pro')">Start Pro — $9/mo</button>
-      </div>
-      <div class="price-card" id="pricingUnlimitedCard">
-        <div class="price-plan">Unlimited</div>
-        <div class="price-amount">$19<span>/mo</span></div>
+        <div class="price-amount">$15<span>/mo</span></div>
         <div class="price-period">billed monthly</div>
         <ul class="price-features">
           <li>Unlimited songs</li>
@@ -1127,10 +1097,10 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
           <li>Karaoke Mode</li>
           <li>Co-writer Mode</li>
           <li>Publish to gallery</li>
-          <li>Priority generation</li>
           <li>Commercial use license</li>
+          <li>All future features</li>
         </ul>
-        <button class="price-btn outline" id="pricingUnlimitedBtn" onclick="pricingAction('unlimited')">Go Unlimited — $19/mo</button>
+        <button class="price-btn solid" id="pricingProBtn" onclick="pricingAction('pro')">Start Pro — $15/mo</button>
       </div>
     </div>
     <p style="text-align:center;color:var(--text3);font-size:13px;margin-top:36px">Questions? Email us at <a href="mailto:support@writemylyrics.ai" style="color:var(--gold);text-decoration:none">support@writemylyrics.ai</a></p>
@@ -1495,7 +1465,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
             <div class="refine-body" id="refineBody">
               <div id="refineGate" class="plan-gate" style="display:none">
                 <div class="plan-gate-h" data-i18n="refine.gate_h">Pro Feature</div>
-                <div class="plan-gate-p" data-i18n="refine.gate_p">Tweak &amp; Refine requires a Pro or Unlimited plan. Upgrade to instantly refine your lyrics with AI.</div>
+                <div class="plan-gate-p" data-i18n="refine.gate_p">Tweak &amp; Refine requires a Pro plan. Upgrade to instantly refine your lyrics with AI.</div>
                 <button class="plan-gate-btn" onclick="showUpgrade()" data-i18n="btn.upgrade_now">Upgrade Now</button>
               </div>
               <div id="refineForm" style="display:none">
@@ -1587,12 +1557,11 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 <!-- Upgrade Modal -->
 <div class="modal-bg" id="upgradeBg" onclick="bgClose(event,'upgradeBg')">
   <div class="modal">
-    <div class="modal-h">Upgrade Your Plan ✨</div>
-    <div class="modal-p">You've used all your songs this month. Upgrade to Pro for 100 songs/month at $9, or go Unlimited for $19/month — perfect for professional songwriters.</div>
+    <div class="modal-h">Upgrade to Pro ✨</div>
+    <div class="modal-p">You've used all your songs this month. Upgrade to Pro for unlimited songs, Tweak &amp; Refine, Karaoke Mode, full history, and everything else — $15/month.</div>
     <div class="modal-btns">
       <button class="m-cancel" onclick="closeModal('upgradeBg')">Maybe later</button>
-      <button class="m-confirm-2" onclick="closeModal('upgradeBg');startCheckout('unlimited')">Unlimited — $19/mo</button>
-      <button class="m-confirm" onclick="closeModal('upgradeBg');startCheckout('pro')">Pro — $9/mo</button>
+      <button class="m-confirm" onclick="closeModal('upgradeBg');startCheckout('pro')">Upgrade to Pro — $15/mo</button>
     </div>
   </div>
 </div>
@@ -1601,11 +1570,10 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 <div class="modal-bg" id="featureUpgradeBg" onclick="bgClose(event,'featureUpgradeBg')">
   <div class="modal">
     <div class="modal-h">You're one step away ✨</div>
-    <div class="modal-p">Upgrade to edit, refine, and perfect your lyrics — starting at $9/month.</div>
+    <div class="modal-p">Upgrade to Pro to edit, refine, and perfect your lyrics — unlimited songs, Karaoke Mode, full history, and more for $15/month.</div>
     <div class="modal-btns">
       <button class="m-cancel" onclick="closeModal('featureUpgradeBg')">Maybe Later</button>
-      <button class="m-confirm-2" onclick="closeModal('featureUpgradeBg');startCheckout('unlimited')">Unlimited — $19/mo</button>
-      <button class="m-confirm" onclick="closeModal('featureUpgradeBg');startCheckout('pro')">Pro — $9/mo</button>
+      <button class="m-confirm" onclick="closeModal('featureUpgradeBg');startCheckout('pro')">Upgrade to Pro — $15/mo</button>
     </div>
   </div>
 </div>
@@ -2383,11 +2351,9 @@ function enterApp(profile) {
 }
 
 function setNavLoggedIn(plan) {
-  const label = plan === 'unlimited' ? 'Unlimited' : plan === 'pro' ? 'Pro' : 'Free Plan';
-  const upgradeHtml = plan === 'free'
-    ? `<button class="nav-upgrade-btn" onclick="showPricing()">Upgrade</button>`
-    : plan === 'pro'
-    ? `<button class="nav-upgrade-link" onclick="startCheckout('unlimited')">Upgrade to Unlimited</button>`
+  const label = plan === 'pro' ? 'Pro' : plan === 'unlimited' ? 'Pro' : 'Free Plan';
+  const upgradeHtml = (plan === 'free')
+    ? `<button class="nav-upgrade-btn" onclick="showPricing()">Upgrade to Pro</button>`
     : '';
   document.getElementById('navRight').innerHTML = `
     <div class="lang-selector" id="langSelector">
@@ -2434,7 +2400,7 @@ function updateUsage() {
   const fill = document.getElementById('usageFill');
   const label = document.getElementById('usageLabel');
   const wrap = document.getElementById('usageWrap');
-  if (APP.plan === 'unlimited') {
+  if (APP.plan === 'unlimited' || APP.plan === 'pro') {
     if (wrap) wrap.style.display = 'none';
   } else {
     const pct = Math.min(100, (APP.usage / APP.limit) * 100);
@@ -2858,34 +2824,24 @@ function showPricing() {
   const plan = APP.plan || 'free';
   const freeBtn = document.getElementById('pricingFreeBtn');
   const proBtn = document.getElementById('pricingProBtn');
-  const unlBtn = document.getElementById('pricingUnlimitedBtn');
   const freeCard = document.getElementById('pricingFreeCard');
   const proCard = document.getElementById('pricingProCard');
-  const unlCard = document.getElementById('pricingUnlimitedCard');
 
-  // Reset
-  [freeCard, proCard, unlCard].forEach(c => { if (c) c.style.opacity = ''; });
+  // Reset opacity
+  [freeCard, proCard].forEach(c => { if (c) c.style.opacity = ''; });
 
   if (plan === 'free') {
     if (freeBtn) { freeBtn.textContent = 'Current Plan'; freeBtn.disabled = true; freeBtn.style.opacity = '.5'; freeBtn.style.cursor = 'default'; }
-    if (proBtn)  { proBtn.textContent = 'Start Pro — $9/mo'; proBtn.disabled = false; proBtn.style.opacity = ''; proBtn.style.cursor = ''; proBtn.onclick = () => startCheckout('pro'); }
-    if (unlBtn)  { unlBtn.textContent = 'Go Unlimited — $19/mo'; unlBtn.disabled = false; unlBtn.style.opacity = ''; unlBtn.style.cursor = ''; unlBtn.onclick = () => startCheckout('unlimited'); }
+    if (proBtn)  { proBtn.textContent = 'Upgrade to Pro — $15/mo'; proBtn.disabled = false; proBtn.style.opacity = ''; proBtn.style.cursor = ''; proBtn.onclick = () => startCheckout('pro'); }
     if (freeCard) freeCard.style.opacity = '.7';
-  } else if (plan === 'pro') {
+  } else if (plan === 'pro' || plan === 'unlimited') {
     if (freeBtn) { freeBtn.textContent = 'Downgrade'; freeBtn.disabled = true; freeBtn.style.opacity = '.4'; freeBtn.style.cursor = 'default'; }
     if (proBtn)  { proBtn.textContent = 'Current Plan'; proBtn.disabled = true; proBtn.style.opacity = '.5'; proBtn.style.cursor = 'default'; }
-    if (unlBtn)  { unlBtn.textContent = 'Upgrade to Unlimited — $19/mo'; unlBtn.disabled = false; unlBtn.style.opacity = ''; unlBtn.style.cursor = ''; unlBtn.onclick = () => startCheckout('unlimited'); }
     if (proCard)  proCard.style.opacity = '.7';
-  } else if (plan === 'unlimited') {
-    if (freeBtn) { freeBtn.textContent = 'Downgrade'; freeBtn.disabled = true; freeBtn.style.opacity = '.4'; freeBtn.style.cursor = 'default'; }
-    if (proBtn)  { proBtn.textContent = 'Downgrade'; proBtn.disabled = true; proBtn.style.opacity = '.4'; proBtn.style.cursor = 'default'; }
-    if (unlBtn)  { unlBtn.textContent = 'Current Plan'; unlBtn.disabled = true; unlBtn.style.opacity = '.5'; unlBtn.style.cursor = 'default'; }
-    if (unlCard)  unlCard.style.opacity = '.7';
   } else {
     // Logged out
     if (freeBtn) { freeBtn.textContent = 'Get Started Free'; freeBtn.disabled = false; freeBtn.style.opacity = ''; freeBtn.style.cursor = ''; freeBtn.onclick = () => showAuthTab('signup'); }
-    if (proBtn)  { proBtn.textContent = 'Start Pro — $9/mo'; proBtn.disabled = false; proBtn.style.opacity = ''; proBtn.style.cursor = ''; proBtn.onclick = () => showAuthTab('signup'); }
-    if (unlBtn)  { unlBtn.textContent = 'Go Unlimited — $19/mo'; unlBtn.disabled = false; unlBtn.style.opacity = ''; unlBtn.style.cursor = ''; unlBtn.onclick = () => showAuthTab('signup'); }
+    if (proBtn)  { proBtn.textContent = 'Start Pro — $15/mo'; proBtn.disabled = false; proBtn.style.opacity = ''; proBtn.style.cursor = ''; proBtn.onclick = () => showAuthTab('signup'); }
   }
   showPage('pricing');
 }
@@ -2960,17 +2916,13 @@ function openSettings() {
   const badge = document.getElementById('setPlanBadge');
   const upgradeBtn = document.getElementById('setPlanUpgradeBtn');
   const plan = APP.plan || 'free';
-  if (badge) badge.textContent = plan === 'unlimited' ? 'Unlimited' : plan === 'pro' ? 'Pro' : 'Free';
+  if (badge) badge.textContent = (plan === 'pro' || plan === 'unlimited') ? 'Pro' : 'Free';
   if (upgradeBtn) {
-    if (plan === 'unlimited') {
+    if (plan === 'pro' || plan === 'unlimited') {
       upgradeBtn.style.display = 'none';
-    } else if (plan === 'pro') {
-      upgradeBtn.style.display = 'inline-block';
-      upgradeBtn.textContent = 'Upgrade to Unlimited';
-      upgradeBtn.onclick = () => { closeModal('settingsBg'); startCheckout('unlimited'); };
     } else {
       upgradeBtn.style.display = 'inline-block';
-      upgradeBtn.textContent = 'Upgrade Plan';
+      upgradeBtn.textContent = 'Upgrade to Pro';
       upgradeBtn.onclick = () => { closeModal('settingsBg'); showPricing(); };
     }
   }
@@ -5109,7 +5061,7 @@ const I18N = {
     'notes.gallery_label':'Gallery','notes.publish':'📤 Publish to Gallery','notes.published':'✓ Published',
     'status.draft':'Draft','status.in_progress':'In Progress','status.sent_to_suno':'Sent to Suno','status.published':'Published',
     'refine.title':'Tweak & Refine','refine.gate_h':'Pro Feature',
-    'refine.gate_p':'Tweak & Refine requires a Pro or Unlimited plan. Upgrade to instantly refine your lyrics with AI.',
+    'refine.gate_p':'Tweak & Refine requires a Pro plan. Upgrade to instantly refine your lyrics with AI.',
     'refine.what':'What to change?','refine.ph':'Make the chorus more hopeful. Tighten the rhymes in verse 2. Change the ending to be more upbeat...',
     'refine.apply':'Apply Changes','refine.revert':'↩ Revert',
     'btn.upgrade_now':'Upgrade Now',
@@ -5150,7 +5102,7 @@ const I18N = {
     'notes.gallery_label':'Galería','notes.publish':'📤 Publicar en Galería','notes.published':'✓ Publicado',
     'status.draft':'Borrador','status.in_progress':'En progreso','status.sent_to_suno':'Enviado a Suno','status.published':'Publicado',
     'refine.title':'Ajustar y Refinar','refine.gate_h':'Función Pro',
-    'refine.gate_p':'Ajustar y Refinar requiere un plan Pro o Ilimitado. Mejora tu plan para refinar tus letras con IA al instante.',
+    'refine.gate_p':'Ajustar y Refinar requiere un plan Pro. Mejora tu plan para refinar tus letras con IA al instante.',
     'refine.what':'¿Qué cambiar?','refine.ph':'Haz el coro más esperanzador. Ajusta las rimas en el verso 2. Cambia el final para que sea más animado...',
     'refine.apply':'Aplicar cambios','refine.revert':'↩ Revertir',
     'btn.upgrade_now':'Mejorar plan',
@@ -5191,7 +5143,7 @@ const I18N = {
     'notes.gallery_label':'Galeria','notes.publish':'📤 Publicar na Galeria','notes.published':'✓ Publicado',
     'status.draft':'Rascunho','status.in_progress':'Em progresso','status.sent_to_suno':'Enviado ao Suno','status.published':'Publicado',
     'refine.title':'Ajustar e Refinar','refine.gate_h':'Recurso Pro',
-    'refine.gate_p':'Ajustar e Refinar requer um plano Pro ou Ilimitado. Faça upgrade para refinar suas letras com IA instantaneamente.',
+    'refine.gate_p':'Ajustar e Refinar requer um plano Pro. Faça upgrade para refinar suas letras com IA instantaneamente.',
     'refine.what':'O que mudar?','refine.ph':'Torne o refrão mais esperançoso. Aperte as rimas no verso 2. Mude o final para ser mais animado...',
     'refine.apply':'Aplicar mudanças','refine.revert':'↩ Reverter',
     'btn.upgrade_now':'Fazer upgrade',
@@ -5232,7 +5184,7 @@ const I18N = {
     'notes.gallery_label':'Galerie','notes.publish':'📤 Publier dans la Galerie','notes.published':'✓ Publié',
     'status.draft':'Brouillon','status.in_progress':'En cours','status.sent_to_suno':'Envoyé à Suno','status.published':'Publié',
     'refine.title':'Ajuster et Affiner','refine.gate_h':'Fonctionnalité Pro',
-    'refine.gate_p':'Ajuster et Affiner nécessite un plan Pro ou Illimité. Passez à un plan supérieur pour affiner vos paroles avec l\'IA instantanément.',
+    'refine.gate_p':'Ajuster et Affiner nécessite un plan Pro. Passez à un plan supérieur pour affiner vos paroles avec l\'IA instantanément.',
     'refine.what':'Que changer ?','refine.ph':'Rendez le refrain plus optimiste. Resserrez les rimes dans le couplet 2. Changez la fin pour être plus entraînant...',
     'refine.apply':'Appliquer les changements','refine.revert':'↩ Rétablir',
     'btn.upgrade_now':'Passer à un plan supérieur',
@@ -5273,7 +5225,7 @@ const I18N = {
     'notes.gallery_label':'Galerie','notes.publish':'📤 In Galerie veröffentlichen','notes.published':'✓ Veröffentlicht',
     'status.draft':'Entwurf','status.in_progress':'In Bearbeitung','status.sent_to_suno':'An Suno gesendet','status.published':'Veröffentlicht',
     'refine.title':'Anpassen & Verfeinern','refine.gate_h':'Pro-Funktion',
-    'refine.gate_p':'Anpassen & Verfeinern erfordert einen Pro- oder Unlimitiert-Plan. Upgraden Sie, um Ihre Lyrics sofort mit KI zu verfeinern.',
+    'refine.gate_p':'Anpassen & Verfeinern erfordert einen Pro-Plan. Upgraden Sie, um Ihre Lyrics sofort mit KI zu verfeinern.',
     'refine.what':'Was ändern?','refine.ph':'Den Refrain optimistischer machen. Die Reime in Strophe 2 straffen. Das Ende schwungvoller gestalten...',
     'refine.apply':'Änderungen übernehmen','refine.revert':'↩ Rückgängig',
     'btn.upgrade_now':'Upgraden',
@@ -5314,7 +5266,7 @@ const I18N = {
     'notes.gallery_label':'ギャラリー','notes.publish':'📤 ギャラリーに公開','notes.published':'✓ 公開済み',
     'status.draft':'下書き','status.in_progress':'進行中','status.sent_to_suno':'Sunoに送信済み','status.published':'公開済み',
     'refine.title':'調整と洗練','refine.gate_h':'Proプラン機能',
-    'refine.gate_p':'調整と洗練にはProまたは無制限プランが必要です。アップグレードしてAIで歌詞を即座に改善しましょう。',
+    'refine.gate_p':'調整と洗練にはProプランが必要です。アップグレードしてAIで歌詞を即座に改善しましょう。',
     'refine.what':'何を変更しますか？','refine.ph':'コーラスをより前向きに。バース2の韻をタイトに。エンディングをより明るく...',
     'refine.apply':'変更を適用','refine.revert':'↩ 元に戻す',
     'btn.upgrade_now':'アップグレード',

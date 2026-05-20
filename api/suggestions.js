@@ -14,7 +14,7 @@ module.exports = async function handler(req, res) {
 
   const profile = await getProfile(user.id, user.email, user.user_metadata?.name);
   if (profile.plan === 'free') {
-    return res.status(403).json({ error: 'Co-writer suggestions require Pro or Unlimited plan' });
+    return res.status(403).json({ error: 'Co-writer suggestions require a Pro plan' });
   }
 
   const url = new URL(req.url, `http://${req.headers.host}`);
