@@ -1662,7 +1662,7 @@ const LOAD_MSGS = [
   'Tuning the melody...','Searching for the chorus...','Laying down the verse...',
   'Getting into the groove...','Almost there...'
 ];
-let loadTick = null, loadIdx = 0;
+let loadTick = null, loadIdx = 0, genAbort = null;
 
 // ── AUTH HELPERS ──
 async function getToken() {
@@ -1680,7 +1680,8 @@ async function authFetch(path, options = {}, overrideToken) {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
       ...(options.headers || {})
-    }
+    },
+    signal: options.signal
   });
   if (res.status === 429) {
     showUpgrade();
@@ -2313,13 +2314,19 @@ async function startCheckout(plan) {
 
 // ── GENERATE ──
 async function generate() {
-  if (APP.busy) return;
+  // Cancel any in-flight generation before starting a new one
+  if (genAbort) { genAbort.abort(); genAbort = null; }
+  // If still marked busy after abort, reset so we can proceed
+  APP.busy = false;
 
   const topic = document.getElementById('topic').value.trim();
   if (!topic) { toast('Please describe what your song is about.'); return; }
 
   const token = await getToken();
   if (!token) { showAuthTab('signin'); return; }
+
+  genAbort = new AbortController();
+  const signal = genAbort.signal;
 
   APP.busy = true;
   setLoading(true);
@@ -2328,6 +2335,7 @@ async function generate() {
   try {
     const result = await authFetch('/api/generate', {
       method: 'POST',
+      signal,
       body: JSON.stringify({
         topic,
         genre: APP.genre || '',
@@ -2375,6 +2383,8 @@ async function generate() {
     }
 
   } catch (e) {
+    // Aborted by a new generate() call — not a real error, new request handles its own UI
+    if (e.name === 'AbortError') return;
     if (e.message !== 'Monthly limit reached') {
       toast('Error: ' + e.message);
     }
@@ -2382,6 +2392,7 @@ async function generate() {
   } finally {
     stopLoader();
     APP.busy = false;
+    genAbort = null;
   }
 }
 
@@ -2389,6 +2400,10 @@ async function generate() {
 function renderLyrics(text) {
   stopLoader();
   APP.busy = false;
+
+  // Hide Write This Song and reset its state — Regenerate takes over from here
+  const genBtn = document.getElementById('genBtn');
+  if (genBtn) { genBtn.classList.remove('loading'); genBtn.disabled = false; genBtn.style.display = 'none'; }
 
   document.getElementById('emptyState').style.display = 'none';
   document.getElementById('loadState').classList.remove('on');
@@ -2610,8 +2625,11 @@ function setLoading(on) {
   document.getElementById('outContent').style.display = 'none';
   document.getElementById('rpActions').style.display = 'none';
   const btn = document.getElementById('genBtn');
-  btn.classList.toggle('loading', on);
-  btn.disabled = on;
+  // Only show spinner on the button if it's currently visible (pre-first-generation)
+  if (btn && btn.style.display !== 'none') {
+    btn.classList.toggle('loading', on);
+    btn.disabled = on;
+  }
 }
 
 function tickLoader() {
@@ -2635,6 +2653,8 @@ function startOver() {
   document.getElementById('outContent').style.display = 'none';
   document.getElementById('rpActions').style.display = 'none';
   document.getElementById('emptyState').style.display = 'flex';
+  const genBtn = document.getElementById('genBtn');
+  if (genBtn) { genBtn.style.display = ''; genBtn.classList.remove('loading'); genBtn.disabled = false; }
   document.getElementById('rpLabel').textContent = t('rp.label');
   document.getElementById('loadState').classList.remove('on');
   document.getElementById('titleArea').style.display = 'none';
