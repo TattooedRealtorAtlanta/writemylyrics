@@ -1527,6 +1527,18 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
   </div>
 </div>
 
+<!-- Delete Account Confirmation Modal -->
+<div class="modal-bg" id="deleteAccountBg" onclick="bgClose(event,'deleteAccountBg')">
+  <div class="modal">
+    <div class="modal-h">Delete your account?</div>
+    <div class="modal-p">This will permanently delete your account, all your songs, version history, and any other data associated with your account. <strong style="color:#f0edf8">This cannot be undone.</strong></div>
+    <div class="modal-btns">
+      <button class="m-cancel" onclick="closeModal('deleteAccountBg')">Cancel</button>
+      <button class="m-confirm" id="deleteAccountBtn" style="background:var(--red);color:#fff" onclick="confirmDeleteAccount()">Delete My Account</button>
+    </div>
+  </div>
+</div>
+
 <!-- Logout Modal -->
 <div class="modal-bg" id="logoutBg" onclick="bgClose(event,'logoutBg')">
   <div class="modal">
@@ -2225,6 +2237,31 @@ async function signOut() {
   setNavLoggedOut();
   showPage('landing');
   await sb.auth.signOut();
+}
+
+async function confirmDeleteAccount() {
+  const btn = document.getElementById('deleteAccountBtn');
+  btn.disabled = true;
+  btn.textContent = 'Deleting…';
+
+  try {
+    await authFetch('/api/user', { method: 'DELETE' });
+  } catch (e) {
+    toast('Error deleting account: ' + e.message);
+    btn.disabled = false;
+    btn.textContent = 'Delete My Account';
+    return;
+  }
+
+  // Account gone — clear local state, sign out of Supabase session, go home
+  closeModal('deleteAccountBg');
+  closeModal('settingsBg');
+  APP.user = null;
+  APP.profile = null;
+  setNavLoggedOut();
+  showPage('landing');
+  await sb.auth.signOut();
+  toast('Your account has been deleted.');
 }
 
 async function loadProfile(user, token) {
@@ -5499,9 +5536,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     </div>
     <div class="settings-footer">
-      <div style="display:flex;align-items:center;gap:14px;font-size:12px">
-        <a href="/privacy" target="_blank" style="color:var(--text3);text-decoration:none" onmouseover="this.style.color='var(--text2)'" onmouseout="this.style.color='var(--text3)'">Privacy Policy</a>
-        <a href="/terms" target="_blank" style="color:var(--text3);text-decoration:none" onmouseover="this.style.color='var(--text2)'" onmouseout="this.style.color='var(--text3)'">Terms of Service</a>
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:10px">
+        <div style="display:flex;align-items:center;gap:14px;font-size:12px">
+          <a href="/privacy" target="_blank" style="color:var(--text3);text-decoration:none" onmouseover="this.style.color='var(--text2)'" onmouseout="this.style.color='var(--text3)'">Privacy Policy</a>
+          <a href="/terms" target="_blank" style="color:var(--text3);text-decoration:none" onmouseover="this.style.color='var(--text2)'" onmouseout="this.style.color='var(--text3)'">Terms of Service</a>
+        </div>
+        <button onclick="document.getElementById('deleteAccountBg').classList.add('on')" style="background:none;border:none;padding:0;font-size:11px;color:#7a3030;cursor:pointer;font-family:'DM Sans',sans-serif" onmouseover="this.style.color='#c0392b'" onmouseout="this.style.color='#7a3030'">Delete account</button>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <span class="settings-saving" id="settingsSavingMsg" style="display:none">Saving…</span>

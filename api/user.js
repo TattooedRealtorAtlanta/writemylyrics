@@ -150,5 +150,17 @@ module.exports = async function handler(req, res) {
     });
   }
 
+  // ── DELETE: permanently delete account and all associated data ──────────
+  if (req.method === 'DELETE') {
+    // supabase.auth.admin.deleteUser cascades through all foreign keys:
+    // profiles, songs, song_versions, song_votes, song_cowriters, song_suggestions
+    const { error } = await supabase.auth.admin.deleteUser(user.id);
+    if (error) {
+      console.error('[/api/user DELETE] deleteUser error:', error.message);
+      return res.status(500).json({ error: 'Failed to delete account: ' + error.message });
+    }
+    return res.status(200).json({ ok: true });
+  }
+
   return res.status(405).json({ error: 'Method not allowed' });
 };
