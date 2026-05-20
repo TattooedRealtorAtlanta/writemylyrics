@@ -302,6 +302,10 @@ select option{background:var(--surface3)}
 .m-confirm-2{background:var(--surface3);border:1px solid var(--gold-border);border-radius:6px;padding:10px 24px;color:var(--gold);font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;transition:all .15s}
 .m-confirm-2:hover{background:var(--gold-dim)}
 .nav-plan-badge{background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);pointer-events:none;white-space:nowrap}
+.nav-upgrade-btn{background:var(--gold);border:none;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#07060a;cursor:pointer;white-space:nowrap;transition:all .2s;font-family:'DM Sans',sans-serif}
+.nav-upgrade-btn:hover{background:var(--gold2)}
+.nav-upgrade-link{background:none;border:1px solid var(--gold-border);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);cursor:pointer;white-space:nowrap;transition:all .2s;font-family:'DM Sans',sans-serif}
+.nav-upgrade-link:hover{background:var(--gold-dim)}
 
 /* ── FIELD TOOLTIPS ── */
 .field-tip{background:none;border:1px solid var(--border);border-radius:50%;width:15px;height:15px;color:var(--text3);font-size:9px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin-left:5px;flex-shrink:0;transition:all .15s;vertical-align:middle;padding:0;font-family:'DM Sans',sans-serif;line-height:1}
@@ -1051,6 +1055,85 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         <button class="form-btn" style="background:var(--surface3);color:var(--text);border:1px solid var(--border)" onclick="switchTab('signin')">Sign In</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PRICING PAGE
+══════════════════════════════════════ -->
+<div class="page" id="page-pricing">
+  <div style="min-height:100vh;padding:80px 20px 60px;max-width:1000px;margin:0 auto">
+    <div style="text-align:center;margin-bottom:16px">
+      <button onclick="APP.user?showPage('app'):showPage('landing')" style="background:none;border:none;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:0" onmouseover="this.style.color='var(--text2)'" onmouseout="this.style.color='var(--text3)'">← Back</button>
+    </div>
+    <div style="text-align:center;margin-bottom:8px">
+      <span class="section-tag">Pricing</span>
+    </div>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,52px);font-weight:700;text-align:center;margin:0 0 12px;color:var(--text)">Start free. Upgrade when ready.</h1>
+    <p style="text-align:center;color:var(--text2);font-size:16px;margin:0 0 48px">No credit card required. Cancel anytime.</p>
+    <div class="pricing-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="price-card" id="pricingFreeCard">
+        <div class="price-plan">Free</div>
+        <div class="price-amount">$0</div>
+        <div class="price-period">forever</div>
+        <ul class="price-features">
+          <li>5 songs per month</li>
+          <li>All 16 genres</li>
+          <li>Chord progressions</li>
+          <li>Song title suggestions</li>
+          <li>TikTok hook generator</li>
+          <li>Suno export</li>
+          <li class="no">Song history</li>
+          <li class="no">Tweak &amp; refine</li>
+          <li class="no">Karaoke Mode</li>
+          <li class="no">Co-writer Mode</li>
+          <li class="no">Publish to gallery</li>
+        </ul>
+        <button class="price-btn outline" id="pricingFreeBtn" onclick="pricingAction('free')">Get Started Free</button>
+      </div>
+      <div class="price-card featured" id="pricingProCard">
+        <div class="price-badge">Most Popular</div>
+        <div class="price-plan">Pro</div>
+        <div class="price-amount">$9<span>/mo</span></div>
+        <div class="price-period">billed monthly</div>
+        <ul class="price-features">
+          <li>100 songs per month</li>
+          <li>All 16 genres</li>
+          <li>Chord progressions</li>
+          <li>Song title suggestions</li>
+          <li>TikTok hook generator</li>
+          <li>Suno export</li>
+          <li>Full song history</li>
+          <li>Tweak &amp; refine</li>
+          <li>Karaoke Mode</li>
+          <li>Co-writer Mode</li>
+          <li>Publish to gallery</li>
+        </ul>
+        <button class="price-btn solid" id="pricingProBtn" onclick="pricingAction('pro')">Start Pro — $9/mo</button>
+      </div>
+      <div class="price-card" id="pricingUnlimitedCard">
+        <div class="price-plan">Unlimited</div>
+        <div class="price-amount">$19<span>/mo</span></div>
+        <div class="price-period">billed monthly</div>
+        <ul class="price-features">
+          <li>Unlimited songs</li>
+          <li>All 16 genres</li>
+          <li>Chord progressions</li>
+          <li>Song title suggestions</li>
+          <li>TikTok hook generator</li>
+          <li>Suno export</li>
+          <li>Full song history</li>
+          <li>Tweak &amp; refine</li>
+          <li>Karaoke Mode</li>
+          <li>Co-writer Mode</li>
+          <li>Publish to gallery</li>
+          <li>Priority generation</li>
+          <li>Commercial use license</li>
+        </ul>
+        <button class="price-btn outline" id="pricingUnlimitedBtn" onclick="pricingAction('unlimited')">Go Unlimited — $19/mo</button>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--text3);font-size:13px;margin-top:36px">Questions? Email us at <a href="mailto:support@writemylyrics.ai" style="color:var(--gold);text-decoration:none">support@writemylyrics.ai</a></p>
   </div>
 </div>
 
@@ -2149,9 +2232,15 @@ function showPage(page) {
     el.style.display = 'block';
   }
   window.scrollTo(0, 0);
-  // Keep URL in sync — gallery gets /gallery, everything else gets /
-  if (page !== 'gallery' && window.location.pathname === '/gallery') {
-    window.history.pushState({}, '', '/');
+  // Keep URL in sync
+  if (page === 'gallery') {
+    // handled by showGallery()
+  } else if (page === 'pricing') {
+    window.history.pushState({}, '', '/pricing');
+  } else {
+    if (window.location.pathname === '/gallery' || window.location.pathname === '/pricing') {
+      window.history.pushState({}, '', '/');
+    }
   }
 }
 
@@ -2295,6 +2384,11 @@ function enterApp(profile) {
 
 function setNavLoggedIn(plan) {
   const label = plan === 'unlimited' ? 'Unlimited' : plan === 'pro' ? 'Pro' : 'Free Plan';
+  const upgradeHtml = plan === 'free'
+    ? `<button class="nav-upgrade-btn" onclick="showPricing()">Upgrade</button>`
+    : plan === 'pro'
+    ? `<button class="nav-upgrade-link" onclick="startCheckout('unlimited')">Upgrade to Unlimited</button>`
+    : '';
   document.getElementById('navRight').innerHTML = `
     <div class="lang-selector" id="langSelector">
       <button class="lang-btn" id="langBtn" onclick="toggleLangDropdown(event)" title="Language">🌐</button>
@@ -2308,6 +2402,7 @@ function setNavLoggedIn(plan) {
       </div>
     </div>
     <span class="nav-plan-badge">${label}</span>
+    ${upgradeHtml}
     <button class="nav-signout" onclick="signOut()" data-i18n="nav.signout">${t('nav.signout')}</button>
   `;
   applyI18n();
@@ -2758,6 +2853,49 @@ function exportLyrics() {
 function showUpgrade() { document.getElementById('upgradeBg').classList.add('on'); }
 function showFeatureUpgrade() { document.getElementById('featureUpgradeBg').classList.add('on'); }
 
+function showPricing() {
+  // Update pricing page CTAs to reflect current plan state
+  const plan = APP.plan || 'free';
+  const freeBtn = document.getElementById('pricingFreeBtn');
+  const proBtn = document.getElementById('pricingProBtn');
+  const unlBtn = document.getElementById('pricingUnlimitedBtn');
+  const freeCard = document.getElementById('pricingFreeCard');
+  const proCard = document.getElementById('pricingProCard');
+  const unlCard = document.getElementById('pricingUnlimitedCard');
+
+  // Reset
+  [freeCard, proCard, unlCard].forEach(c => { if (c) c.style.opacity = ''; });
+
+  if (plan === 'free') {
+    if (freeBtn) { freeBtn.textContent = 'Current Plan'; freeBtn.disabled = true; freeBtn.style.opacity = '.5'; freeBtn.style.cursor = 'default'; }
+    if (proBtn)  { proBtn.textContent = 'Start Pro — $9/mo'; proBtn.disabled = false; proBtn.style.opacity = ''; proBtn.style.cursor = ''; proBtn.onclick = () => startCheckout('pro'); }
+    if (unlBtn)  { unlBtn.textContent = 'Go Unlimited — $19/mo'; unlBtn.disabled = false; unlBtn.style.opacity = ''; unlBtn.style.cursor = ''; unlBtn.onclick = () => startCheckout('unlimited'); }
+    if (freeCard) freeCard.style.opacity = '.7';
+  } else if (plan === 'pro') {
+    if (freeBtn) { freeBtn.textContent = 'Downgrade'; freeBtn.disabled = true; freeBtn.style.opacity = '.4'; freeBtn.style.cursor = 'default'; }
+    if (proBtn)  { proBtn.textContent = 'Current Plan'; proBtn.disabled = true; proBtn.style.opacity = '.5'; proBtn.style.cursor = 'default'; }
+    if (unlBtn)  { unlBtn.textContent = 'Upgrade to Unlimited — $19/mo'; unlBtn.disabled = false; unlBtn.style.opacity = ''; unlBtn.style.cursor = ''; unlBtn.onclick = () => startCheckout('unlimited'); }
+    if (proCard)  proCard.style.opacity = '.7';
+  } else if (plan === 'unlimited') {
+    if (freeBtn) { freeBtn.textContent = 'Downgrade'; freeBtn.disabled = true; freeBtn.style.opacity = '.4'; freeBtn.style.cursor = 'default'; }
+    if (proBtn)  { proBtn.textContent = 'Downgrade'; proBtn.disabled = true; proBtn.style.opacity = '.4'; proBtn.style.cursor = 'default'; }
+    if (unlBtn)  { unlBtn.textContent = 'Current Plan'; unlBtn.disabled = true; unlBtn.style.opacity = '.5'; unlBtn.style.cursor = 'default'; }
+    if (unlCard)  unlCard.style.opacity = '.7';
+  } else {
+    // Logged out
+    if (freeBtn) { freeBtn.textContent = 'Get Started Free'; freeBtn.disabled = false; freeBtn.style.opacity = ''; freeBtn.style.cursor = ''; freeBtn.onclick = () => showAuthTab('signup'); }
+    if (proBtn)  { proBtn.textContent = 'Start Pro — $9/mo'; proBtn.disabled = false; proBtn.style.opacity = ''; proBtn.style.cursor = ''; proBtn.onclick = () => showAuthTab('signup'); }
+    if (unlBtn)  { unlBtn.textContent = 'Go Unlimited — $19/mo'; unlBtn.disabled = false; unlBtn.style.opacity = ''; unlBtn.style.cursor = ''; unlBtn.onclick = () => showAuthTab('signup'); }
+  }
+  showPage('pricing');
+}
+
+function pricingAction(tier) {
+  if (!APP.user) { showAuthTab('signup'); return; }
+  if (tier === APP.plan) return;
+  startCheckout(tier);
+}
+
 // Apply locked/unlocked visual state to plan-gated UI elements
 function applyPlanUI() {
   const free = APP.plan === 'free';
@@ -2823,7 +2961,19 @@ function openSettings() {
   const upgradeBtn = document.getElementById('setPlanUpgradeBtn');
   const plan = APP.plan || 'free';
   if (badge) badge.textContent = plan === 'unlimited' ? 'Unlimited' : plan === 'pro' ? 'Pro' : 'Free';
-  if (upgradeBtn) upgradeBtn.style.display = plan === 'unlimited' ? 'none' : 'inline-block';
+  if (upgradeBtn) {
+    if (plan === 'unlimited') {
+      upgradeBtn.style.display = 'none';
+    } else if (plan === 'pro') {
+      upgradeBtn.style.display = 'inline-block';
+      upgradeBtn.textContent = 'Upgrade to Unlimited';
+      upgradeBtn.onclick = () => { closeModal('settingsBg'); startCheckout('unlimited'); };
+    } else {
+      upgradeBtn.style.display = 'inline-block';
+      upgradeBtn.textContent = 'Upgrade Plan';
+      upgradeBtn.onclick = () => { closeModal('settingsBg'); showPricing(); };
+    }
+  }
 
   document.getElementById('settingsSavingMsg').style.display = 'none';
   document.getElementById('settingsBg').classList.add('on');
@@ -5307,7 +5457,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Detect path-based routing
   const path = window.location.pathname.replace(/\/$/, '').toLowerCase();
   const startOnGallery = path === '/gallery';
+  const startOnPricing = path === '/pricing';
   if (startOnGallery) window.history.replaceState({}, '', '/gallery');
+  if (startOnPricing) window.history.replaceState({}, '', '/pricing');
 
   // Check for Stripe redirect
   const params = new URLSearchParams(window.location.search);
@@ -5322,10 +5474,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       await loadProfile(session.user, session.access_token);
       if (startOnGallery) showGallery();
-    } catch { showPage(startOnGallery ? 'gallery' : 'landing'); if (startOnGallery) loadGallery(true); }
+      else if (startOnPricing) showPricing();
+    } catch {
+      showPage(startOnGallery ? 'gallery' : startOnPricing ? 'pricing' : 'landing');
+      if (startOnGallery) loadGallery(true);
+    }
   } else {
     if (startOnGallery) {
       showGallery();
+    } else if (startOnPricing) {
+      showPricing();
     } else {
       showPage('landing');
       switchTab('signin');
@@ -5530,7 +5688,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <label class="settings-label">Current Plan</label>
         <div class="settings-plan-row">
           <span class="settings-plan-badge" id="setPlanBadge">Free</span>
-          <button class="settings-upgrade-btn" id="setPlanUpgradeBtn" onclick="closeModal('settingsBg');showUpgrade()" style="display:none">Upgrade Plan</button>
+          <button class="settings-upgrade-btn" id="setPlanUpgradeBtn" style="display:none">Upgrade Plan</button>
         </div>
       </div>
 
