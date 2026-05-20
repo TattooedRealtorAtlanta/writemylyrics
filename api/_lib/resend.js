@@ -1,34 +1,40 @@
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
+// Read at call time, not module load time — ensures Vercel env vars are always current
+function getKey() { return process.env.RESEND_API_KEY; }
+
 const FROM = 'Scott at WriteMyLyrics <support@writemylyrics.ai>';
 const APP_URL = 'https://writemylyrics.ai';
 
 async function resendRequest(path, body) {
-  if (!RESEND_API_KEY) {
+  const key = getKey();
+  if (!key) {
     console.warn('[resend] RESEND_API_KEY not set — skipping email');
     return null;
   }
+  console.log(`[resend] sending to ${path}`, { to: body.to, subject: body.subject, scheduled_at: body.scheduled_at || 'immediate' });
   const res = await fetch(`https://api.resend.com${path}`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${RESEND_API_KEY}`,
+      'Authorization': `Bearer ${key}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    console.error(`[resend] ${path} failed (${res.status}):`, data);
+    console.error(`[resend] ${path} failed (${res.status}):`, JSON.stringify(data));
     return null;
   }
+  console.log(`[resend] success — email id: ${data.id}`);
   return data;
 }
 
 // Cancel a scheduled email by ID — called when user generates their first song
 async function cancelEmail(emailId) {
-  if (!RESEND_API_KEY || !emailId) return;
+  const key = getKey();
+  if (!key || !emailId) return;
   const res = await fetch(`https://api.resend.com/emails/${emailId}/cancel`, {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${RESEND_API_KEY}` },
+    headers: { 'Authorization': `Bearer ${key}` },
   });
   if (!res.ok) {
     const body = await res.text().catch(() => '');

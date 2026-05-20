@@ -26,13 +26,18 @@ module.exports = async function handler(req, res) {
     // Atomic claim: only proceeds for the row where welcome_sent is still false.
     // If two requests race, only one UPDATE returns a row — prevents duplicates.
     if (!profile.welcome_sent) {
-      const { data: claimed } = await supabase
+      const { data: claimed, error: claimErr } = await supabase
         .from('profiles')
         .update({ welcome_sent: true })
         .eq('id', user.id)
         .eq('welcome_sent', false)
         .select('id')
         .single();
+
+      if (claimErr) {
+        // Most likely cause: migration not yet run — welcome_sent column missing
+        console.error('[/api/user] welcome_sent claim failed:', claimErr.message, '| code:', claimErr.code);
+      }
 
       if (claimed) {
         // This request won the race — send all three emails
