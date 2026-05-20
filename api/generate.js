@@ -1,6 +1,7 @@
 const Anthropic = require('@anthropic-ai/sdk');
 const { supabase, PLAN_LIMITS, getUser, getProfile } = require('./_lib/supabase');
 const { getJsonBody } = require('./_lib/body');
+const { cancelEmail } = require('./_lib/resend');
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const MODEL = 'claude-sonnet-4-20250514';
@@ -138,9 +139,19 @@ STRUMMING: [pattern]
 
     // Increment usage (one count per full generation)
     const newUsage = currentUsage + 1;
+    const usageUpdate = { usage_count: newUsage };
+
+    // First-ever generation — cancel the 48h nudge email, it's no longer needed
+    if (currentUsage === 0 && profile.email_nudge_id) {
+      cancelEmail(profile.email_nudge_id).catch(e =>
+        console.warn('[generate] nudge cancel failed:', e.message)
+      );
+      usageUpdate.email_nudge_id = null;
+    }
+
     await supabase
       .from('profiles')
-      .update({ usage_count: newUsage })
+      .update(usageUpdate)
       .eq('id', user.id);
 
     return res.status(200).json({

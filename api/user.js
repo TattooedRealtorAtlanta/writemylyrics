@@ -1,4 +1,5 @@
 const { supabase, PLAN_LIMITS, getUser, getProfile } = require('./_lib/supabase');
+const { sendWelcomeEmail, scheduleNudgeEmail, scheduleFollowupEmail } = require('./_lib/resend');
 
 module.exports = async function handler(req, res) {
   const user = await getUser(req);
@@ -19,6 +20,47 @@ module.exports = async function handler(req, res) {
     if (!profile) {
       console.error('[/api/user GET] getProfile returned null for user:', user.id);
       return res.status(500).json({ error: 'Profile not found' });
+    }
+
+    // ── Send welcome emails on first login ───────────────────────────────
+    // Atomic claim: only proceeds for the row where welcome_sent is still false.
+    // If two requests race, only one UPDATE returns a row — prevents duplicates.
+    if (!profile.welcome_sent) {
+      const { data: claimed } = await supabase
+        .from('profiles')
+        .update({ welcome_sent: true })
+        .eq('id', user.id)
+        .eq('welcome_sent', false)
+        .select('id')
+        .single();
+
+      if (claimed) {
+        // This request won the race — send all three emails
+        const signupTime = new Date();
+        const displayName = profile.name || name || '';
+        const toEmail = profile.email || user.email;
+
+        try {
+          // Email 1 — immediate
+          await sendWelcomeEmail(toEmail, displayName);
+
+          // Email 2 — 48h nudge (scheduled; store ID so we can cancel on first gen)
+          const nudgeResult = await scheduleNudgeEmail(toEmail, displayName, signupTime);
+          if (nudgeResult?.id) {
+            await supabase
+              .from('profiles')
+              .update({ email_nudge_id: nudgeResult.id })
+              .eq('id', user.id);
+          }
+
+          // Email 3 — 7 day follow-up (no need to cancel; always send)
+          await scheduleFollowupEmail(toEmail, displayName, signupTime);
+
+        } catch (emailErr) {
+          // Email failure must never break the login flow
+          console.error('[/api/user] welcome email error:', emailErr.message);
+        }
+      }
     }
 
     // Reset monthly usage if 30+ days have passed
