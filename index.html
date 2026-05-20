@@ -104,11 +104,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .showcase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:48px}
 .song-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .25s,box-shadow .25s}
 .song-card:hover{border-color:var(--gold-border);box-shadow:0 20px 60px rgba(0,0,0,.4)}
-.song-card-top{padding:22px 24px 16px}
+.song-card-top{padding:22px 24px 14px}
 .song-genre-pill{display:inline-block;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:20px;padding:3px 11px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
 .song-card-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:0}
-.song-player{background:var(--surface2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.song-player iframe{display:block;width:100%;border:none}
+.song-play-area{display:flex;align-items:center;gap:14px;background:var(--surface2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:16px 24px;text-decoration:none;transition:background .2s}
+.song-play-area:hover{background:var(--surface3)}
+.song-play-area:hover .song-play-btn{background:var(--gold2);transform:scale(1.08)}
+.song-play-btn{width:44px;height:44px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;color:#07060a;flex-shrink:0;transition:all .2s}
+.song-play-label{font-size:13px;font-weight:600;color:var(--text2);letter-spacing:.02em}
+.song-play-area:hover .song-play-label{color:var(--text)}
 .song-lyrics{padding:18px 24px 22px;flex:1}
 .song-lyrics-text{font-size:13px;color:var(--text2);line-height:1.85;font-style:italic;border-left:2px solid var(--gold-border);padding-left:14px}
 .song-lyrics-text span{display:block}
@@ -900,6 +904,91 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
     </div>
   </div>
 
+  <div class="showcase">
+    <div class="section-tag">Real songs, real results</div>
+    <h2 class="section-h">Songs made with WriteMyLyrics.</h2>
+    <p class="section-sub" style="margin-bottom:0">Generated in the studio. Produced in Suno. Click to listen.</p>
+    <div class="showcase-grid">
+
+      <!-- Card 1 — Country -->
+      <div class="song-card">
+        <div class="song-card-top">
+          <div class="song-genre-pill">Country</div>
+          <div class="song-card-title">Crimson on Saturday</div>
+        </div>
+        <a class="song-play-area" href="https://suno.com/s/bVEpcYJ6F7cvEim7" target="_blank" rel="noopener" title="Listen on Suno">
+          <div class="song-play-btn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <span class="song-play-label">Listen on Suno</span>
+        </a>
+        <div class="song-lyrics">
+          <div class="song-lyrics-text">
+            <span>I was raised on Saturday nights and crimson red</span>
+            <span>Down in Tuscaloosa where champions are bred</span>
+            <span>Like Bear and Nick, we don't back down</span>
+            <span>We own this field, we own this town</span>
+            <span>'Cause we're Alabama born and we ain't done</span>
+            <span>Roll Tide, roll on, we stand our ground</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 — R&B -->
+      <div class="song-card">
+        <div class="song-card-top">
+          <div class="song-genre-pill">R&amp;B</div>
+          <div class="song-card-title">Falling Into You</div>
+        </div>
+        <a class="song-play-area" href="https://suno.com/s/AALYclEPEjsRhHrf" target="_blank" rel="noopener" title="Listen on Suno">
+          <div class="song-play-btn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <span class="song-play-label">Listen on Suno</span>
+        </a>
+        <div class="song-lyrics">
+          <div class="song-lyrics-text">
+            <span>Never thought I'd feel this way again</span>
+            <span>Closed my heart, said love would never win</span>
+            <span>Falling without warning, didn't see it coming</span>
+            <span>Heart was barely beating, now it's steady drumming</span>
+            <span>Everything has changed since you appeared</span>
+            <span>Falling into you, falling into you</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 — Hip Hop -->
+      <div class="song-card">
+        <div class="song-card-top">
+          <div class="song-genre-pill">Hip Hop</div>
+          <div class="song-card-title">Calloused Hands</div>
+        </div>
+        <a class="song-play-area" href="https://suno.com/s/26Im420iOUCQxnMM" target="_blank" rel="noopener" title="Listen on Suno">
+          <div class="song-play-btn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <span class="song-play-label">Listen on Suno</span>
+        </a>
+        <div class="song-lyrics">
+          <div class="song-lyrics-text">
+            <span>Started with a dream and some change in my pocket</span>
+            <span>Nothing but ambition, couldn't nobody stop it</span>
+            <span>From nothing to something, I rose from the dirt</span>
+            <span>They counted me out but I counted it up</span>
+            <span>I built my empire just to show I'm alive</span>
+            <span>Building my kingdom for my own sake</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="showcase-cta">
+      <button class="btn-primary" onclick="showAuthTab('signup')">Write Your Song — Free</button>
+      <p>No credit card required. <a href="#pricing" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'});return false">See plans →</a></p>
+    </div>
+  </div>
+
   <div class="features" id="features">
     <div class="section-tag">Everything you need</div>
     <h2 class="section-h">More than just lyrics.</h2>
@@ -944,82 +1033,6 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
       <div class="genre-tags">
         <span class="genre-tag">Country</span><span class="genre-tag">Hip Hop</span><span class="genre-tag">Pop</span><span class="genre-tag">Rock</span><span class="genre-tag">R&amp;B</span><span class="genre-tag">Blues</span><span class="genre-tag">Folk</span><span class="genre-tag">Gospel</span><span class="genre-tag">Americana</span><span class="genre-tag">Outlaw Country</span><span class="genre-tag">Trap</span><span class="genre-tag">Military / Patriotic</span><span class="genre-tag">Singer-Songwriter</span>
       </div>
-    </div>
-  </div>
-
-  <div class="showcase">
-    <div class="section-tag">Real songs, real results</div>
-    <h2 class="section-h">Songs made with WriteMyLyrics.</h2>
-    <p class="section-sub" style="margin-bottom:0">Generated in the studio. Produced in Suno. Hit play.</p>
-    <div class="showcase-grid">
-
-      <!-- Card 1 — Country -->
-      <div class="song-card">
-        <div class="song-card-top">
-          <div class="song-genre-pill">Country</div>
-          <div class="song-card-title">Crimson on Saturday</div>
-        </div>
-        <div class="song-player">
-          <iframe src="https://suno.com/embed/bVEpcYJ6F7cvEim7" height="152" allow="autoplay"></iframe>
-        </div>
-        <div class="song-lyrics">
-          <div class="song-lyrics-text">
-            <span>I was raised on Saturday nights and crimson red</span>
-            <span>Down in Tuscaloosa where champions are bred</span>
-            <span>Like Bear and Nick, we don't back down</span>
-            <span>We own this field, we own this town</span>
-            <span>'Cause we're Alabama born and we ain't done</span>
-            <span>Roll Tide, roll on, we stand our ground</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2 — R&B -->
-      <div class="song-card">
-        <div class="song-card-top">
-          <div class="song-genre-pill">R&amp;B</div>
-          <div class="song-card-title">Falling Into You</div>
-        </div>
-        <div class="song-player">
-          <iframe src="https://suno.com/embed/AALYclEPEjsRhHrf" height="152" allow="autoplay"></iframe>
-        </div>
-        <div class="song-lyrics">
-          <div class="song-lyrics-text">
-            <span>Never thought I'd feel this way again</span>
-            <span>Closed my heart, said love would never win</span>
-            <span>Falling without warning, didn't see it coming</span>
-            <span>Heart was barely beating, now it's steady drumming</span>
-            <span>Everything has changed since you appeared</span>
-            <span>Falling into you, falling into you</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3 — Hip Hop -->
-      <div class="song-card">
-        <div class="song-card-top">
-          <div class="song-genre-pill">Hip Hop</div>
-          <div class="song-card-title">Calloused Hands</div>
-        </div>
-        <div class="song-player">
-          <iframe src="https://suno.com/embed/26Im420iOUCQxnMM" height="152" allow="autoplay"></iframe>
-        </div>
-        <div class="song-lyrics">
-          <div class="song-lyrics-text">
-            <span>Started with a dream and some change in my pocket</span>
-            <span>Nothing but ambition, couldn't nobody stop it</span>
-            <span>From nothing to something, I rose from the dirt</span>
-            <span>They counted me out but I counted it up</span>
-            <span>I built my empire just to show I'm alive</span>
-            <span>Building my kingdom for my own sake</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-    <div class="showcase-cta">
-      <button class="btn-primary" onclick="showAuthTab('signup')">Write Your Song — Free</button>
-      <p>No credit card required. <a href="#pricing" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'});return false">See plans →</a></p>
     </div>
   </div>
 
