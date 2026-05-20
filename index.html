@@ -402,6 +402,8 @@ select option{background:var(--surface3)}
 .hi-btn{background:var(--surface3);border:1px solid var(--border);border-radius:5px;padding:4px 10px;font-size:11px;font-family:'DM Sans',sans-serif;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap}
 .hi-btn:hover{border-color:var(--gold-border);color:var(--text)}
 .hi-btn.del:hover{border-color:var(--red);color:var(--red)}
+.hi-btn.locked{opacity:.45;cursor:pointer}
+.hi-btn.locked:hover{border-color:var(--border);color:var(--text2)}
 .hi-empty{text-align:center;padding:60px 20px;color:var(--text3);font-size:14px;line-height:1.6}
 .hi-loading{text-align:center;padding:40px;color:var(--text3);font-size:13px}
 .plan-gate{background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:10px;padding:24px;text-align:center;margin:12px 0}
@@ -494,8 +496,11 @@ select option{background:var(--surface3)}
 .refine-panel.on{display:block}
 .refine-toggle{display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;padding:10px 0;width:100%;text-align:left;transition:color .2s}
 .refine-toggle:hover{color:var(--gold)}
+.refine-toggle.plan-locked{opacity:.55}
+.refine-toggle.plan-locked:hover{color:var(--text2)}
 .refine-toggle-icon{font-size:12px;transition:transform .2s;display:inline-block}
 .refine-toggle.open .refine-toggle-icon{transform:rotate(90deg)}
+.feature-lock{font-size:11px;margin-left:auto;opacity:.7}
 .refine-body{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:4px;display:none}
 .refine-body.open{display:block}
 .refine-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--gold);font-weight:600;margin-bottom:8px;display:block}
@@ -1401,6 +1406,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
             <button class="refine-toggle" id="refineToggle" onclick="toggleRefine()">
               <span class="refine-toggle-icon">▶</span>
               <span data-i18n="refine.title">Tweak &amp; Refine</span>
+              <span class="feature-lock" id="refineLock" style="display:none">🔒</span>
             </button>
             <div class="refine-body" id="refineBody">
               <div id="refineGate" class="plan-gate" style="display:none">
@@ -1503,6 +1509,19 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
       <button class="m-cancel" onclick="closeModal('upgradeBg')">Maybe later</button>
       <button class="m-confirm-2" onclick="closeModal('upgradeBg');startCheckout('unlimited')">Unlimited — $19/mo</button>
       <button class="m-confirm" onclick="closeModal('upgradeBg');startCheckout('pro')">Pro — $9/mo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Feature Upgrade Modal -->
+<div class="modal-bg" id="featureUpgradeBg" onclick="bgClose(event,'featureUpgradeBg')">
+  <div class="modal">
+    <div class="modal-h">You're one step away ✨</div>
+    <div class="modal-p">Upgrade to edit, refine, and perfect your lyrics — starting at $9/month.</div>
+    <div class="modal-btns">
+      <button class="m-cancel" onclick="closeModal('featureUpgradeBg')">Maybe Later</button>
+      <button class="m-confirm-2" onclick="closeModal('featureUpgradeBg');startCheckout('unlimited')">Unlimited — $19/mo</button>
+      <button class="m-confirm" onclick="closeModal('featureUpgradeBg');startCheckout('pro')">Pro — $9/mo</button>
     </div>
   </div>
 </div>
@@ -2077,7 +2096,7 @@ async function togglePublish(btn) {
   // Resolve song ID — history cards carry data-song-id; studio button uses APP.currentSongId
   const id = btn.dataset.songId || APP.currentSongId;
   if (!id) { toast('No song loaded.'); return; }
-  if (APP.plan === 'free') { showUpgrade(); return; }
+  if (APP.plan === 'free') { showFeatureUpgrade(); return; }
 
   const publish = btn.dataset.published !== 'true'; // toggle current state
 
@@ -2233,7 +2252,7 @@ function enterApp(profile) {
   updateUsage();
   showPage('app');
   // Apply saved studio defaults after DOM is ready
-  requestAnimationFrame(() => applyStudioDefaults(profile));
+  requestAnimationFrame(() => { applyStudioDefaults(profile); applyPlanUI(); });
 }
 
 function setNavLoggedIn(plan) {
@@ -2361,6 +2380,7 @@ async function generate() {
     APP.limit = result.limit;
     APP.plan = result.plan;
     updateUsage();
+    applyPlanUI();
 
     renderLyrics(result.lyrics);
 
@@ -2372,15 +2392,13 @@ async function generate() {
       await saveSongToHistory(result);
     }
 
-    // Show refine panel for pro/unlimited
-    if (APP.plan !== 'free') {
-      const rp = document.getElementById('refinePanel');
-      if (rp) rp.classList.add('on');
-      const rrBtn = document.getElementById('refineRevertBtn');
-      if (rrBtn) rrBtn.classList.remove('on');
-      const ri = document.getElementById('refineInstructions');
-      if (ri) ri.value = '';
-    }
+    // Always show refine panel — lock icon handles free-plan gating
+    const rp = document.getElementById('refinePanel');
+    if (rp) rp.classList.add('on');
+    const rrBtn = document.getElementById('refineRevertBtn');
+    if (rrBtn) rrBtn.classList.remove('on');
+    const ri = document.getElementById('refineInstructions');
+    if (ri) ri.value = '';
 
   } catch (e) {
     // Aborted by a new generate() call — not a real error, new request handles its own UI
@@ -2697,6 +2715,16 @@ function exportLyrics() {
 }
 
 function showUpgrade() { document.getElementById('upgradeBg').classList.add('on'); }
+function showFeatureUpgrade() { document.getElementById('featureUpgradeBg').classList.add('on'); }
+
+// Apply locked/unlocked visual state to plan-gated UI elements
+function applyPlanUI() {
+  const free = APP.plan === 'free';
+  const lock = document.getElementById('refineLock');
+  if (lock) lock.style.display = free ? 'inline' : 'none';
+  const toggle = document.getElementById('refineToggle');
+  if (toggle) toggle.classList.toggle('plan-locked', free);
+}
 function showLogout() { document.getElementById('logoutBg').classList.add('on'); }
 function closeModal(id) { document.getElementById(id).classList.remove('on'); }
 function bgClose(e, id) { if (e.target.id === id) closeModal(id); }
@@ -3437,7 +3465,7 @@ function showView(v) {
 function planGateEl(feature, text) {
   const div = document.createElement('div');
   div.className = 'plan-gate';
-  div.innerHTML = `<div class="plan-gate-h">${escHtml(feature)}</div><div class="plan-gate-p">${escHtml(text)}</div><button class="plan-gate-btn" onclick="showUpgrade()">Upgrade Now</button>`;
+  div.innerHTML = `<div class="plan-gate-h">${escHtml(feature)}</div><div class="plan-gate-p">${escHtml(text)}</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="plan-gate-btn" onclick="showFeatureUpgrade()">Upgrade Now</button></div>`;
   return div;
 }
 
@@ -3451,7 +3479,7 @@ async function loadHistory() {
 
   if (APP.plan === 'free') {
     scroll.innerHTML = '';
-    scroll.appendChild(planGateEl('Song History', 'Song history requires a Pro or Unlimited plan. Upgrade to automatically save every song you generate.'));
+    scroll.appendChild(planGateEl('Song History', 'Your songs aren\'t saved yet. Upgrade to automatically save every song you generate, revisit past work, and publish to the gallery.'));
     return;
   }
 
@@ -3511,7 +3539,7 @@ function renderHistory(songs) {
         <button class="hi-btn" onclick="openKaraoke(APP.songs[${idx}].lyrics, APP.songs[${idx}].id)">🎤 Karaoke</button>
         <button class="pub-btn${song.published ? ' on' : ''}" id="pub-${song.id}" data-song-id="${song.id}" data-published="${!!song.published}" onclick="togglePublish(this)">${song.published ? '✓ Published' : '📤 Publish'}</button>
         ${song.published ? `<button class="hi-btn" onclick="shareSong('${song.id}')">🔗 Share</button>` : ''}
-        ${APP.plan !== 'free' ? `<button class="hi-btn" onclick="openCowrModal('${song.id}','${escHtml(title)}')">👥 Co-writers</button><button class="hi-btn" onclick="openSuggestModal('${song.id}','${escHtml(title)}',true)">💡 Suggestions</button>` : ''}
+        ${APP.plan !== 'free' ? `<button class="hi-btn" onclick="openCowrModal('${song.id}','${escHtml(title)}')">👥 Co-writers</button><button class="hi-btn" onclick="openSuggestModal('${song.id}','${escHtml(title)}',true)">💡 Suggestions</button>` : `<button class="hi-btn locked" onclick="showFeatureUpgrade()">🔒 Co-writers</button><button class="hi-btn locked" onclick="showFeatureUpgrade()">🔒 Suggestions</button>`}
         <button class="hi-btn del" onclick="deleteSong('${song.id}',${idx})">🗑</button>
       </div>`;
     scroll.appendChild(item);
@@ -4214,10 +4242,7 @@ async function autoSync() {
 
 // ── KARAOKE ──
 function openKaraoke(lyrics, songId) {
-  if (APP.plan === 'free') {
-    showUpgrade();
-    return;
-  }
+  if (APP.plan === 'free') { showFeatureUpgrade(); return; }
 
   KAR.lines     = [];
   KAR.audioUrl  = '';
@@ -4498,6 +4523,8 @@ async function saveKarSync() {
 
 // ── TWEAK & REFINE ──
 function toggleRefine() {
+  if (APP.plan === 'free') { showFeatureUpgrade(); return; }
+
   const toggle = document.getElementById('refineToggle');
   const body = document.getElementById('refineBody');
   const isOpen = body.classList.contains('open');
@@ -4508,16 +4535,8 @@ function toggleRefine() {
   } else {
     body.classList.add('open');
     toggle.classList.add('open');
-
-    const gate = document.getElementById('refineGate');
-    const form = document.getElementById('refineForm');
-    if (APP.plan === 'free') {
-      gate.style.display = 'block';
-      form.style.display = 'none';
-    } else {
-      gate.style.display = 'none';
-      form.style.display = 'block';
-    }
+    document.getElementById('refineGate').style.display = 'none';
+    document.getElementById('refineForm').style.display = 'block';
   }
 }
 
