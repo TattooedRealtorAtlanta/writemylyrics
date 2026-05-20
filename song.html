@@ -27,6 +27,8 @@ nav{padding:0 40px;height:64px;display:flex;align-items:center;justify-content:s
 .song-title{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:700;line-height:1.15;margin-bottom:6px;letter-spacing:-.02em}
 .song-author{font-size:13px;color:var(--text2);margin-bottom:28px}
 .song-author span{color:var(--gold)}
+.share-btn{background:var(--surface2);border:1px solid rgba(201,148,58,.35);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600;color:var(--gold);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap}
+.share-btn:hover{background:rgba(201,148,58,.12)}
 .audio-player{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:32px;display:flex;align-items:center;gap:14px}
 .play-btn{width:44px;height:44px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
 .play-btn:hover{background:var(--gold2)}
@@ -62,7 +64,9 @@ audio{display:none}
   <div id="songContent" style="display:none">
     <div class="song-title" id="songTitle"></div>
     <div class="song-author" id="songAuthor"></div>
-    <div class="song-meta-row" id="songMeta"></div>
+    <div class="song-meta-row" id="songMeta">
+      <button class="share-btn" id="shareBtn" onclick="copyLink()">↗ Share</button>
+    </div>
 
     <div class="audio-player" id="audioPlayer" style="display:none">
       <button class="play-btn" id="playBtn" onclick="togglePlay()">
@@ -99,7 +103,8 @@ function renderLyrics(text) {
   const el = document.getElementById('lyricsDisplay');
   el.innerHTML = '';
   (text||'').split('\n').forEach(line => {
-    const t = line.trim();
+    // Strip markdown bold markers (**text** or __text__) before testing
+    const t = line.trim().replace(/^\*{1,2}(.*?)\*{1,2}$/, '$1').replace(/^_{1,2}(.*?)_{1,2}$/, '$1').trim();
     if (!t) { el.appendChild(document.createElement('br')); return; }
     if (LABEL_RE.test(t)) {
       const span = document.createElement('span');
@@ -109,6 +114,24 @@ function renderLyrics(text) {
     } else {
       el.appendChild(document.createTextNode(t + '\n'));
     }
+  });
+}
+
+function copyLink() {
+  const btn = document.getElementById('shareBtn');
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    btn.textContent = 'Copied! ✓';
+    setTimeout(() => { btn.textContent = '↗ Share'; }, 2000);
+  }).catch(() => {
+    // Fallback for browsers that block clipboard without interaction
+    const ta = document.createElement('textarea');
+    ta.value = window.location.href;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = 'Copied! ✓';
+    setTimeout(() => { btn.textContent = '↗ Share'; }, 2000);
   });
 }
 
