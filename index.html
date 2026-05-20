@@ -1313,6 +1313,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
           <button class="act-btn gold" onclick="generate()" data-i18n="btn.regenerate">↺ Regenerate</button>
           <button class="act-btn" onclick="copyLyrics()" data-i18n="btn.copy">Copy</button>
           <button class="act-btn" onclick="exportToSuno()">⚡ Suno</button>
+          <button class="act-btn" id="studioKaraokeBtn" onclick="studioKaraoke()">🎤 Karaoke</button>
           <button class="act-btn" id="versionsBtn" onclick="openVersionHistory(APP.currentSongId)" style="display:none">↩ Versions</button>
           <button class="act-btn" id="syllableBtn" onclick="toggleSyllables()" data-i18n="btn.syllables">Syllables</button>
           <button class="act-btn" onclick="openHooksPanel()">🎵 TikTok Hooks</button>
@@ -2392,9 +2393,7 @@ async function generate() {
       await saveSongToHistory(result);
     }
 
-    // Always show refine panel — lock icon handles free-plan gating
-    const rp = document.getElementById('refinePanel');
-    if (rp) rp.classList.add('on');
+    // Reset refine state for fresh generation (panel visibility handled by renderLyrics)
     const rrBtn = document.getElementById('refineRevertBtn');
     if (rrBtn) rrBtn.classList.remove('on');
     const ri = document.getElementById('refineInstructions');
@@ -2427,6 +2426,11 @@ function renderLyrics(text) {
   document.getElementById('loadState').classList.remove('on');
   document.getElementById('outContent').style.display = 'block';
   document.getElementById('rpActions').style.display = 'flex';
+
+  // Always show the refine panel when lyrics are displayed — applyPlanUI handles lock state
+  const rp = document.getElementById('refinePanel');
+  if (rp) rp.classList.add('on');
+  applyPlanUI();
 
   const topic = document.getElementById('topic').value.trim();
   document.getElementById('rpLabel').textContent = topic || 'Your lyrics';
@@ -3478,8 +3482,20 @@ async function loadHistory() {
   scroll.innerHTML = '<div class="hi-loading">Loading songs...</div>';
 
   if (APP.plan === 'free') {
-    scroll.innerHTML = '';
-    scroll.appendChild(planGateEl('Song History', 'Your songs aren\'t saved yet. Upgrade to automatically save every song you generate, revisit past work, and publish to the gallery.'));
+    scroll.innerHTML = `
+      <div class="plan-gate">
+        <div class="plan-gate-h">Song History</div>
+        <div class="plan-gate-p">Your songs aren't being saved. Upgrade to automatically save every song, publish to the gallery, and unlock these features:</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:16px">
+          <button class="hi-btn locked" onclick="showFeatureUpgrade()">🎤 Karaoke</button>
+          <button class="hi-btn locked" onclick="showFeatureUpgrade()">📤 Publish</button>
+          <button class="hi-btn locked" onclick="showFeatureUpgrade()">👥 Co-writers</button>
+          <button class="hi-btn locked" onclick="showFeatureUpgrade()">💡 Suggestions</button>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="plan-gate-btn" onclick="showFeatureUpgrade()">Upgrade Now</button>
+        </div>
+      </div>`;
     return;
   }
 
@@ -4241,6 +4257,13 @@ async function autoSync() {
 }
 
 // ── KARAOKE ──
+// Studio Karaoke button — works from the right panel for all plans
+function studioKaraoke() {
+  if (APP.plan === 'free') { showFeatureUpgrade(); return; }
+  if (!APP.lyrics) { toast('Generate a song first.'); return; }
+  openKaraoke(APP.lyrics, APP.currentSongId);
+}
+
 function openKaraoke(lyrics, songId) {
   if (APP.plan === 'free') { showFeatureUpgrade(); return; }
 
