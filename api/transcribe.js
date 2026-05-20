@@ -1,7 +1,7 @@
 if (!globalThis.WebSocket) {
   globalThis.WebSocket = require('ws');
 }
-const { getUser } = require('./_lib/supabase');
+const { getUser, getProfile } = require('./_lib/supabase');
 const { getJsonBody } = require('./_lib/body');
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -52,6 +52,11 @@ const handler = async function transcribeHandler(req, res) {
 
   const user = await getUser(req);
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
+
+  const profile = await getProfile(user.id, user.email, user.user_metadata?.name);
+  if (profile.plan === 'free') {
+    return res.status(403).json({ error: 'Karaoke requires Pro or Unlimited plan' });
+  }
 
   const contentType = (req.headers['content-type'] || '').toLowerCase();
 

@@ -92,6 +92,14 @@ module.exports = async function handler(req, res) {
     const { id, sync_data, notes, status, lyrics, published, audio_url } = body;
     if (!id) return res.status(400).json({ error: 'id is required' });
 
+    // Publishing is a Pro/Unlimited feature — gate it server-side
+    if (published !== undefined) {
+      const profile = await getProfile(user.id, user.email, user.user_metadata?.name);
+      if (profile.plan === 'free') {
+        return res.status(403).json({ error: 'Publishing requires Pro or Unlimited plan' });
+      }
+    }
+
     const updates = {};
     if (sync_data  !== undefined) updates.sync_data  = sync_data;
     if (notes      !== undefined) updates.notes      = notes;
