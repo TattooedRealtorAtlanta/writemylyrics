@@ -82,6 +82,16 @@ module.exports = async function handler(req, res) {
       usageCount = 0;
     }
 
+    // Count active Pro members for urgency display in upgrade modal
+    let proCount = 0;
+    try {
+      const { count } = await supabase
+        .from('profiles')
+        .select('id', { count: 'exact', head: true })
+        .in('plan', ['pro', 'unlimited']);
+      proCount = count || 0;
+    } catch { /* non-critical */ }
+
     return res.status(200).json({
       id: profile.id,
       email: profile.email,
@@ -89,6 +99,8 @@ module.exports = async function handler(req, res) {
       plan: profile.plan,
       usage: usageCount,
       limit: PLAN_LIMITS[profile.plan] ?? 5,
+      reset_at: profile.usage_reset_at || null,
+      pro_count: proCount,
       // Settings defaults
       default_genre:     profile.default_genre     || null,
       default_moods:     profile.default_moods     || null,

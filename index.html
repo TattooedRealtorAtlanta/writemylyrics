@@ -339,7 +339,8 @@ select option{background:var(--surface3)}
 .modal-bg.on{display:flex}
 .modal{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:480px;box-shadow:0 40px 80px rgba(0,0,0,.6)}
 .modal-h{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;margin-bottom:8px}
-.modal-p{font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.7}
+.modal-p{font-size:14px;color:var(--text2);margin-bottom:12px;line-height:1.7}
+.modal-meta{font-size:12px;color:var(--text3);margin-bottom:20px;line-height:1.6;min-height:0}
 .modal-btns{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .m-cancel{background:none;border:1px solid var(--border);border-radius:6px;padding:10px 20px;color:var(--text2);font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
 .m-cancel:hover{border-color:var(--text3);color:var(--text)}
@@ -1941,10 +1942,11 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 <!-- Upgrade Modal -->
 <div class="modal-bg" id="upgradeBg" onclick="bgClose(event,'upgradeBg')">
   <div class="modal">
-    <div class="modal-h">Upgrade to Pro ✨</div>
-    <div class="modal-p">You've used all your songs this month. Upgrade to Pro for unlimited songs, Tweak &amp; Refine, Karaoke Mode, full history, and everything else — $15/month.</div>
+    <div class="modal-h">You're on a roll — don't stop now.</div>
+    <div class="modal-p" id="upgradeModalBody">Upgrade to Pro and keep going — unlimited songs, Karaoke Mode, Tweak &amp; Refine, shareable links, and a commercial use license. All for $15/month.</div>
+    <div class="modal-meta" id="upgradeModalMeta"></div>
     <div class="modal-btns">
-      <button class="m-cancel" onclick="closeModal('upgradeBg')">Maybe later</button>
+      <button class="m-cancel" onclick="dismissUpgradeModal()">Remind me later</button>
       <button class="m-confirm" onclick="closeModal('upgradeBg');startCheckout('pro')">Upgrade to Pro — $15/mo</button>
     </div>
   </div>
@@ -1954,9 +1956,10 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 <div class="modal-bg" id="featureUpgradeBg" onclick="bgClose(event,'featureUpgradeBg')">
   <div class="modal">
     <div class="modal-h">You're one step away ✨</div>
-    <div class="modal-p">Upgrade to Pro to edit, refine, and perfect your lyrics — unlimited songs, Karaoke Mode, full history, and more for $15/month.</div>
+    <div class="modal-p" id="featureUpgradeModalBody">Upgrade to Pro for unlimited songs, Karaoke Mode, Tweak &amp; Refine, shareable links, and a commercial use license — $15/month.</div>
+    <div class="modal-meta" id="featureUpgradeModalMeta"></div>
     <div class="modal-btns">
-      <button class="m-cancel" onclick="closeModal('featureUpgradeBg')">Maybe Later</button>
+      <button class="m-cancel" onclick="closeModal('featureUpgradeBg')">Remind me later</button>
       <button class="m-confirm" onclick="closeModal('featureUpgradeBg');startCheckout('pro')">Upgrade to Pro — $15/mo</button>
     </div>
   </div>
@@ -2782,6 +2785,8 @@ async function loadProfile(user, token) {
     APP.plan = profile.plan;
     APP.usage = profile.usage;
     APP.limit = profile.limit;
+    APP.resetAt = profile.reset_at || null;
+    APP.proCount = profile.pro_count || 0;
     enterApp(profile);
   } catch (e) {
     console.error('loadProfile error:', e);
@@ -2857,10 +2862,18 @@ function updateUsage() {
     if (wrap) wrap.style.display = 'none';
   } else {
     const pct = Math.min(100, (APP.usage / APP.limit) * 100);
+    const remaining = APP.limit - APP.usage;
     if (fill) fill.style.width = pct + '%';
-    if (label) label.textContent = `${APP.usage} / ${APP.limit} songs used this month`;
+    if (label) label.textContent = remaining === 1
+      ? `1 song left this month`
+      : `${APP.usage} / ${APP.limit} songs used this month`;
     if (fill) fill.style.background = pct >= 80 ? 'var(--red)' : 'var(--gold)';
     if (wrap) wrap.style.display = 'block';
+    // Proactive nudge when exactly 1 song remains — show once per session
+    if (remaining === 1 && !APP._nudgedOneLeft) {
+      APP._nudgedOneLeft = true;
+      setTimeout(() => toast('Heads up — you have 1 free song left this month. After that you\'ll need Pro to keep going.'), 400);
+    }
   }
 }
 
@@ -3300,8 +3313,43 @@ function exportLyrics() {
   toast('Lyrics downloaded!');
 }
 
-function showUpgrade() { document.getElementById('upgradeBg').classList.add('on'); }
-function showFeatureUpgrade() { document.getElementById('featureUpgradeBg').classList.add('on'); }
+function daysUntilReset() {
+  if (!APP.resetAt) return null;
+  const resetDate = new Date(APP.resetAt);
+  resetDate.setDate(resetDate.getDate() + 30);
+  const diff = Math.ceil((resetDate - new Date()) / (1000 * 60 * 60 * 24));
+  return Math.max(0, diff);
+}
+
+function showUpgrade() {
+  const meta = document.getElementById('upgradeModalMeta');
+  if (meta) {
+    const days = daysUntilReset();
+    const count = APP.proCount || 0;
+    const parts = [];
+    if (count > 0) parts.push(`${count} ${count === 1 ? 'person has' : 'people have'} upgraded this month.`);
+    if (days !== null) parts.push(`Or wait — your limit resets in ${days} day${days !== 1 ? 's' : ''}.`);
+    meta.textContent = parts.join(' ');
+  }
+  document.getElementById('upgradeBg').classList.add('on');
+}
+
+function dismissUpgradeModal() {
+  closeModal('upgradeBg');
+  const days = daysUntilReset();
+  if (days !== null && days > 0) {
+    toast(`Got it — your limit resets in ${days} day${days !== 1 ? 's' : ''}.`);
+  }
+}
+
+function showFeatureUpgrade() {
+  const meta = document.getElementById('featureUpgradeModalMeta');
+  if (meta) {
+    const count = APP.proCount || 0;
+    meta.textContent = count > 0 ? `Join ${count} Pro ${count === 1 ? 'member' : 'members'} making music this month.` : '';
+  }
+  document.getElementById('featureUpgradeBg').classList.add('on');
+}
 
 // ── SHARE ──
 function toggleShareDropdown(e) {
