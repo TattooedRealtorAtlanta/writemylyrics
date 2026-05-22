@@ -138,6 +138,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .genre-tag{background:var(--surface2);border:1px solid var(--border);border-radius:40px;padding:8px 20px;font-size:13px;color:var(--text2);transition:all .2s;cursor:default}
 .genre-tag:hover{border-color:var(--gold-border);color:var(--gold)}
 
+/* Military Callout */
+.mil-callout{padding:0 40px;max-width:1100px;margin:0 auto 80px}
+.mil-callout-inner{background:linear-gradient(135deg,rgba(201,148,58,.08) 0%,rgba(201,148,58,.03) 100%);border:1px solid var(--gold-border);border-radius:16px;padding:36px 40px;display:flex;align-items:center;gap:28px}
+.mil-callout-icon{font-size:36px;flex-shrink:0;line-height:1}
+.mil-callout-text{}
+.mil-callout-hed{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px}
+.mil-callout-sub{font-size:14px;color:var(--text2);line-height:1.6}
+@media(max-width:600px){.mil-callout-inner{flex-direction:column;gap:16px;padding:28px 24px;text-align:center}}
+
 /* Pricing */
 .pricing{padding:100px 40px;max-width:1000px;margin:0 auto;text-align:center}
 .pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:60px;text-align:left}
@@ -1087,13 +1096,13 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
       </div>
       <div class="feat-card">
         <div class="feat-icon">🎯</div>
-        <div class="feat-title">13 Genres</div>
-        <div class="feat-desc">Country, hip hop, pop, rock, R&amp;B, blues, folk, gospel, Americana, outlaw country, trap, military/patriotic, and singer-songwriter.</div>
+        <div class="feat-title">16+ Genres</div>
+        <div class="feat-desc">Country, hip hop, pop, rock, R&amp;B, blues, folk, gospel, Americana, outlaw country, trap, military/patriotic, singer-songwriter, metal, alternative, EDM, and Latin.</div>
       </div>
       <div class="feat-card">
         <div class="feat-icon">🎤</div>
         <div class="feat-title">Karaoke Mode</div>
-        <div class="feat-desc">Scroll-along karaoke view with your generated lyrics. Add a backing track, record your vocals, and download the mix.</div>
+        <div class="feat-desc">See your lyrics formatted line by line, ready to perform. Scroll-along karaoke view with word-by-word highlighting — add a backing track and follow along in real time.</div>
       </div>
       <div class="feat-card">
         <div class="feat-icon">🚀</div>
@@ -1105,6 +1114,21 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         <div class="feat-title">Tweak &amp; Refine</div>
         <div class="feat-desc">Not quite right? Tell the AI what to change — "make the chorus more hopeful" or "tighten the rhymes" — and it rewrites instantly.</div>
       </div>
+      <div class="feat-card">
+        <div class="feat-icon">📤</div>
+        <div class="feat-title">Upload Your Lyrics</div>
+        <div class="feat-desc">Already have lyrics? Upload them and let AI rewrite, complete, or polish your existing work.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">✦</div>
+        <div class="feat-title">Advanced Mode</div>
+        <div class="feat-desc">Describe your song in your own words. Drop in a verse. The more detail you give, the better the result.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">👥</div>
+        <div class="feat-title">Co-writer Mode</div>
+        <div class="feat-desc">Write songs with friends. Invite collaborators and build something together.</div>
+      </div>
     </div>
   </div>
 
@@ -1113,6 +1137,16 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
       <div class="genres-label">Works for every genre</div>
       <div class="genre-tags">
         <span class="genre-tag">Country</span><span class="genre-tag">Hip Hop</span><span class="genre-tag">Pop</span><span class="genre-tag">Rock</span><span class="genre-tag">R&amp;B</span><span class="genre-tag">Blues</span><span class="genre-tag">Folk</span><span class="genre-tag">Gospel</span><span class="genre-tag">Americana</span><span class="genre-tag">Outlaw Country</span><span class="genre-tag">Trap</span><span class="genre-tag">Military / Patriotic</span><span class="genre-tag">Singer-Songwriter</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mil-callout">
+    <div class="mil-callout-inner">
+      <div class="mil-callout-icon">🎖️</div>
+      <div class="mil-callout-text">
+        <div class="mil-callout-hed">Built for veterans.</div>
+        <div class="mil-callout-sub">Military/Patriotic genre available — perfect for retirement ceremonies, unit songs, and sendoffs. Write something that actually means something.</div>
       </div>
     </div>
   </div>
