@@ -52,7 +52,7 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid JSON body' });
   }
 
-  const { topic, genre, moods, structure, tempo, rhyme, pov, words, styleNotes, language, mixLanguages, sectionLanguages, artistStyle } = body;
+  const { topic, genre, moods, structure, tempo, rhyme, pov, words, styleNotes, language, mixLanguages, sectionLanguages, artistStyle, narrative } = body;
   if (!topic) return res.status(400).json({ error: 'topic is required' });
 
   const moodStr = Array.isArray(moods) ? moods.join(', ') : (moods || 'Unspecified');
@@ -72,7 +72,24 @@ module.exports = async function handler(req, res) {
 
   const lyricsSys = `You are an expert songwriter with deep knowledge of multiple genres and languages. You write authentic, emotionally resonant lyrics that sound like they came from a real artist. You understand meter, rhyme, imagery, and storytelling in any language. Always label each section clearly — VERSE 1, CHORUS, BRIDGE etc. Never add explanation or commentary — just the lyrics.`;
 
-  const lyricsUsr = `Write complete song lyrics:
+  let lyricsUsr;
+  if (narrative) {
+    // Advanced mode — treat the full input as a rich creative brief
+    lyricsUsr = `Write complete song lyrics based on the following narrative from the songwriter:
+
+---
+${topic}
+---
+
+Use this narrative as your primary creative source. Pull specific details, emotions, images, and characters directly from it. If the narrative includes any lyric lines or partial verses, treat them as style and tone reference — match that voice. Let the story guide every word.
+
+Genre: ${genre || 'Unspecified'}
+Structure: ${structure || 'Verse / Chorus / Verse / Chorus / Bridge / Chorus'}
+Rhyme scheme: Mixed, rhyme where it feels natural${langInstruction}
+
+Write the complete lyrics now. Label every section. Stay true to the narrative.`;
+  } else {
+    lyricsUsr = `Write complete song lyrics:
 
 Topic: ${topic}
 Genre: ${genre || 'Unspecified'}
@@ -85,9 +102,12 @@ Words to include: ${words || 'None'}
 Style notes: ${styleNotes || 'None'}${langInstruction}
 
 Write the complete lyrics now. Label every section. Make it authentic.${artistStyle ? `\n\nARTIST STYLE: Write in the distinct lyrical style of ${artistStyle} — their characteristic vocabulary, rhyme patterns, phrasing, themes, and flow. The lyrics should sound like they could genuinely be from that artist.` : ''}`;
+  }
 
   const titlesSys = `You are a music title expert. Respond with ONLY a JSON array of exactly 3 title strings. No prose, no backticks, no markdown.`;
-  const titlesUsr = `Suggest 3 song titles for a ${genre || 'general'} song about: ${topic}${primaryLang !== 'English' ? `. Titles should be in ${primaryLang} or blend ${primaryLang} and English naturally.` : ''}`;
+  const titlesUsr = narrative
+    ? `Suggest 3 song titles based on this songwriter's narrative for a ${genre || 'general'} song:\n${topic.slice(0, 300)}`
+    : `Suggest 3 song titles for a ${genre || 'general'} song about: ${topic}${primaryLang !== 'English' ? `. Titles should be in ${primaryLang} or blend ${primaryLang} and English naturally.` : ''}`;
 
   const chordsSys = `You are a music theorist. Suggest chord progressions that real musicians use. Respond in EXACTLY the format requested — nothing else.`;
   const chordsUsr = `Chord progression for:

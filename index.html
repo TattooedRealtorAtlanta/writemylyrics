@@ -832,6 +832,20 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
   .sg-top{flex-direction:column;gap:12px}
   .sg-top-right{align-self:flex-start}
 }
+/* ── MODE TABS ── */
+.mode-tabs{display:flex;gap:3px;margin-top:12px;background:var(--surface3);border-radius:8px;padding:3px}
+.mode-tab{flex:1;padding:6px 0;font-size:12px;font-weight:600;letter-spacing:.05em;background:none;border:none;border-radius:6px;color:var(--text2);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
+.mode-tab:hover{color:var(--text)}
+.mode-tab.active{background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-border)}
+.mode-pro-badge{font-size:9px;font-weight:700;letter-spacing:.08em;background:var(--gold);color:#07060a;border-radius:4px;padding:1px 5px;line-height:1.4}
+.mode-tab.active .mode-pro-badge{background:var(--gold2)}
+/* ── ADVANCED MODE PANEL ── */
+#advancedModeFields{display:none;flex-direction:column}
+#advancedModeFields.on{display:flex}
+.adv-narrative-wrap{margin-bottom:16px}
+.adv-narrative{width:100%;min-height:230px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13.5px;padding:12px;line-height:1.75;resize:vertical;box-sizing:border-box;transition:border-color .2s}
+.adv-narrative:focus{outline:none;border-color:var(--gold-border)}
+.adv-narrative::placeholder{color:var(--text3);font-style:italic}
 /* ── UPLOAD LYRICS ── */
 .upload-lyrics-btn{width:100%;background:none;border:1px solid var(--gold-border);border-radius:var(--r);padding:10px 14px;font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;letter-spacing:.05em;color:var(--gold);cursor:pointer;transition:all .15s;margin-top:8px}
 .upload-lyrics-btn:hover{background:var(--gold-dim);border-color:var(--gold)}
@@ -1328,6 +1342,10 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
       <div class="lp-head">
         <div class="lp-title">Song<em>Writer</em></div>
         <div class="lp-sub" data-i18n="studio.title">AI Lyrics Studio</div>
+        <div class="mode-tabs">
+          <button class="mode-tab active" id="tabSimple" onclick="setStudioMode('simple')">Simple</button>
+          <button class="mode-tab" id="tabAdvanced" onclick="setStudioMode('advanced')">Advanced <span class="mode-pro-badge">Pro</span></button>
+        </div>
         <button class="tmpl-btn" id="tmplBtn" onclick="openTemplates()" data-i18n="btn.template">📋 Start from a Template</button>
         <div class="usage-bar-wrap" id="usageWrap">
           <div class="usage-label">
@@ -1339,6 +1357,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
       </div>
 
       <div class="lp-scroll">
+        <div id="simpleModeFields">
         <div class="field">
           <label class="field-label" data-i18n="studio.topic">Topic / Concept <button class="field-tip" data-tip="What is your song about? Be specific. 'Losing my dog after 12 years' works better than 'sadness.' The more detail you give, the better the lyrics.">?</button></label>
           <textarea id="topic" rows="4" data-i18n-placeholder="studio.topic_ph" placeholder="What is this song about? A person, a feeling, a moment — describe it in your own words."></textarea>
@@ -1481,6 +1500,46 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
             <div id="rhymeResults"></div>
           </div>
         </div>
+        </div><!-- /simpleModeFields -->
+
+        <div id="advancedModeFields">
+          <div class="field adv-narrative-wrap">
+            <label class="field-label">Your Song</label>
+            <textarea class="adv-narrative" id="advNarrative" rows="10" placeholder="Describe your song in your own words. Tell us the story, the feeling, the people. Drop in a line or verse you've already written. The more you share, the better the song."></textarea>
+          </div>
+          <div class="field">
+            <label class="field-label">Genre <button class="field-tip" data-tip="Choose the musical genre. This affects vocabulary, rhythm, and structure of the lyrics.">?</button></label>
+            <select id="advGenre" onchange="APP.genre = this.value">
+              <option value="">No genre specified</option>
+              <option value="Country">Country</option>
+              <option value="Hip Hop">Hip Hop</option>
+              <option value="Pop">Pop</option>
+              <option value="Rock">Rock</option>
+              <option value="R&B">R&amp;B</option>
+              <option value="Blues">Blues</option>
+              <option value="Folk">Folk</option>
+              <option value="Military / Patriotic">Military / Patriotic</option>
+              <option value="Gospel">Gospel</option>
+              <option value="Americana">Americana</option>
+              <option value="Outlaw Country">Outlaw Country</option>
+              <option value="Trap">Trap</option>
+              <option value="Singer-Songwriter">Singer-Songwriter</option>
+              <option value="Metal">Metal</option>
+              <option value="Alternative">Alternative</option>
+              <option value="EDM">EDM</option>
+              <option value="Latin">Latin</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">Song Structure <button class="field-tip" data-tip="Controls how many verses, choruses, and bridges your song has.">?</button></label>
+            <select id="advStructure">
+              <option value="Verse / Chorus / Verse / Chorus / Bridge / Chorus">Verse / Chorus / Verse / Chorus / Bridge / Chorus</option>
+              <option value="Verse / Chorus / Verse / Chorus">Verse / Chorus / Verse / Chorus (short)</option>
+              <option value="Verse / Verse / Chorus / Verse / Chorus">Verse / Verse / Chorus / Verse / Chorus</option>
+              <option value="Intro / Verse / Pre-Chorus / Chorus / Verse / Pre-Chorus / Chorus / Bridge / Chorus">Full Production</option>
+            </select>
+          </div>
+        </div><!-- /advancedModeFields -->
       </div>
 
       <div class="lp-footer">
@@ -1955,7 +2014,8 @@ const APP = {
   transposeOffset: 0,
   // i18n
   uiLang: localStorage.getItem('wml_lang') || 'en',
-  _feedbackRating: 0
+  _feedbackRating: 0,
+  advancedMode: false
 };
 
 // ── KARAOKE STATE ──
@@ -2665,11 +2725,49 @@ async function generate() {
   // If still marked busy after abort, reset so we can proceed
   APP.busy = false;
 
-  const topic = document.getElementById('topic').value.trim();
-  if (!topic) { toast('Please describe what your song is about.'); return; }
-
   const token = await getToken();
   if (!token) { showAuthTab('signin'); return; }
+
+  let topic, payload;
+  if (APP.advancedMode) {
+    const narrative = document.getElementById('advNarrative').value.trim();
+    if (!narrative) { toast('Tell us about your song first.'); return; }
+    topic = narrative;
+    payload = {
+      topic: narrative,
+      genre: APP.genre || '',
+      moods: [],
+      structure: document.getElementById('advStructure').value,
+      tempo: 'Mid tempo',
+      rhyme: 'Mixed, rhyme where it feels natural',
+      pov: 'First person (I / me / my)',
+      words: '',
+      styleNotes: '',
+      language: APP.language,
+      mixLanguages: false,
+      sectionLanguages: {},
+      artistStyle: '',
+      narrative: true
+    };
+  } else {
+    topic = document.getElementById('topic').value.trim();
+    if (!topic) { toast('Please describe what your song is about.'); return; }
+    payload = {
+      topic,
+      genre: APP.genre || '',
+      moods: APP.moods,
+      structure: document.getElementById('structure').value,
+      tempo: APP.tempo,
+      rhyme: document.getElementById('rhyme').value,
+      pov: document.getElementById('pov').value,
+      words: document.getElementById('words').value,
+      styleNotes: document.getElementById('tone').value,
+      language: APP.language,
+      mixLanguages: APP.mixLanguages,
+      sectionLanguages: APP.mixLanguages ? APP.sectionLanguages : {},
+      artistStyle: document.getElementById('artistStyleInput')?.value.trim() || ''
+    };
+  }
 
   genAbort = new AbortController();
   const signal = genAbort.signal;
@@ -2682,21 +2780,7 @@ async function generate() {
     const result = await authFetch('/api/generate', {
       method: 'POST',
       signal,
-      body: JSON.stringify({
-        topic,
-        genre: APP.genre || '',
-        moods: APP.moods,
-        structure: document.getElementById('structure').value,
-        tempo: APP.tempo,
-        rhyme: document.getElementById('rhyme').value,
-        pov: document.getElementById('pov').value,
-        words: document.getElementById('words').value,
-        styleNotes: document.getElementById('tone').value,
-        language: APP.language,
-        mixLanguages: APP.mixLanguages,
-        sectionLanguages: APP.mixLanguages ? APP.sectionLanguages : {},
-        artistStyle: document.getElementById('artistStyleInput')?.value.trim() || ''
-      })
+      body: JSON.stringify(payload)
     });
 
     APP.lyrics = result.lyrics;
@@ -2758,8 +2842,11 @@ function renderLyrics(text) {
   if (rp) rp.classList.add('on');
   applyPlanUI();
 
-  const topic = document.getElementById('topic').value.trim();
-  document.getElementById('rpLabel').textContent = topic || 'Your lyrics';
+  const topicRaw = APP.advancedMode
+    ? document.getElementById('advNarrative').value.trim()
+    : document.getElementById('topic').value.trim();
+  const topicLabel = topicRaw.length > 50 ? topicRaw.slice(0, 50).replace(/\s\S*$/, '') + '…' : topicRaw;
+  document.getElementById('rpLabel').textContent = topicLabel || 'Your lyrics';
 
   const out = document.getElementById('lyricsOut');
   out.innerHTML = '';
@@ -3130,6 +3217,29 @@ function applyPlanUI() {
   if (lock) lock.style.display = free ? 'inline' : 'none';
   const toggle = document.getElementById('refineToggle');
   if (toggle) toggle.classList.toggle('plan-locked', free);
+}
+
+function setStudioMode(mode) {
+  if (mode === 'advanced' && APP.plan === 'free') {
+    document.getElementById('featureUpgradeBg').classList.add('on');
+    return;
+  }
+  APP.advancedMode = (mode === 'advanced');
+  document.getElementById('tabSimple').classList.toggle('active', !APP.advancedMode);
+  document.getElementById('tabAdvanced').classList.toggle('active', APP.advancedMode);
+  document.getElementById('simpleModeFields').style.display = APP.advancedMode ? 'none' : '';
+  document.getElementById('advancedModeFields').classList.toggle('on', APP.advancedMode);
+  // Sync genre select with current APP.genre when entering advanced mode
+  if (APP.advancedMode) {
+    document.getElementById('advGenre').value = APP.genre || '';
+    document.getElementById('advStructure').value = document.getElementById('structure').value;
+    // Hide template button in advanced mode — it's simple-mode-oriented
+    const tmpl = document.getElementById('tmplBtn');
+    if (tmpl) tmpl.style.display = 'none';
+  } else {
+    const tmpl = document.getElementById('tmplBtn');
+    if (tmpl) tmpl.style.display = '';
+  }
 }
 function showLogout() { document.getElementById('logoutBg').classList.add('on'); }
 function closeModal(id) { document.getElementById(id).classList.remove('on'); }
@@ -4084,7 +4194,9 @@ async function deleteSong(id, idx) {
 async function saveSongToHistory(result) {
   if (APP.plan === 'free') return;
   try {
-    const topic = document.getElementById('topic').value.trim();
+    const topic = APP.advancedMode
+      ? document.getElementById('advNarrative').value.trim()
+      : document.getElementById('topic').value.trim();
     const sunoPrompt = buildSunoPrompt(result.lyrics, { language: APP.language, mixLanguages: APP.mixLanguages });
     const { song } = await authFetch('/api/songs', {
       method: 'POST',
@@ -4092,16 +4204,18 @@ async function saveSongToHistory(result) {
         title: result.titles?.[0] || null,
         lyrics: result.lyrics,
         genre: APP.genre || null,
-        moods: APP.moods,
-        tempo: APP.tempo || null,
-        structure: document.getElementById('structure').value,
-        rhyme: document.getElementById('rhyme').value,
-        pov: document.getElementById('pov').value,
+        moods: APP.advancedMode ? [] : APP.moods,
+        tempo: APP.advancedMode ? null : (APP.tempo || null),
+        structure: APP.advancedMode
+          ? document.getElementById('advStructure').value
+          : document.getElementById('structure').value,
+        rhyme: APP.advancedMode ? null : document.getElementById('rhyme').value,
+        pov: APP.advancedMode ? null : document.getElementById('pov').value,
         topic: topic || null,
-        style_notes: document.getElementById('tone').value || null,
+        style_notes: APP.advancedMode ? null : (document.getElementById('tone').value || null),
         chords: result.chords || null,
         suno_prompt: sunoPrompt,
-        artist_style: APP.artistStyle || null
+        artist_style: APP.advancedMode ? null : (APP.artistStyle || null)
       })
     });
     APP.currentSongId = song.id;
