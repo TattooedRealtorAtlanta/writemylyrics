@@ -19,6 +19,10 @@
       "dest": "/song.html"
     },
     {
+      "src": "/sitemap.xml",
+      "dest": "/sitemap.xml"
+    },
+    {
       "src": "/how-to",
       "dest": "/how-to.html"
     },
