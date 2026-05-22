@@ -23,6 +23,10 @@
       "dest": "/how-to.html"
     },
     {
+      "src": "/retirement-song",
+      "dest": "/retirement-song.html"
+    },
+    {
       "src": "/privacy",
       "dest": "/privacy-policy.html"
     },

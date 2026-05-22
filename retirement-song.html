@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retirement Song Generator — WriteMyLyrics.ai</title>
+<meta name="description" content="Write a custom retirement song in minutes. Personalized lyrics for any career — military, teacher, nurse, office. Free to try.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#07060a;
+  --surface:#0e0d12;
+  --surface2:#151419;
+  --surface3:#1c1b22;
+  --gold:#c9943a;
+  --gold2:#e8b84b;
+  --gold-dim:rgba(201,148,58,.15);
+  --gold-border:rgba(201,148,58,.25);
+  --text:#ede8df;
+  --text2:#9b9490;
+  --text3:#524e4a;
+  --red:#e05555;
+  --green:#4ec994;
+  --border:rgba(255,255,255,.06);
+  --r:8px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden}
+
+/* ── NOISE OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(7,6,10,.85);backdrop-filter:blur(20px)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.02em;text-decoration:none;display:inline-block}
+.nav-logo span{color:var(--gold)}
+.nav-center{display:flex;align-items:center;gap:4px}
+.nav-center-link{background:none;border:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;padding:6px 12px;border-radius:6px;transition:color .2s;text-decoration:none;display:inline-block}
+.nav-center-link:hover{color:var(--text)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-link-btn{background:none;border:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;padding:6px 12px;border-radius:6px;transition:color .2s;text-decoration:none;display:inline-block}
+.nav-link-btn:hover{color:var(--text)}
+.nav-cta{background:var(--gold);color:#07060a;border:none;border-radius:6px;padding:8px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.nav-cta:hover{background:var(--gold2);transform:translateY(-1px)}
+
+/* ── PAGE LAYOUT ── */
+.page{padding-top:64px}
+
+/* ── HERO ── */
+.hero{padding:100px 40px 80px;max-width:860px;margin:0 auto;text-align:center}
+.hero-eyebrow{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.hero-h{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,6vw,72px);font-weight:700;line-height:1.05;letter-spacing:-.02em;margin-bottom:20px}
+.hero-h em{color:var(--gold);font-style:italic}
+.hero-sub{font-size:18px;color:var(--text2);line-height:1.7;max-width:600px;margin:0 auto 40px}
+.hero-cta{display:inline-block;background:var(--gold);color:#07060a;border:none;border-radius:8px;padding:16px 36px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s}
+.hero-cta:hover{background:var(--gold2);transform:translateY(-2px)}
+.hero-sub-note{margin-top:14px;font-size:13px;color:var(--text3)}
+
+/* ── SECTION SHARED ── */
+.section{padding:72px 40px;border-top:1px solid var(--border)}
+.section-inner{max-width:860px;margin:0 auto}
+.section-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.section-h{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4vw,44px);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:20px}
+.section-h em{color:var(--gold);font-style:italic}
+.section-p{font-size:16px;color:var(--text2);line-height:1.8;max-width:640px}
+
+/* ── WHY A SONG ── */
+.why-block{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:36px 40px;margin-top:32px}
+.why-block p{font-size:18px;color:var(--text);line-height:1.8;font-family:'Cormorant Garamond',serif;font-weight:400}
+
+/* ── PRICE COMPARISON ── */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:32px}
+.compare-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px 32px}
+.compare-card.highlight{border-color:var(--gold-border);background:linear-gradient(135deg,var(--surface) 0%,rgba(201,148,58,.06) 100%)}
+.compare-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.compare-label.gold{color:var(--gold)}
+.compare-price{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;line-height:1;margin-bottom:6px}
+.compare-price span{font-size:16px;font-weight:400;color:var(--text2)}
+.compare-items{margin-top:20px;display:flex;flex-direction:column;gap:10px}
+.compare-item{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text2)}
+.compare-item .ci-icon{flex-shrink:0;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;margin-top:1px}
+.compare-item .ci-icon.bad{background:rgba(224,85,85,.15);color:var(--red)}
+.compare-item .ci-icon.good{background:rgba(78,201,148,.15);color:var(--green)}
+
+/* ── OCCASIONS GRID ── */
+.occasions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
+.occasion-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px 20px;text-align:center;transition:border-color .2s}
+.occasion-card:hover{border-color:var(--gold-border)}
+.occasion-icon{font-size:32px;margin-bottom:12px}
+.occasion-name{font-size:14px;font-weight:600;color:var(--text)}
+
+/* ── HOW IT WORKS ── */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+.step{position:relative;padding-left:0}
+.step-num{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:700;line-height:1;color:var(--gold-border);margin-bottom:8px}
+.step-h{font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px}
+.step-p{font-size:14px;color:var(--text2);line-height:1.7}
+
+/* ── FOOTER CTA ── */
+.footer-cta{padding:100px 40px;text-align:center;border-top:1px solid var(--border)}
+.footer-cta-inner{max-width:600px;margin:0 auto}
+.footer-cta-h{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,50px);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:16px}
+.footer-cta-h em{color:var(--gold);font-style:italic}
+.footer-cta-p{font-size:16px;color:var(--text2);line-height:1.7;margin-bottom:36px}
+.footer-note{margin-top:14px;font-size:13px;color:var(--text3)}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text);text-decoration:none}
+.footer-logo span{color:var(--gold)}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap}
+.footer-links a{font-size:13px;color:var(--text3);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--text2)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  nav{padding:0 20px}
+  .hero{padding:72px 24px 56px}
+  .section{padding:56px 24px}
+  .compare-grid{grid-template-columns:1fr}
+  .occasions-grid{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:1fr;gap:32px}
+  footer{padding:24px 20px;flex-direction:column;align-items:flex-start}
+  .why-block{padding:24px}
+}
+@media(max-width:440px){
+  .occasions-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">Write<span>My</span>Lyrics</a>
+  <div class="nav-center">
+    <a href="/gallery" class="nav-center-link">🔥 Gallery</a>
+    <a href="/how-to" class="nav-center-link">How-To</a>
+  </div>
+  <div class="nav-right">
+    <a href="/" class="nav-link-btn">Sign In</a>
+    <a href="/" class="nav-cta">Start Free</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Retirement Gift Idea</div>
+    <h1 class="hero-h">Write the perfect retirement song —<br><em>in minutes.</em></h1>
+    <p class="hero-sub">They gave 30 years. Give them something they'll never forget. A custom song written just for them — their name, their story, their career.</p>
+    <a href="/" class="hero-cta">Write a retirement song</a>
+    <p class="hero-sub-note">Free to try · No credit card required</p>
+  </section>
+
+  <!-- WHY A SONG -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label">Why a song?</div>
+      <h2 class="section-h">The only gift that tells<br>their <em>actual story.</em></h2>
+      <div class="why-block">
+        <p>A card gets tossed. A gift card gets spent. A song gets played at the party, sent to family, and saved forever. It's the only retirement gift that tells their actual story.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICE COMPARISON -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label">Compare your options</div>
+      <h2 class="section-h">A fraction of the cost.<br><em>None of the wait.</em></h2>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <div class="compare-label">Etsy / Fiverr</div>
+          <div class="compare-price">$14–$34 <span>per song</span></div>
+          <div class="compare-items">
+            <div class="compare-item">
+              <div class="ci-icon bad">✕</div>
+              <span>Wait 1–3 days for delivery</span>
+            </div>
+            <div class="compare-item">
+              <div class="ci-icon bad">✕</div>
+              <span>One song — no revisions included</span>
+            </div>
+            <div class="compare-item">
+              <div class="ci-icon bad">✕</div>
+              <span>Generic templates, not truly personal</span>
+            </div>
+          </div>
+        </div>
+        <div class="compare-card highlight">
+          <div class="compare-label gold">WriteMyLyrics Pro</div>
+          <div class="compare-price">$15 <span>/ month</span></div>
+          <div class="compare-items">
+            <div class="compare-item">
+              <div class="ci-icon good">✓</div>
+              <span>Lyrics ready in under 30 seconds</span>
+            </div>
+            <div class="compare-item">
+              <div class="ci-icon good">✓</div>
+              <span>Unlimited songs — rewrite until it's perfect</span>
+            </div>
+            <div class="compare-item">
+              <div class="ci-icon good">✓</div>
+              <span>Fully personalized — their name, career, and story</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKS FOR ANY RETIREMENT -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label">Any career. Any story.</div>
+      <h2 class="section-h">Works for any <em>retirement.</em></h2>
+      <p class="section-p">Every career has a story worth telling. WriteMyLyrics turns it into something they'll actually keep.</p>
+      <div class="occasions-grid">
+        <div class="occasion-card">
+          <div class="occasion-icon">🎖️</div>
+          <div class="occasion-name">Military retirement</div>
+        </div>
+        <div class="occasion-card">
+          <div class="occasion-icon">🏥</div>
+          <div class="occasion-name">Nurse or doctor</div>
+        </div>
+        <div class="occasion-card">
+          <div class="occasion-icon">📚</div>
+          <div class="occasion-name">Teacher</div>
+        </div>
+        <div class="occasion-card">
+          <div class="occasion-icon">🚒</div>
+          <div class="occasion-name">Police or fire</div>
+        </div>
+        <div class="occasion-card">
+          <div class="occasion-icon">💼</div>
+          <div class="occasion-name">Office farewell</div>
+        </div>
+        <div class="occasion-card">
+          <div class="occasion-icon">🔧</div>
+          <div class="occasion-name">Trades worker</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label">How it works</div>
+      <h2 class="section-h">Three steps to a song<br>they'll <em>never forget.</em></h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-h">Tell us about them</div>
+          <p class="step-p">Name, career, years of service, inside jokes, memorable moments. The more you give us, the more personal it gets.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-h">Pick a genre and mood</div>
+          <p class="step-p">Funny, heartfelt, or both. Country ballad, classic rock anthem, or a warm R&B send-off — your call.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-h">Get full lyrics instantly</div>
+          <p class="step-p">Complete song lyrics in under 30 seconds. Refine any section, download the lyrics, and share them at the party.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER CTA -->
+  <section class="footer-cta">
+    <div class="footer-cta-inner">
+      <h2 class="footer-cta-h">Ready to make their retirement<br><em>unforgettable?</em></h2>
+      <p class="footer-cta-p">Start free — no credit card required. Write your first retirement song in the next five minutes.</p>
+      <a href="/" class="hero-cta">Try it free</a>
+      <p class="footer-note">5 free songs per month · Upgrade to Pro for unlimited</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="/" class="footer-logo">Write<span>My</span>Lyrics</a>
+  <div class="footer-links">
+    <a href="/gallery">Gallery</a>
+    <a href="/how-to">How-To</a>
+    <a href="/pricing">Pricing</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+  </div>
+</footer>
+
+</body>
+</html>
