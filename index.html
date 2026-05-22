@@ -832,6 +832,31 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
   .sg-top{flex-direction:column;gap:12px}
   .sg-top-right{align-self:flex-start}
 }
+/* ── UPLOAD LYRICS ── */
+.upload-lyrics-btn{width:100%;background:none;border:1px solid var(--gold-border);border-radius:var(--r);padding:10px 14px;font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;letter-spacing:.05em;color:var(--gold);cursor:pointer;transition:all .15s;margin-top:8px}
+.upload-lyrics-btn:hover{background:var(--gold-dim);border-color:var(--gold)}
+.ul-modal .modal{max-width:600px;width:90vw}
+.ul-field{margin-top:12px}
+.ul-label{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--text2);text-transform:uppercase;margin-bottom:5px}
+.ul-textarea{width:100%;min-height:170px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:11px 12px;color:var(--text);font-size:13px;font-family:inherit;line-height:1.7;resize:vertical;box-sizing:border-box}
+.ul-textarea:focus{outline:none;border-color:var(--gold-border)}
+.ul-input,.ul-select{width:100%;background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text);font-size:13px;box-sizing:border-box}
+.ul-input:focus,.ul-select:focus{outline:none;border-color:var(--gold-border)}
+.ul-select{appearance:none;cursor:pointer}
+.ul-actions{display:flex;flex-direction:column;gap:7px;margin-top:16px}
+.ul-action-btn{display:flex;flex-direction:column;align-items:flex-start;background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:11px 15px;cursor:pointer;text-align:left;transition:all .15s;width:100%}
+.ul-action-btn:hover{border-color:var(--gold-border);background:var(--gold-dim)}
+.ul-action-btn:disabled{opacity:.5;cursor:not-allowed}
+.ul-action-btn .ul-btn-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.ul-action-btn .ul-btn-desc{font-size:11px;color:var(--text2);line-height:1.5}
+.ul-action-btn.ul-primary{border-color:var(--gold-border);background:var(--gold-dim)}
+.ul-action-btn.ul-primary .ul-btn-title{color:var(--gold)}
+.ul-processing{display:none;align-items:center;gap:10px;color:var(--text2);font-size:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.ul-processing.on{display:flex}
+.ul-processing .wb{width:3px;height:16px;background:var(--gold);border-radius:2px;animation:wave .9s ease-in-out infinite}
+.ul-processing .wb:nth-child(2){animation-delay:.12s;height:22px}
+.ul-processing .wb:nth-child(3){animation-delay:.24s;height:18px}
+.ul-processing .wb:nth-child(4){animation-delay:.36s}
 </style>
 </head>
 <body>
@@ -1463,6 +1488,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
           <span class="btn-norm" data-i18n="btn.write_song">✍ WRITE THIS SONG</span>
           <span class="btn-spin"><span class="spinner"></span><span id="btnMsg">Finding the words...</span></span>
         </button>
+        <button class="upload-lyrics-btn" id="uploadLyricsBtn" onclick="openUploadLyrics()">↑ Upload Your Lyrics</button>
       </div>
     </div>
 
@@ -1733,6 +1759,73 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
     <div class="modal-btns">
       <button class="m-cancel" onclick="closeModal('logoutBg')">Close</button>
       <button class="m-confirm" style="background:var(--red);color:#fff" onclick="signOut()">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Lyrics Modal -->
+<div class="modal-bg ul-modal" id="uploadLyricsBg" onclick="bgClose(event,'uploadLyricsBg')">
+  <div class="modal">
+    <div class="modal-h">Upload Your Lyrics</div>
+    <div class="modal-p">Paste your existing lyrics below and choose how you'd like to proceed.</div>
+
+    <div class="ul-field">
+      <div class="ul-label">Your Lyrics</div>
+      <textarea class="ul-textarea" id="ulLyrics" placeholder="Paste your lyrics here...&#10;&#10;Tip for Complete My Song: mark unfinished sections with [INCOMPLETE]"></textarea>
+    </div>
+
+    <div style="display:flex;gap:12px">
+      <div class="ul-field" style="flex:1">
+        <div class="ul-label">Song Title</div>
+        <input class="ul-input" type="text" id="ulTitle" placeholder="Optional title...">
+      </div>
+      <div class="ul-field" style="flex:1">
+        <div class="ul-label">Genre</div>
+        <select class="ul-select" id="ulGenre">
+          <option value="">Select genre...</option>
+          <option value="Country">Country</option>
+          <option value="Hip Hop">Hip Hop</option>
+          <option value="Pop">Pop</option>
+          <option value="Rock">Rock</option>
+          <option value="R&B">R&amp;B</option>
+          <option value="Blues">Blues</option>
+          <option value="Folk">Folk</option>
+          <option value="Military / Patriotic">Military / Patriotic</option>
+          <option value="Gospel">Gospel</option>
+          <option value="Americana">Americana</option>
+          <option value="Outlaw Country">Outlaw Country</option>
+          <option value="Trap">Trap</option>
+          <option value="Singer-Songwriter">Singer-Songwriter</option>
+          <option value="Metal">Metal</option>
+          <option value="Alternative">Alternative</option>
+          <option value="EDM">EDM</option>
+          <option value="Latin">Latin</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ul-actions">
+      <button class="ul-action-btn ul-primary" id="ulRewriteBtn" onclick="submitUploadedLyrics('rewrite')">
+        <span class="ul-btn-title">✦ Rewrite &amp; Improve</span>
+        <span class="ul-btn-desc">AI rewrites your lyrics with better rhyme scheme, flow, and structure — preserving your original meaning.</span>
+      </button>
+      <button class="ul-action-btn" id="ulCompleteBtn" onclick="submitUploadedLyrics('complete')">
+        <span class="ul-btn-title">◎ Complete My Song</span>
+        <span class="ul-btn-desc">Mark where you're stuck with [INCOMPLETE] and AI fills those sections in while matching your style.</span>
+      </button>
+      <button class="ul-action-btn" id="ulSaveBtn" onclick="submitUploadedLyrics('save')">
+        <span class="ul-btn-title">↓ Save As-Is</span>
+        <span class="ul-btn-desc">Save directly to Song History with no AI changes. All toolbar features still available.</span>
+      </button>
+    </div>
+
+    <div class="ul-processing" id="ulProcessing">
+      <div style="display:flex;gap:3px;align-items:center"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div>
+      <span id="ulProcessingMsg">Processing your lyrics...</span>
+    </div>
+
+    <div class="modal-btns" style="margin-top:14px;justify-content:flex-end">
+      <button class="m-cancel" id="ulCancelBtn" onclick="closeModal('uploadLyricsBg')">Cancel</button>
     </div>
   </div>
 </div>
@@ -4020,6 +4113,116 @@ async function saveSongToHistory(result) {
     if (versionsBtn) versionsBtn.style.display = 'inline-flex';
   } catch (e) {
     console.warn('[saveSongToHistory]', e.message);
+  }
+}
+
+// ── UPLOAD LYRICS ──
+function openUploadLyrics() {
+  if (APP.plan === 'free') {
+    document.getElementById('featureUpgradeBg').classList.add('on');
+    return;
+  }
+  // Reset modal state
+  document.getElementById('ulLyrics').value = '';
+  document.getElementById('ulTitle').value = '';
+  document.getElementById('ulGenre').value = '';
+  document.getElementById('ulProcessing').classList.remove('on');
+  ['ulRewriteBtn','ulCompleteBtn','ulSaveBtn','ulCancelBtn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = false;
+  });
+  document.getElementById('uploadLyricsBg').classList.add('on');
+}
+
+async function submitUploadedLyrics(action) {
+  const lyrics = document.getElementById('ulLyrics').value.trim();
+  const title = document.getElementById('ulTitle').value.trim();
+  const genre = document.getElementById('ulGenre').value;
+
+  if (!lyrics) { toast('Please paste your lyrics first.'); return; }
+
+  if (action === 'save') {
+    closeModal('uploadLyricsBg');
+    APP.lyrics = lyrics;
+    APP.originalLyrics = lyrics;
+    APP.currentSongId = null;
+    if (genre) APP.genre = genre;
+    renderLyrics(lyrics);
+    if (title) document.getElementById('rpLabel').textContent = title;
+    await _saveUploadedToHistory({ lyrics, title, genre });
+    return;
+  }
+
+  // Disable buttons and show spinner
+  ['ulRewriteBtn','ulCompleteBtn','ulSaveBtn','ulCancelBtn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = true;
+  });
+  const procMsg = document.getElementById('ulProcessingMsg');
+  procMsg.textContent = action === 'rewrite' ? 'Rewriting your lyrics...' : 'Completing your song...';
+  document.getElementById('ulProcessing').classList.add('on');
+
+  try {
+    const result = await authFetch('/api/refine', {
+      method: 'POST',
+      body: JSON.stringify({
+        lyrics,
+        instructions: action === 'rewrite' ? '__upload_rewrite__' : '__upload_complete__',
+        genre: genre || '',
+        action: 'upload_' + action
+      })
+    });
+
+    closeModal('uploadLyricsBg');
+    APP.lyrics = result.lyrics;
+    APP.originalLyrics = result.lyrics;
+    APP.currentSongId = null;
+    if (genre) APP.genre = genre;
+    if (result.usage !== undefined) { APP.usage = result.usage; APP.limit = result.limit; updateUsage(); }
+
+    renderLyrics(result.lyrics);
+    if (title) document.getElementById('rpLabel').textContent = title;
+    await _saveUploadedToHistory({ lyrics: result.lyrics, title, genre });
+
+  } catch (e) {
+    toast('Error: ' + e.message);
+    ['ulRewriteBtn','ulCompleteBtn','ulSaveBtn','ulCancelBtn'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.disabled = false;
+    });
+    document.getElementById('ulProcessing').classList.remove('on');
+  }
+}
+
+async function _saveUploadedToHistory({ lyrics, title, genre }) {
+  if (APP.plan === 'free') return;
+  try {
+    const sunoPrompt = buildSunoPrompt(lyrics, { genre: genre || '', language: APP.language, mixLanguages: APP.mixLanguages, moods: [], tempo: '' });
+    const { song } = await authFetch('/api/songs', {
+      method: 'POST',
+      body: JSON.stringify({
+        title: title || null,
+        lyrics,
+        genre: genre || null,
+        moods: [],
+        tempo: null,
+        structure: null,
+        rhyme: null,
+        pov: null,
+        topic: title || null,
+        style_notes: null,
+        chords: null,
+        suno_prompt: sunoPrompt,
+        artist_style: null
+      })
+    });
+    APP.currentSongId = song.id;
+    KAR.songId = song.id;
+    showNotesPanel({ notes: '', status: 'draft' });
+    const versionsBtn = document.getElementById('versionsBtn');
+    if (versionsBtn) versionsBtn.style.display = 'inline-flex';
+  } catch (e) {
+    console.warn('[_saveUploadedToHistory]', e.message);
   }
 }
 

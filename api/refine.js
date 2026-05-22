@@ -27,10 +27,10 @@ module.exports = async function handler(req, res) {
   }
 
   const body = await getJsonBody(req);
-  const { lyrics, instructions, genre, moods, tempo, topic, songId } = body;
+  const { lyrics, instructions, genre, moods, tempo, topic, songId, action } = body;
 
-  if (!lyrics || !instructions) {
-    return res.status(400).json({ error: 'lyrics and instructions are required' });
+  if (!lyrics) {
+    return res.status(400).json({ error: 'lyrics is required' });
   }
 
   const contextLines = [
@@ -40,7 +40,28 @@ module.exports = async function handler(req, res) {
     topic && `Topic: ${topic}`
   ].filter(Boolean);
 
-  const prompt = `You are an expert songwriter and lyricist. The user has existing song lyrics and wants specific changes made.${contextLines.length ? '\n\nSong context:\n' + contextLines.join('\n') : ''}
+  const ctx = contextLines.length ? '\n\nSong context:\n' + contextLines.join('\n') : '';
+
+  let prompt;
+  if (action === 'upload_rewrite') {
+    prompt = `You are an expert songwriter and lyricist. The user has written their own song lyrics and wants a professional rewrite.${ctx}
+
+Original lyrics:
+${lyrics}
+
+Rewrite these lyrics with improved rhyme scheme, better flow, and stronger structure — while preserving the original meaning, story, and emotional core. Keep every section label (VERSE 1, CHORUS, BRIDGE, etc.) in the same format. Return ONLY the rewritten lyrics — no explanations, no commentary, no preamble.`;
+  } else if (action === 'upload_complete') {
+    prompt = `You are an expert songwriter and lyricist. The user has partial song lyrics with [INCOMPLETE] markers where they got stuck.${ctx}
+
+Partial lyrics:
+${lyrics}
+
+Fill in every [INCOMPLETE] section with new lyrics that match the style, tone, rhyme scheme, and voice of the existing sections. Keep all existing lyric lines exactly as written — only replace [INCOMPLETE] markers. Keep every section label (VERSE 1, CHORUS, BRIDGE, etc.) in the same format. Return ONLY the complete lyrics — no explanations, no commentary, no preamble.`;
+  } else {
+    if (!instructions) {
+      return res.status(400).json({ error: 'lyrics and instructions are required' });
+    }
+    prompt = `You are an expert songwriter and lyricist. The user has existing song lyrics and wants specific changes made.${ctx}
 
 Original lyrics:
 ${lyrics}
@@ -49,6 +70,7 @@ User's refinement instructions:
 ${instructions}
 
 Apply the requested changes. Preserve the overall structure and what's working well. Return ONLY the updated lyrics — no explanations, no commentary, no preamble. Keep the same section labels (VERSE 1, CHORUS, BRIDGE, etc.) in the same format.`;
+  }
 
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
