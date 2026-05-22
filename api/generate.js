@@ -52,8 +52,14 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid JSON body' });
   }
 
-  const { topic, genre, moods, structure, tempo, rhyme, pov, words, styleNotes, language, mixLanguages, sectionLanguages, artistStyle, narrative } = body;
+  const { topic, genre, genres, moods, structure, tempo, rhyme, pov, words, styleNotes, language, mixLanguages, sectionLanguages, artistStyle, narrative } = body;
   if (!topic) return res.status(400).json({ error: 'topic is required' });
+
+  // Resolve genre display — narrative mode may pass a genres array
+  const advGenres = Array.isArray(genres) && genres.length > 0 ? genres : null;
+  const genreDisplay = advGenres
+    ? advGenres.join(' + ')
+    : (genre || 'Unspecified');
 
   const moodStr = Array.isArray(moods) ? moods.join(', ') : (moods || 'Unspecified');
   const primaryLang = language || 'English';
@@ -75,6 +81,9 @@ module.exports = async function handler(req, res) {
   let lyricsUsr;
   if (narrative) {
     // Advanced mode — treat the full input as a rich creative brief
+    const genreLine = advGenres && advGenres.length > 1
+      ? `Genre blend: ${genreDisplay} — weave elements of each style together naturally`
+      : `Genre: ${genreDisplay}`;
     lyricsUsr = `Write complete song lyrics based on the following narrative from the songwriter:
 
 ---
@@ -83,7 +92,7 @@ ${topic}
 
 Use this narrative as your primary creative source. Pull specific details, emotions, images, and characters directly from it. If the narrative includes any lyric lines or partial verses, treat them as style and tone reference — match that voice. Let the story guide every word.
 
-Genre: ${genre || 'Unspecified'}
+${genreLine}
 Structure: ${structure || 'Verse / Chorus / Verse / Chorus / Bridge / Chorus'}
 Rhyme scheme: Mixed, rhyme where it feels natural${langInstruction}
 
@@ -106,7 +115,7 @@ Write the complete lyrics now. Label every section. Make it authentic.${artistSt
 
   const titlesSys = `You are a music title expert. Respond with ONLY a JSON array of exactly 3 title strings. No prose, no backticks, no markdown.`;
   const titlesUsr = narrative
-    ? `Suggest 3 song titles based on this songwriter's narrative for a ${genre || 'general'} song:\n${topic.slice(0, 300)}`
+    ? `Suggest 3 song titles based on this songwriter's narrative for a ${genreDisplay} song:\n${topic.slice(0, 300)}`
     : `Suggest 3 song titles for a ${genre || 'general'} song about: ${topic}${primaryLang !== 'English' ? `. Titles should be in ${primaryLang} or blend ${primaryLang} and English naturally.` : ''}`;
 
   const chordsSys = `You are a music theorist. Suggest chord progressions that real musicians use. Respond in EXACTLY the format requested — nothing else.`;

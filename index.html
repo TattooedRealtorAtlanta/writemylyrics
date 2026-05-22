@@ -846,6 +846,13 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 .adv-narrative{width:100%;min-height:230px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13.5px;padding:12px;line-height:1.75;resize:vertical;box-sizing:border-box;transition:border-color .2s}
 .adv-narrative:focus{outline:none;border-color:var(--gold-border)}
 .adv-narrative::placeholder{color:var(--text3);font-style:italic}
+.adv-genre-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.adv-genre-tags:empty{margin-bottom:0}
+.adv-genre-tag{display:inline-flex;align-items:center;gap:4px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:20px;padding:4px 8px 4px 12px;font-size:12px;color:var(--gold);font-weight:500}
+.adv-genre-tag-x{background:none;border:none;color:var(--gold);cursor:pointer;padding:0 2px;font-size:15px;line-height:1;opacity:.65;display:flex;align-items:center}
+.adv-genre-tag-x:hover{opacity:1}
+.adv-genre-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.adv-genre-grid .pick-btn.adv-maxed{opacity:.3;cursor:not-allowed;pointer-events:none}
 /* ── UPLOAD LYRICS ── */
 .upload-lyrics-btn{width:100%;background:none;border:1px solid var(--gold-border);border-radius:var(--r);padding:10px 14px;font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;letter-spacing:.05em;color:var(--gold);cursor:pointer;transition:all .15s;margin-top:8px}
 .upload-lyrics-btn:hover{background:var(--gold-dim);border-color:var(--gold)}
@@ -1508,27 +1515,27 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
             <textarea class="adv-narrative" id="advNarrative" rows="10" placeholder="Describe your song in your own words. Tell us the story, the feeling, the people. Drop in a line or verse you've already written. The more you share, the better the song."></textarea>
           </div>
           <div class="field">
-            <label class="field-label">Genre <button class="field-tip" data-tip="Choose the musical genre. This affects vocabulary, rhythm, and structure of the lyrics.">?</button></label>
-            <select id="advGenre" onchange="APP.genre = this.value">
-              <option value="">No genre specified</option>
-              <option value="Country">Country</option>
-              <option value="Hip Hop">Hip Hop</option>
-              <option value="Pop">Pop</option>
-              <option value="Rock">Rock</option>
-              <option value="R&B">R&amp;B</option>
-              <option value="Blues">Blues</option>
-              <option value="Folk">Folk</option>
-              <option value="Military / Patriotic">Military / Patriotic</option>
-              <option value="Gospel">Gospel</option>
-              <option value="Americana">Americana</option>
-              <option value="Outlaw Country">Outlaw Country</option>
-              <option value="Trap">Trap</option>
-              <option value="Singer-Songwriter">Singer-Songwriter</option>
-              <option value="Metal">Metal</option>
-              <option value="Alternative">Alternative</option>
-              <option value="EDM">EDM</option>
-              <option value="Latin">Latin</option>
-            </select>
+            <label class="field-label">Genre <span style="color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(pick up to 3)</span> <button class="field-tip" data-tip="Pick up to 3 genres. When multiple are selected the AI blends them together.">?</button></label>
+            <div class="adv-genre-tags" id="advGenreTags"></div>
+            <div class="adv-genre-grid" id="advGenreGrid">
+              <button class="pick-btn" data-v="Country" onclick="toggleAdvGenre('Country')">Country</button>
+              <button class="pick-btn" data-v="Hip Hop" onclick="toggleAdvGenre('Hip Hop')">Hip Hop</button>
+              <button class="pick-btn" data-v="Pop" onclick="toggleAdvGenre('Pop')">Pop</button>
+              <button class="pick-btn" data-v="Rock" onclick="toggleAdvGenre('Rock')">Rock</button>
+              <button class="pick-btn" data-v="R&B" onclick="toggleAdvGenre('R&amp;B')">R&amp;B</button>
+              <button class="pick-btn" data-v="Blues" onclick="toggleAdvGenre('Blues')">Blues</button>
+              <button class="pick-btn" data-v="Folk" onclick="toggleAdvGenre('Folk')">Folk</button>
+              <button class="pick-btn" data-v="Military / Patriotic" onclick="toggleAdvGenre('Military / Patriotic')">Military</button>
+              <button class="pick-btn" data-v="Gospel" onclick="toggleAdvGenre('Gospel')">Gospel</button>
+              <button class="pick-btn" data-v="Americana" onclick="toggleAdvGenre('Americana')">Americana</button>
+              <button class="pick-btn" data-v="Outlaw Country" onclick="toggleAdvGenre('Outlaw Country')">Outlaw</button>
+              <button class="pick-btn" data-v="Trap" onclick="toggleAdvGenre('Trap')">Trap</button>
+              <button class="pick-btn" data-v="Singer-Songwriter" onclick="toggleAdvGenre('Singer-Songwriter')">S-S-W</button>
+              <button class="pick-btn" data-v="Metal" onclick="toggleAdvGenre('Metal')">Metal</button>
+              <button class="pick-btn" data-v="Alternative" onclick="toggleAdvGenre('Alternative')">Alt</button>
+              <button class="pick-btn" data-v="EDM" onclick="toggleAdvGenre('EDM')">EDM</button>
+              <button class="pick-btn" data-v="Latin" onclick="toggleAdvGenre('Latin')">Latin</button>
+            </div>
           </div>
           <div class="field">
             <label class="field-label">Song Structure <button class="field-tip" data-tip="Controls how many verses, choruses, and bridges your song has.">?</button></label>
@@ -2015,7 +2022,8 @@ const APP = {
   // i18n
   uiLang: localStorage.getItem('wml_lang') || 'en',
   _feedbackRating: 0,
-  advancedMode: false
+  advancedMode: false,
+  advGenres: []
 };
 
 // ── KARAOKE STATE ──
@@ -2735,7 +2743,8 @@ async function generate() {
     topic = narrative;
     payload = {
       topic: narrative,
-      genre: APP.genre || '',
+      genre: APP.advGenres[0] || '',
+      genres: APP.advGenres,
       moods: [],
       structure: document.getElementById('advStructure').value,
       tempo: 'Mid tempo',
@@ -3219,6 +3228,38 @@ function applyPlanUI() {
   if (toggle) toggle.classList.toggle('plan-locked', free);
 }
 
+function toggleAdvGenre(v) {
+  const idx = APP.advGenres.indexOf(v);
+  if (idx > -1) {
+    APP.advGenres.splice(idx, 1);
+  } else {
+    if (APP.advGenres.length >= 3) return;
+    APP.advGenres.push(v);
+  }
+  renderAdvGenreTags();
+}
+
+function removeAdvGenre(v) {
+  APP.advGenres = APP.advGenres.filter(g => g !== v);
+  renderAdvGenreTags();
+}
+
+function renderAdvGenreTags() {
+  const tagsEl = document.getElementById('advGenreTags');
+  const grid = document.getElementById('advGenreGrid');
+  if (!tagsEl || !grid) return;
+  tagsEl.innerHTML = APP.advGenres.map(g =>
+    `<span class="adv-genre-tag">${g}<button class="adv-genre-tag-x" onclick="removeAdvGenre('${g.replace(/'/g, "\\'")}')" title="Remove">×</button></span>`
+  ).join('');
+  const atMax = APP.advGenres.length >= 3;
+  grid.querySelectorAll('.pick-btn').forEach(b => {
+    const sel = APP.advGenres.includes(b.dataset.v);
+    b.classList.toggle('on', sel);
+    b.classList.toggle('adv-maxed', atMax && !sel);
+  });
+  APP.genre = APP.advGenres[0] || '';
+}
+
 function setStudioMode(mode) {
   if (mode === 'advanced' && APP.plan === 'free') {
     document.getElementById('featureUpgradeBg').classList.add('on');
@@ -3229,9 +3270,10 @@ function setStudioMode(mode) {
   document.getElementById('tabAdvanced').classList.toggle('active', APP.advancedMode);
   document.getElementById('simpleModeFields').style.display = APP.advancedMode ? 'none' : '';
   document.getElementById('advancedModeFields').classList.toggle('on', APP.advancedMode);
-  // Sync genre select with current APP.genre when entering advanced mode
+  // Sync genre and structure when entering advanced mode
   if (APP.advancedMode) {
-    document.getElementById('advGenre').value = APP.genre || '';
+    if (APP.genre && !APP.advGenres.includes(APP.genre)) APP.advGenres = [APP.genre];
+    renderAdvGenreTags();
     document.getElementById('advStructure').value = document.getElementById('structure').value;
     // Hide template button in advanced mode — it's simple-mode-oriented
     const tmpl = document.getElementById('tmplBtn');
@@ -4203,7 +4245,7 @@ async function saveSongToHistory(result) {
       body: JSON.stringify({
         title: result.titles?.[0] || null,
         lyrics: result.lyrics,
-        genre: APP.genre || null,
+        genre: APP.advancedMode ? (APP.advGenres.join(', ') || null) : (APP.genre || null),
         moods: APP.advancedMode ? [] : APP.moods,
         tempo: APP.advancedMode ? null : (APP.tempo || null),
         structure: APP.advancedMode
