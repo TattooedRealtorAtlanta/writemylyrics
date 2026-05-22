@@ -853,6 +853,27 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 .adv-genre-tag-x:hover{opacity:1}
 .adv-genre-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .adv-genre-grid .pick-btn.adv-maxed{opacity:.3;cursor:not-allowed;pointer-events:none}
+/* ── QUICK REFINE PANEL ── */
+.qr-panel{display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;margin:16px 0 8px;overflow:hidden}
+.qr-panel.on{display:block}
+.qr-head{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);background:var(--surface3)}
+.qr-title{font-size:12px;font-weight:700;color:var(--gold);letter-spacing:.08em;text-transform:uppercase}
+.qr-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:17px;padding:0 2px;line-height:1}
+.qr-close:hover{color:var(--text)}
+.qr-body{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.qr-row{display:flex;flex-direction:column;gap:7px}
+.qr-check-row{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none}
+.qr-check-row input[type=checkbox]{accent-color:var(--gold);width:14px;height:14px;cursor:pointer;flex-shrink:0}
+.qr-option-label{font-size:13px;font-weight:600;color:var(--text)}
+.qr-sub{padding-left:23px;padding-top:4px}
+.qr-sub select{font-size:12px;padding:7px 10px;background:var(--surface3)}
+.qr-divider{height:1px;background:var(--border);margin:2px 0}
+.qr-custom-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);font-weight:600;margin-bottom:5px}
+.qr-custom textarea{font-size:13px;padding:9px 11px;background:var(--surface3);border-radius:6px;min-height:60px}
+.qr-actions{display:flex;gap:9px;align-items:center;padding-top:4px}
+.qr-apply{background:var(--gold);border:none;border-radius:6px;padding:9px 20px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#07060a;cursor:pointer;transition:all .2s}
+.qr-apply:hover{background:var(--gold2)}
+.qr-apply:disabled{opacity:.5;cursor:not-allowed}
 /* ── UPLOAD LYRICS ── */
 .upload-lyrics-btn{width:100%;background:none;border:1px solid var(--gold-border);border-radius:var(--r);padding:10px 14px;font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;letter-spacing:.05em;color:var(--gold);cursor:pointer;transition:all .15s;margin-top:8px}
 .upload-lyrics-btn:hover{background:var(--gold-dim);border-color:var(--gold)}
@@ -1374,7 +1395,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
           <label class="field-label" data-i18n="studio.genre">Genre <button class="field-tip" data-tip="Choose the musical genre. This affects vocabulary, rhythm, and structure of the lyrics.">?</button></label>
           <div class="genre-grid" id="genreGrid">
             <button class="pick-btn" data-v="Country">Country</button>
-            <button class="pick-btn" data-v="Hip Hop">Hip Hop</button>
+            <button class="pick-btn" data-v="Rap / Hip Hop">Hip Hop/Rap</button>
             <button class="pick-btn" data-v="Pop">Pop</button>
             <button class="pick-btn" data-v="Rock">Rock</button>
             <button class="pick-btn" data-v="R&B">R&amp;B</button>
@@ -1519,7 +1540,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
             <div class="adv-genre-tags" id="advGenreTags"></div>
             <div class="adv-genre-grid" id="advGenreGrid">
               <button class="pick-btn" data-v="Country" onclick="toggleAdvGenre('Country')">Country</button>
-              <button class="pick-btn" data-v="Hip Hop" onclick="toggleAdvGenre('Hip Hop')">Hip Hop</button>
+              <button class="pick-btn" data-v="Rap / Hip Hop" onclick="toggleAdvGenre('Rap / Hip Hop')">Hip Hop/Rap</button>
               <button class="pick-btn" data-v="Pop" onclick="toggleAdvGenre('Pop')">Pop</button>
               <button class="pick-btn" data-v="Rock" onclick="toggleAdvGenre('Rock')">Rock</button>
               <button class="pick-btn" data-v="R&B" onclick="toggleAdvGenre('R&amp;B')">R&amp;B</button>
@@ -1578,6 +1599,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         </div>
         <div class="rp-actions" id="rpActions" style="display:none">
           <button class="act-btn gold" onclick="generate()" data-i18n="btn.regenerate">↺ Regenerate</button>
+          <button class="act-btn" id="quickRefineBtn" onclick="openQuickRefine()">✦ Refine</button>
           <button class="act-btn" onclick="copyLyrics()" data-i18n="btn.copy">Copy</button>
           <button class="act-btn" onclick="exportToSuno()">⚡ Suno</button>
           <button class="act-btn" id="studioKaraokeBtn" onclick="studioKaraoke()">🎤 Karaoke</button>
@@ -1670,6 +1692,97 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
             <div class="suno-body">
               <div class="suno-text" id="sunoText"></div>
               <button class="suno-copy" onclick="copySuno()">Copy &amp; Open Suno</button>
+            </div>
+          </div>
+
+          <!-- Quick Refine Panel -->
+          <div id="quickRefinePanel" class="qr-panel">
+            <div class="qr-head">
+              <span class="qr-title">✦ Refine</span>
+              <button class="qr-close" onclick="closeQuickRefine()">✕</button>
+            </div>
+            <div class="qr-body">
+
+              <div class="qr-row">
+                <label class="qr-check-row">
+                  <input type="checkbox" id="qrMoodToggle" onchange="toggleQrSection('mood',this.checked)">
+                  <span class="qr-option-label">Mood</span>
+                </label>
+                <div class="qr-sub" id="qrMoodSub" style="display:none">
+                  <div class="mood-wrap" id="qrMoodChips">
+                    <button class="mood-chip" data-v="Happy">Happy</button>
+                    <button class="mood-chip" data-v="Sad">Sad</button>
+                    <button class="mood-chip" data-v="Angry">Angry</button>
+                    <button class="mood-chip" data-v="Nostalgic">Nostalgic</button>
+                    <button class="mood-chip" data-v="Hopeful">Hopeful</button>
+                    <button class="mood-chip" data-v="Heartbroken">Heartbroken</button>
+                    <button class="mood-chip" data-v="Defiant">Defiant</button>
+                    <button class="mood-chip" data-v="Celebratory">Celebratory</button>
+                    <button class="mood-chip" data-v="Melancholy">Melancholy</button>
+                    <button class="mood-chip" data-v="Reflective">Reflective</button>
+                    <button class="mood-chip" data-v="Raw">Raw</button>
+                    <button class="mood-chip" data-v="Tender">Tender</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="qr-row">
+                <label class="qr-check-row">
+                  <input type="checkbox" id="qrGenreToggle" onchange="toggleQrSection('genre',this.checked)">
+                  <span class="qr-option-label">Genre</span>
+                </label>
+                <div class="qr-sub" id="qrGenreSub" style="display:none">
+                  <select id="qrGenreSelect">
+                    <option value="">Select genre...</option>
+                    <option value="Country">Country</option>
+                    <option value="Rap / Hip Hop">Hip Hop / Rap</option>
+                    <option value="Pop">Pop</option>
+                    <option value="Rock">Rock</option>
+                    <option value="R&B">R&amp;B</option>
+                    <option value="Blues">Blues</option>
+                    <option value="Folk">Folk</option>
+                    <option value="Military / Patriotic">Military / Patriotic</option>
+                    <option value="Gospel">Gospel</option>
+                    <option value="Americana">Americana</option>
+                    <option value="Outlaw Country">Outlaw Country</option>
+                    <option value="Trap">Trap</option>
+                    <option value="Singer-Songwriter">Singer-Songwriter</option>
+                    <option value="Metal">Metal</option>
+                    <option value="Alternative">Alternative</option>
+                    <option value="EDM">EDM</option>
+                    <option value="Latin">Latin</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="qr-row">
+                <label class="qr-check-row">
+                  <input type="checkbox" id="qrChordsToggle">
+                  <span class="qr-option-label">Chords</span>
+                </label>
+              </div>
+
+              <div class="qr-row">
+                <label class="qr-check-row">
+                  <input type="checkbox" id="qrVerseToggle" onchange="toggleQrSection('verse',this.checked)">
+                  <span class="qr-option-label">Specific section only</span>
+                </label>
+                <div class="qr-sub" id="qrVerseSub" style="display:none">
+                  <select id="qrVerseSelect"></select>
+                </div>
+              </div>
+
+              <div class="qr-divider"></div>
+
+              <div class="qr-custom">
+                <div class="qr-custom-label">Custom instructions (optional)</div>
+                <textarea id="qrCustom" rows="2" placeholder="Any other changes — tighten the rhymes, make it more personal, different ending..."></textarea>
+              </div>
+
+              <div class="qr-actions">
+                <button class="qr-apply" id="qrApplyBtn" onclick="submitQuickRefine()">Apply Changes</button>
+                <button class="m-cancel" onclick="closeQuickRefine()">Cancel</button>
+              </div>
             </div>
           </div>
 
@@ -4382,23 +4495,209 @@ async function _saveUploadedToHistory({ lyrics, title, genre }) {
   }
 }
 
+// ── QUICK REFINE ──
+function openQuickRefine() {
+  if (!APP.lyrics) { toast('Generate a song first.'); return; }
+  if (APP.plan === 'free') { document.getElementById('featureUpgradeBg').classList.add('on'); return; }
+
+  // Reset state
+  ['qrMoodToggle','qrGenreToggle','qrChordsToggle','qrVerseToggle'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.checked = false;
+  });
+  ['qrMoodSub','qrGenreSub','qrVerseSub'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  document.querySelectorAll('#qrMoodChips .mood-chip').forEach(b => b.classList.remove('on'));
+  const qrGenre = document.getElementById('qrGenreSelect');
+  if (qrGenre) qrGenre.value = '';
+  const qrCustom = document.getElementById('qrCustom');
+  if (qrCustom) qrCustom.value = '';
+  const qrApply = document.getElementById('qrApplyBtn');
+  if (qrApply) qrApply.disabled = false;
+
+  // Populate verse dropdown from current lyrics
+  const verseSelect = document.getElementById('qrVerseSelect');
+  if (verseSelect) {
+    const sections = getLyricsSections(APP.lyrics);
+    verseSelect.innerHTML = sections.length
+      ? sections.map(s => `<option value="${s}">${s}</option>`).join('')
+      : '<option value="">No sections found</option>';
+  }
+
+  const panel = document.getElementById('quickRefinePanel');
+  if (panel) {
+    panel.classList.add('on');
+    setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
+  }
+}
+
+function closeQuickRefine() {
+  const panel = document.getElementById('quickRefinePanel');
+  if (panel) panel.classList.remove('on');
+}
+
+function toggleQrSection(name, on) {
+  const subMap = { mood: 'qrMoodSub', genre: 'qrGenreSub', verse: 'qrVerseSub' };
+  const el = document.getElementById(subMap[name]);
+  if (el) el.style.display = on ? '' : 'none';
+}
+
+function getLyricsSections(lyrics) {
+  if (!lyrics) return [];
+  const seen = new Set();
+  return lyrics.split('\n')
+    .map(l => l.trim())
+    .filter(l => /^(VERSE|CHORUS|BRIDGE|PRE-CHORUS|INTRO|OUTRO|HOOK|BREAK|TAG|REFRAIN)/i.test(l))
+    .filter(l => { if (seen.has(l)) return false; seen.add(l); return true; });
+}
+
+function buildQuickRefineInstructions() {
+  const parts = [];
+
+  const moodOn = document.getElementById('qrMoodToggle')?.checked;
+  if (moodOn) {
+    const moods = [...document.querySelectorAll('#qrMoodChips .mood-chip.on')].map(b => b.dataset.v);
+    if (moods.length) parts.push(`Change the emotional tone and mood to: ${moods.join(', ')}. Adjust word choice, imagery, and feeling throughout to match.`);
+    else parts.push('Refine the emotional tone — make it more emotionally resonant throughout.');
+  }
+
+  const genreOn = document.getElementById('qrGenreToggle')?.checked;
+  if (genreOn) {
+    const g = document.getElementById('qrGenreSelect')?.value;
+    if (g) parts.push(`Shift the lyrical style and vocabulary toward ${g} — adapt the phrasing, rhythm, and references to fit that genre.`);
+  }
+
+  const chordsOn = document.getElementById('qrChordsToggle')?.checked;
+
+  const verseOn = document.getElementById('qrVerseToggle')?.checked;
+  if (verseOn) {
+    const section = document.getElementById('qrVerseSelect')?.value;
+    if (section) parts.push(`IMPORTANT: Only rewrite the ${section} section. Leave every other section word-for-word exactly as written. Do not alter anything outside of ${section}.`);
+  }
+
+  const custom = document.getElementById('qrCustom')?.value.trim();
+  if (custom) parts.push(custom);
+
+  return { instructions: parts.join(' ') || 'Polish and improve the lyrics overall.', refineChords: chordsOn };
+}
+
+async function submitQuickRefine() {
+  if (!APP.lyrics) return;
+  const { instructions, refineChords } = buildQuickRefineInstructions();
+  const qrApply = document.getElementById('qrApplyBtn');
+  if (qrApply) qrApply.disabled = true;
+
+  try {
+    const result = await authFetch('/api/refine', {
+      method: 'POST',
+      body: JSON.stringify({
+        lyrics: APP.lyrics,
+        instructions,
+        genre: APP.advancedMode ? (APP.advGenres[0] || '') : (APP.genre || ''),
+        moods: APP.advancedMode ? [] : APP.moods,
+        tempo: APP.advancedMode ? '' : (APP.tempo || ''),
+        songId: APP.currentSongId || null,
+        refineChords
+      })
+    });
+
+    closeQuickRefine();
+    APP.originalLyrics = APP.lyrics;
+    APP.lyrics = result.lyrics;
+    renderLyrics(result.lyrics);
+    if (result.chords) renderChords(result.chords);
+    if (result.usage !== undefined) { APP.usage = result.usage; APP.limit = result.limit; updateUsage(); }
+
+    // Update saved song if one is loaded
+    if (APP.currentSongId) {
+      authFetch('/api/songs', {
+        method: 'PATCH',
+        body: JSON.stringify({ id: APP.currentSongId, lyrics: result.lyrics })
+      }).catch(() => {});
+    }
+
+    const rrBtn = document.getElementById('refineRevertBtn');
+    if (rrBtn) rrBtn.classList.add('on');
+    toast('Changes applied.');
+  } catch (e) {
+    toast('Error: ' + e.message);
+    if (qrApply) qrApply.disabled = false;
+  }
+}
+
+// Wire up qrMoodChips click handlers (called once on init)
+function initQuickRefine() {
+  document.querySelectorAll('#qrMoodChips .mood-chip').forEach(b => {
+    b.addEventListener('click', () => b.classList.toggle('on'));
+  });
+}
+
 // ── SUNO EXPORT ──
+// ── SUNO GENRE STYLE MAP ──
+const SUNO_GENRE_MAP = {
+  'Country':              { v: 'country vocals',                         i: 'acoustic guitar, fiddle, steel guitar, banjo' },
+  'Rap / Hip Hop':        { v: 'rap vocals, hip hop flow',               i: 'hip hop beat, 808 bass, trap hi-hats' },
+  'Hip Hop':              { v: 'hip hop vocals',                         i: 'hip hop beat, 808 bass, sampled drums' },
+  'Pop':                  { v: 'pop vocals',                             i: 'synth, clean production, programmed drums' },
+  'Rock':                 { v: 'rock vocals',                            i: 'electric guitar, bass guitar, live drums' },
+  'R&B':                  { v: 'R&B vocals, soulful',                    i: 'smooth production, warm keys, sub bass' },
+  'Blues':                { v: 'blues vocals, raw',                      i: 'blues guitar, harmonica, shuffle drums' },
+  'Folk':                 { v: 'folk vocals, intimate',                  i: 'acoustic guitar, fingerpicking, soft brush drums' },
+  'Military / Patriotic': { v: 'powerful anthemic vocals',               i: 'orchestral brass, snare drum, strings' },
+  'Gospel':               { v: 'gospel vocals, choir harmony',           i: 'organ, piano, full choir' },
+  'Americana':            { v: 'americana vocals, rootsy',               i: 'acoustic guitar, mandolin, upright bass' },
+  'Outlaw Country':       { v: 'outlaw country vocals, gritty twang',    i: 'electric guitar, honky tonk piano, shuffle drums' },
+  'Trap':                 { v: 'trap rap vocals, ad-libs',               i: 'trap beat, rolling hi-hats, 808 bass, dark synth' },
+  'Singer-Songwriter':    { v: 'singer-songwriter vocals, confessional', i: 'acoustic guitar, light piano, minimal production' },
+  'Metal':                { v: 'metal vocals, powerful',                 i: 'heavy distorted guitar, double kick drums, thick bass' },
+  'Alternative':          { v: 'alternative rock vocals',                i: 'layered guitar, indie production, driving drums' },
+  'EDM':                  { v: 'electronic vocals, vocal chops',         i: 'synth lead, bass drop, dance beat, sub bass' },
+  'Latin':                { v: 'latin vocals, passionate',               i: 'latin percussion, guitar, brass, congas' },
+};
+
+function buildGenreStyleTags(genreList) {
+  if (!genreList || genreList.length === 0) return '';
+  const isRap = genreList.some(g => /rap|hip.?hop|trap/i.test(g));
+  if (genreList.length === 1) {
+    const s = SUNO_GENRE_MAP[genreList[0]];
+    return s ? `${s.v}, ${s.i}` : genreList[0];
+  }
+  // Multi-genre blend: combine vocals, take top 2 instruments per genre
+  const vocals = genreList.map(g => SUNO_GENRE_MAP[g]?.v || g).join(', ');
+  const instruments = [...new Set(
+    genreList.flatMap(g => (SUNO_GENRE_MAP[g]?.i || '').split(', ').slice(0, 2))
+  )].join(', ');
+  let style = `${vocals}, ${instruments}`;
+  if (isRap) {
+    const nonRap = genreList.filter(g => !/rap|hip.?hop|trap/i.test(g));
+    if (nonRap.length) style += `, rap verses, sung ${nonRap[0].toLowerCase()} hook`;
+  }
+  return style;
+}
+
 function buildSunoPrompt(lyrics, opts = {}) {
-  const genre = opts.genre !== undefined ? opts.genre : APP.genre || '';
+  // Resolve genre list — advanced mode passes genres array; simple mode uses APP.genre
+  const genreList = opts.genres && opts.genres.length
+    ? opts.genres
+    : APP.advancedMode
+      ? (APP.advGenres.length ? APP.advGenres : [])
+      : (opts.genre !== undefined ? (opts.genre ? [opts.genre] : []) : (APP.genre ? [APP.genre] : []));
+
   const moods = opts.moods !== undefined ? opts.moods : APP.moods;
   const tempo = opts.tempo !== undefined ? opts.tempo : APP.tempo || '';
   const styleNotes = opts.styleNotes !== undefined ? opts.styleNotes : (document.getElementById('tone')?.value || '');
   const language = opts.language !== undefined ? opts.language : APP.language || 'English';
   const mixLanguages = opts.mixLanguages !== undefined ? opts.mixLanguages : APP.mixLanguages;
 
+  const genreStyle = buildGenreStyleTags(genreList);
   const moodsStr = Array.isArray(moods) ? moods.join(', ') : (moods || '');
   let langTag = '';
-  if (mixLanguages) {
-    langTag = 'multilingual vocals';
-  } else if (language && language !== 'English') {
-    langTag = `${language} vocals`;
-  }
-  const styleParts = [genre, moodsStr, tempo, styleNotes, langTag].filter(Boolean);
+  if (mixLanguages) { langTag = 'multilingual vocals'; }
+  else if (language && language !== 'English') { langTag = `${language} vocals`; }
+
+  const styleParts = [genreStyle || genreList.join(' + '), moodsStr, tempo, styleNotes, langTag].filter(Boolean);
   let out = styleParts.length ? `Style: ${styleParts.join(', ')}\n\n` : '';
 
   const formatted = lyrics.split('\n').map(line => {
@@ -6000,6 +6299,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     b.classList.add('on');
     APP.tempo = b.dataset.v;
   }));
+
+  // Init quick refine mood chips
+  initQuickRefine();
 
   // Rebuild section lang grid when structure changes
   document.getElementById('structure').addEventListener('change', () => {

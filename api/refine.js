@@ -27,7 +27,7 @@ module.exports = async function handler(req, res) {
   }
 
   const body = await getJsonBody(req);
-  const { lyrics, instructions, genre, moods, tempo, topic, songId, action } = body;
+  const { lyrics, instructions, genre, moods, tempo, topic, songId, action, refineChords } = body;
 
   if (!lyrics) {
     return res.status(400).json({ error: 'lyrics is required' });
@@ -72,13 +72,19 @@ ${instructions}
 Apply the requested changes. Preserve the overall structure and what's working well. Return ONLY the updated lyrics — no explanations, no commentary, no preamble. Keep the same section labels (VERSE 1, CHORUS, BRIDGE, etc.) in the same format.`;
   }
 
-  const message = await anthropic.messages.create({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 2000,
-    messages: [{ role: 'user', content: prompt }]
-  });
+  const moodStr = Array.isArray(moods) ? moods.join(', ') : (moods || '');
+  const chordsPrompt = `Chord progression for:\nGenre: ${genre || 'Unspecified'}\nMood: ${moodStr || 'Unspecified'}\nTempo: ${tempo || 'Mid tempo'}\n\nRespond EXACTLY:\nKEY: [key]\nSTRUMMING: [pattern]\n\n[section]: [chords with em dashes]\n(one line per section)`;
 
-  const refined = message.content[0]?.text?.trim();
+  const calls = [
+    anthropic.messages.create({ model: 'claude-sonnet-4-20250514', max_tokens: 2000, messages: [{ role: 'user', content: prompt }] }),
+    refineChords
+      ? anthropic.messages.create({ model: 'claude-sonnet-4-20250514', max_tokens: 400, messages: [{ role: 'user', content: chordsPrompt }] })
+      : Promise.resolve(null)
+  ];
+
+  const [lyricsMsg, chordsMsg] = await Promise.all(calls);
+  const refined = lyricsMsg.content[0]?.text?.trim();
+  const newChords = chordsMsg ? chordsMsg.content[0]?.text?.trim() : null;
   if (!refined) return res.status(500).json({ error: 'AI returned empty response' });
 
   // Save the original lyrics as a version before returning the refined version
@@ -102,6 +108,7 @@ Apply the requested changes. Preserve the overall structure and what's working w
 
   return res.status(200).json({
     lyrics: refined,
+    chords: newChords || null,
     usage: newCount,
     limit,
     plan: profile.plan

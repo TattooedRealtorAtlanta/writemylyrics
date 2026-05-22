@@ -61,6 +61,13 @@ module.exports = async function handler(req, res) {
     ? advGenres.join(' + ')
     : (genre || 'Unspecified');
 
+  // Detect if this is a rap/hip-hop track
+  const allGenres = advGenres || (genre ? [genre] : []);
+  const isRapTrack = allGenres.some(g => /rap|hip.?hop|trap/i.test(g));
+  const rapInstruction = isRapTrack
+    ? '\nRAP STRUCTURE NOTE: This is a Rap / Hip Hop track. Write VERSE sections as rap bars — strong multi-syllable rhyme schemes, internal rhymes, rhythm and flow, wordplay. The CHORUS/HOOK may be sung or rapped. Prioritize cadence, punch lines, and lyrical density over standard song structure.'
+    : '';
+
   const moodStr = Array.isArray(moods) ? moods.join(', ') : (moods || 'Unspecified');
   const primaryLang = language || 'English';
   const isMixed = !!(mixLanguages && sectionLanguages && Object.keys(sectionLanguages).length);
@@ -96,7 +103,7 @@ ${genreLine}
 Structure: ${structure || 'Verse / Chorus / Verse / Chorus / Bridge / Chorus'}
 Rhyme scheme: Mixed, rhyme where it feels natural${langInstruction}
 
-Write the complete lyrics now. Label every section. Stay true to the narrative.`;
+Write the complete lyrics now. Label every section. Stay true to the narrative.${rapInstruction}`;
   } else {
     lyricsUsr = `Write complete song lyrics:
 
@@ -110,7 +117,7 @@ Point of view: ${pov || 'First person (I / me / my)'}
 Words to include: ${words || 'None'}
 Style notes: ${styleNotes || 'None'}${langInstruction}
 
-Write the complete lyrics now. Label every section. Make it authentic.${artistStyle ? `\n\nARTIST STYLE: Write in the distinct lyrical style of ${artistStyle} — their characteristic vocabulary, rhyme patterns, phrasing, themes, and flow. The lyrics should sound like they could genuinely be from that artist.` : ''}`;
+Write the complete lyrics now. Label every section. Make it authentic.${artistStyle ? `\n\nARTIST STYLE: Write in the distinct lyrical style of ${artistStyle} — their characteristic vocabulary, rhyme patterns, phrasing, themes, and flow. The lyrics should sound like they could genuinely be from that artist.` : ''}${rapInstruction}`;
   }
 
   const titlesSys = `You are a music title expert. Respond with ONLY a JSON array of exactly 3 title strings. No prose, no backticks, no markdown.`;
