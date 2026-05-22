@@ -82,13 +82,14 @@ module.exports = async function handler(req, res) {
       usageCount = 0;
     }
 
-    // Count active Pro members for urgency display in upgrade modal
+    // Count paying Pro members (active Stripe subscription only) for upgrade modal
     let proCount = 0;
     try {
       const { count } = await supabase
         .from('profiles')
         .select('id', { count: 'exact', head: true })
-        .in('plan', ['pro', 'unlimited']);
+        .in('plan', ['pro', 'unlimited'])
+        .not('stripe_subscription_id', 'is', null);
       proCount = count || 0;
     } catch { /* non-critical */ }
 

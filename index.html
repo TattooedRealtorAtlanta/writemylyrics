@@ -3327,7 +3327,11 @@ function showUpgrade() {
     const days = daysUntilReset();
     const count = APP.proCount || 0;
     const parts = [];
-    if (count > 0) parts.push(`${count} ${count === 1 ? 'person has' : 'people have'} upgraded this month.`);
+    if (count >= 5) {
+      parts.push(`${count} ${count === 1 ? 'person has' : 'people have'} upgraded this month.`);
+    } else {
+      parts.push('Join musicians and songwriters who are creating with WriteMyLyrics Pro.');
+    }
     if (days !== null) parts.push(`Or wait — your limit resets in ${days} day${days !== 1 ? 's' : ''}.`);
     meta.textContent = parts.join(' ');
   }
@@ -3346,7 +3350,9 @@ function showFeatureUpgrade() {
   const meta = document.getElementById('featureUpgradeModalMeta');
   if (meta) {
     const count = APP.proCount || 0;
-    meta.textContent = count > 0 ? `Join ${count} Pro ${count === 1 ? 'member' : 'members'} making music this month.` : '';
+    meta.textContent = count >= 5
+      ? `Join ${count} Pro ${count === 1 ? 'member' : 'members'} making music this month.`
+      : 'Join musicians and songwriters who are creating with WriteMyLyrics Pro.';
   }
   document.getElementById('featureUpgradeBg').classList.add('on');
 }
