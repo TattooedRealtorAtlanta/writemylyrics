@@ -545,15 +545,15 @@ select option{background:var(--surface3)}
 .hook-copy.copied{border-color:#4ade80;color:#4ade80}
 .refine-panel{margin-top:20px;display:none}
 .refine-panel.on{display:block}
-.refine-toggle{display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;padding:10px 0;width:100%;text-align:left;transition:color .2s}
-.refine-toggle:hover{color:var(--gold)}
-.refine-toggle.plan-locked{opacity:.55}
-.refine-toggle.plan-locked:hover{color:var(--text2)}
-.refine-toggle-icon{font-size:12px;transition:transform .2s;display:inline-block}
+.refine-head{display:flex;align-items:center;gap:10px;background:var(--gold);border:1.5px solid var(--gold);border-radius:9px 9px 0 0;color:#07060a;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;padding:13px 16px}
+.refine-head .rh-lock{font-size:12px;margin-left:auto;opacity:.75}
+.refine-toggle{display:flex;align-items:center;gap:10px;background:none;border:1.5px solid var(--gold);border-radius:9px;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;padding:12px 16px;width:100%;transition:background .2s,color .2s}
+.refine-toggle:hover{background:var(--gold);color:#07060a}
+.refine-toggle.open{background:var(--gold);color:#07060a;border-radius:9px 9px 0 0}
+.refine-toggle-icon{font-size:11px;transition:transform .2s;display:inline-block}
 .refine-toggle.open .refine-toggle-icon{transform:rotate(90deg)}
 .feature-lock{font-size:11px;margin-left:auto;opacity:.7}
-.refine-body{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:4px;display:none}
-.refine-body.open{display:block}
+.refine-body{background:var(--surface2);border:1.5px solid var(--gold);border-top:none;border-radius:0 0 9px 9px;padding:16px;display:block}
 .refine-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--gold);font-weight:600;margin-bottom:8px;display:block}
 .refine-row{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
 .refine-apply{background:var(--gold);border:none;border-radius:6px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#07060a;cursor:pointer;transition:all .2s}
@@ -1702,6 +1702,30 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
             <span class="stat">Est. length: <b id="el">—</b></span>
           </div>
 
+          <!-- Tweak & Refine Panel -->
+          <div id="refinePanel" class="refine-panel">
+            <div class="refine-head">
+              <span style="font-size:15px;line-height:1">✦</span>
+              <span data-i18n="refine.title">Tweak &amp; Refine</span>
+              <span class="rh-lock" id="refineLock" style="display:none">🔒 Pro only</span>
+            </div>
+            <div class="refine-body" id="refineBody">
+              <div id="refineGate" class="plan-gate" style="display:none">
+                <div class="plan-gate-h" data-i18n="refine.gate_h">Pro Feature</div>
+                <div class="plan-gate-p" data-i18n="refine.gate_p">Tweak &amp; Refine requires a Pro plan. Upgrade to instantly refine your lyrics with AI.</div>
+                <button class="plan-gate-btn" onclick="showUpgrade()" data-i18n="btn.upgrade_now">Upgrade Now</button>
+              </div>
+              <div id="refineForm" style="display:none">
+                <span class="refine-label" data-i18n="refine.what">What to change?</span>
+                <textarea id="refineInstructions" rows="3" data-i18n-placeholder="refine.ph" placeholder="Make the chorus more hopeful. Tighten the rhymes in verse 2. Change the ending to be more upbeat..."></textarea>
+                <div class="refine-row">
+                  <button class="refine-apply" id="refineApplyBtn" onclick="submitRefine()" data-i18n="refine.apply">Apply Changes</button>
+                  <button class="refine-revert" id="refineRevertBtn" onclick="revertLyrics()" data-i18n="refine.revert">↩ Revert</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div id="chordsArea" style="display:none">
             <!-- Controls bar — always visible when chords exist -->
             <div class="chord-controls-bar">
@@ -1838,30 +1862,6 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
               <button class="hooks-close" onclick="closeHooksPanel()">✕</button>
             </div>
             <div class="hooks-body" id="hooksBody"></div>
-          </div>
-
-          <!-- Tweak & Refine Panel -->
-          <div id="refinePanel" class="refine-panel">
-            <button class="refine-toggle" id="refineToggle" onclick="toggleRefine()">
-              <span class="refine-toggle-icon">▶</span>
-              <span data-i18n="refine.title">Tweak &amp; Refine</span>
-              <span class="feature-lock" id="refineLock" style="display:none">🔒</span>
-            </button>
-            <div class="refine-body" id="refineBody">
-              <div id="refineGate" class="plan-gate" style="display:none">
-                <div class="plan-gate-h" data-i18n="refine.gate_h">Pro Feature</div>
-                <div class="plan-gate-p" data-i18n="refine.gate_p">Tweak &amp; Refine requires a Pro plan. Upgrade to instantly refine your lyrics with AI.</div>
-                <button class="plan-gate-btn" onclick="showUpgrade()" data-i18n="btn.upgrade_now">Upgrade Now</button>
-              </div>
-              <div id="refineForm" style="display:none">
-                <span class="refine-label" data-i18n="refine.what">What to change?</span>
-                <textarea id="refineInstructions" rows="3" data-i18n-placeholder="refine.ph" placeholder="Make the chorus more hopeful. Tighten the rhymes in verse 2. Change the ending to be more upbeat..."></textarea>
-                <div class="refine-row">
-                  <button class="refine-apply" id="refineApplyBtn" onclick="submitRefine()" data-i18n="refine.apply">Apply Changes</button>
-                  <button class="refine-revert" id="refineRevertBtn" onclick="revertLyrics()" data-i18n="refine.revert">↩ Revert</button>
-                </div>
-              </div>
-            </div>
           </div>
 
           <!-- Song Notes Panel -->
@@ -3292,8 +3292,6 @@ function startOver() {
   if (out) out.classList.remove('chord-mode');
   document.getElementById('sunoPanel').classList.remove('on');
   document.getElementById('refinePanel').classList.remove('on');
-  document.getElementById('refineBody').classList.remove('open');
-  document.getElementById('refineToggle').classList.remove('open');
   hideNotesPanel();
   const versionsBtn = document.getElementById('versionsBtn');
   if (versionsBtn) versionsBtn.style.display = 'none';
@@ -3435,8 +3433,10 @@ function applyPlanUI() {
   const free = APP.plan === 'free';
   const lock = document.getElementById('refineLock');
   if (lock) lock.style.display = free ? 'inline' : 'none';
-  const toggle = document.getElementById('refineToggle');
-  if (toggle) toggle.classList.toggle('plan-locked', free);
+  const gate = document.getElementById('refineGate');
+  const form = document.getElementById('refineForm');
+  if (gate) gate.style.display = free ? 'block' : 'none';
+  if (form) form.style.display = free ? 'none' : 'block';
 }
 
 function toggleAdvGenre(v) {
@@ -5619,23 +5619,8 @@ async function saveKarSync() {
 
 // ── TWEAK & REFINE ──
 function toggleRefine() {
-  if (APP.plan === 'free') { showFeatureUpgrade(); return; }
-
-  const toggle = document.getElementById('refineToggle');
-  const body = document.getElementById('refineBody');
-  const isOpen = body.classList.contains('open');
-
-  if (isOpen) {
-    body.classList.remove('open');
-    toggle.classList.remove('open');
-  } else {
-    body.classList.add('open');
-    toggle.classList.add('open');
-    document.getElementById('refineGate').style.display = 'none';
-    document.getElementById('refineForm').style.display = 'block';
-  }
+  // Kept as no-op — panel is always open when visible; applyPlanUI controls gate vs form
 }
-
 async function submitRefine() {
   const instructions = document.getElementById('refineInstructions').value.trim();
   if (!instructions) { toast('Describe what to change first.'); return; }
