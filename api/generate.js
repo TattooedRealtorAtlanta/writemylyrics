@@ -4,7 +4,7 @@ const { getJsonBody } = require('./_lib/body');
 const { cancelEmail } = require('./_lib/resend');
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-const MODEL = 'claude-sonnet-4-20250514';
+const MODEL = 'claude-opus-4-8';
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {

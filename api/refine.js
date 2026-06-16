@@ -76,9 +76,9 @@ Apply the requested changes. Preserve the overall structure and what's working w
   const chordsPrompt = `Chord progression for:\nGenre: ${genre || 'Unspecified'}\nMood: ${moodStr || 'Unspecified'}\nTempo: ${tempo || 'Mid tempo'}\n\nRespond EXACTLY:\nKEY: [key]\nSTRUMMING: [pattern]\n\n[section]: [chords with em dashes]\n(one line per section)`;
 
   const calls = [
-    anthropic.messages.create({ model: 'claude-sonnet-4-20250514', max_tokens: 2000, messages: [{ role: 'user', content: prompt }] }),
+    anthropic.messages.create({ model: 'claude-opus-4-8', max_tokens: 2000, messages: [{ role: 'user', content: prompt }] }),
     refineChords
-      ? anthropic.messages.create({ model: 'claude-sonnet-4-20250514', max_tokens: 400, messages: [{ role: 'user', content: chordsPrompt }] })
+      ? anthropic.messages.create({ model: 'claude-opus-4-8', max_tokens: 400, messages: [{ role: 'user', content: chordsPrompt }] })
       : Promise.resolve(null)
   ];
 
