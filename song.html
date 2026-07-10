@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WriteMyLyrics</title>
+<link rel="canonical" href="https://www.writemylyrics.ai/song/" id="canonical-link">
 <meta name="description" content="Read and listen to this song on WriteMyLyrics.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
@@ -138,6 +139,9 @@ function copyLink() {
 async function loadSong() {
   const id = window.location.pathname.replace('/song/', '').replace(/\//g,'').trim();
   if (!id) { showError(); return; }
+
+  const canonicalLink = document.getElementById('canonical-link');
+  if (canonicalLink) canonicalLink.href = `https://www.writemylyrics.ai/song/${encodeURIComponent(id)}`;
 
   try {
     const res = await fetch(`/api/songs?id=${encodeURIComponent(id)}`);
