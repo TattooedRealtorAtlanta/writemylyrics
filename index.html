@@ -13,7 +13,11 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-Y4L6QEENCL');
+  // send_page_view:false — this is a single-document SPA; showPage()/showView()
+  // fire the real, title-differentiated page_view events on every view change
+  // (including the very first one on load), so the automatic pageview here
+  // would just be a duplicate with the wrong (static) title.
+  gtag('config', 'G-Y4L6QEENCL', { send_page_view: false });
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -2688,6 +2692,33 @@ async function togglePublish(btn) {
   }
 }
 
+// ── GA4 — VIRTUAL PAGEVIEWS + EVENTS ──
+// This app never does a real page reload after the first load: showPage()/
+// showView() just toggle which DOM section is visible. GA4's automatic
+// page_view (disabled above) only ever sees the very first URL, so every
+// view change needs a manual page_view fired here to show up as its own
+// row in GA4's "Pages and screens" report. page_location uses the *real*
+// address bar URL (accurate for gallery/pricing, which do pushState); for
+// views that don't change the URL (studio/history/auth) page_path carries
+// the virtual identifier instead so the view still shows up distinctly.
+function gaPageView(title, virtualPath) {
+  try {
+    if (typeof gtag !== 'function') return;
+    gtag('event', 'page_view', {
+      page_title: title,
+      page_location: window.location.href,
+      page_path: virtualPath || window.location.pathname
+    });
+  } catch (e) {}
+}
+
+function gaEvent(name, params) {
+  try {
+    if (typeof gtag !== 'function') return;
+    gtag('event', name, params || {});
+  } catch (e) {}
+}
+
 // ── PAGE ROUTING ──
 function showPage(page) {
   document.querySelectorAll('.page').forEach(p => {
@@ -2710,6 +2741,17 @@ function showPage(page) {
       window.history.pushState({}, '', '/');
     }
   }
+
+  // GA4 pageview per view — 'app' is skipped: entering the app always
+  // follows up with showView('studio'), which fires its own pageview.
+  const GA_PAGES = {
+    landing: { title: 'Homepage', path: '/' },
+    auth:    { title: 'Sign In',  path: '/auth' },
+    gallery: { title: 'Gallery',  path: '/gallery' },
+    pricing: { title: 'Pricing',  path: '/pricing' }
+  };
+  const gaPage = GA_PAGES[page];
+  if (gaPage) gaPageView(gaPage.title, gaPage.path);
 }
 
 function showAuthTab(tab) {
@@ -2849,6 +2891,10 @@ function enterApp(profile) {
   setNavLoggedIn(profile.plan);
   updateUsage();
   showPage('app');
+  // Studio is the default sub-view on entering the app; call showView()
+  // explicitly (harmless no-op on the DOM) so its GA4 pageview/event fires —
+  // enterApp() itself doesn't otherwise touch the studio/history toggle.
+  showView('studio');
   // Apply saved studio defaults after DOM is ready
   requestAnimationFrame(() => { applyStudioDefaults(profile); applyPlanUI(); maybeShowWizardOrFork(); });
 }
@@ -2994,6 +3040,8 @@ async function generate() {
     };
   }
 
+  gaEvent('generate_clicked', { genre: payload.genre || (payload.genres && payload.genres[0]) || 'none' });
+
   genAbort = new AbortController();
   const signal = genAbort.signal;
 
@@ -3036,9 +3084,12 @@ async function generate() {
     const ri = document.getElementById('refineInstructions');
     if (ri) ri.value = '';
 
+    gaEvent('generation_success', { genre: payload.genre || (payload.genres && payload.genres[0]) || 'none' });
+
   } catch (e) {
     // Aborted by a new generate() call — not a real error, new request handles its own UI
     if (e.name === 'AbortError') return;
+    gaEvent('generation_error', { reason: String(e.message || 'unknown').slice(0, 100) });
     if (e.message !== 'Monthly limit reached') {
       toast('Error: ' + e.message);
     }
@@ -4284,11 +4335,14 @@ function showView(v) {
     sbStudio.classList.remove('active');
     sbHistory.classList.add('active');
     loadHistory();
+    gaPageView('History', '/history');
   } else {
     leftPanel.style.display = '';
     historyPanel.classList.remove('active');
     sbStudio.classList.add('active');
     sbHistory.classList.remove('active');
+    gaPageView('Studio', '/studio');
+    gaEvent('view_studio');
   }
 }
 
@@ -4738,6 +4792,7 @@ function buildQuickRefineInstructions() {
 async function submitQuickRefine() {
   if (!APP.lyrics) return;
   const { instructions, refineChords } = buildQuickRefineInstructions();
+  gaEvent('tweak_refine_used', { mode: 'quick' });
   const qrApply = document.getElementById('qrApplyBtn');
   if (qrApply) qrApply.disabled = true;
 
@@ -4878,6 +4933,7 @@ function closeSunoPanel() {
 function copySuno() {
   const text = document.getElementById('sunoText').textContent;
   navigator.clipboard.writeText(text);
+  gaEvent('export_to_suno', { source: 'studio' });
   window.open('https://suno.com', '_blank');
   toast('Lyrics copied — Suno is opening!');
 }
@@ -5126,6 +5182,7 @@ function sunoExportSong(idx) {
     styleNotes: song.style_notes || ''
   });
   navigator.clipboard.writeText(prompt);
+  gaEvent('export_to_suno', { source: 'history' });
   window.open('https://suno.com', '_blank');
   toast('Lyrics copied — Suno is opening!');
 }
@@ -5393,6 +5450,8 @@ function studioKaraoke() {
 
 function openKaraoke(lyrics, songId) {
   if (APP.plan === 'free') { showFeatureUpgrade(); return; }
+
+  gaEvent('karaoke_mode_used');
 
   KAR.lines     = [];
   KAR.audioUrl  = '';
@@ -5679,6 +5738,8 @@ async function submitRefine() {
   const instructions = document.getElementById('refineInstructions').value.trim();
   if (!instructions) { toast('Describe what to change first.'); return; }
   if (!APP.lyrics) { toast('Generate a song first.'); return; }
+
+  gaEvent('tweak_refine_used', { mode: 'freeform' });
 
   const btn = document.getElementById('refineApplyBtn');
   btn.disabled = true;
