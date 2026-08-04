@@ -1667,6 +1667,110 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
               <option value="Intro / Verse / Pre-Chorus / Chorus / Verse / Pre-Chorus / Chorus / Bridge / Chorus">Full Production</option>
             </select>
           </div>
+
+          <div class="field">
+            <button class="refine-toggle" id="advFineTuneToggle" onclick="toggleAdvFineTune()">
+              <span class="refine-toggle-icon">▶</span>
+              <span>Fine-tune your song (optional)</span>
+            </button>
+            <div class="rhyme-body" id="advFineTuneBody" style="display:none">
+
+              <div class="field">
+                <label class="field-label">Mood <span style="color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(select multiple)</span> <button class="field-tip" data-tip="Select one or more moods. Combining moods (e.g. Nostalgic + Tender) produces more nuanced lyrics.">?</button></label>
+                <div class="mood-wrap" id="advMoodGrid">
+                  <button class="mood-chip" data-v="Happy">Happy</button>
+                  <button class="mood-chip" data-v="Sad">Sad</button>
+                  <button class="mood-chip" data-v="Angry">Angry</button>
+                  <button class="mood-chip" data-v="Nostalgic">Nostalgic</button>
+                  <button class="mood-chip" data-v="Hopeful">Hopeful</button>
+                  <button class="mood-chip" data-v="Heartbroken">Heartbroken</button>
+                  <button class="mood-chip" data-v="Defiant">Defiant</button>
+                  <button class="mood-chip" data-v="Celebratory">Celebratory</button>
+                  <button class="mood-chip" data-v="Melancholy">Melancholy</button>
+                  <button class="mood-chip" data-v="Reflective">Reflective</button>
+                  <button class="mood-chip" data-v="Raw">Raw</button>
+                  <button class="mood-chip" data-v="Tender">Tender</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field-label">Tempo <button class="field-tip" data-tip="Sets the energy and speed feel of the lyrics. Affects rhythm and phrasing.">?</button></label>
+                <div class="tempo-grid" id="advTempoGrid">
+                  <button class="pick-btn" data-v="Slow ballad">Slow Ballad</button>
+                  <button class="pick-btn on" data-v="Mid tempo">Mid Tempo</button>
+                  <button class="pick-btn" data-v="Uptempo">Uptempo</button>
+                  <button class="pick-btn" data-v="Driving fast">Driving Fast</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field-label">Rhyme Scheme <button class="field-tip" data-tip="AABB: pairs of lines rhyme. ABAB: alternating lines rhyme. ABCB Ballad: only 2nd and 4th lines rhyme. Free verse: no required rhyme.">?</button></label>
+                <select id="advRhyme">
+                  <option value="AABB couplets">AABB — Couplets</option>
+                  <option value="ABAB alternating">ABAB — Alternating</option>
+                  <option value="ABCB ballad style">ABCB — Ballad</option>
+                  <option value="Free verse, no forced rhyme">Free Verse</option>
+                  <option value="Mixed, rhyme where it feels natural">Mixed</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label class="field-label">Point of View <button class="field-tip" data-tip="First person (I/me/my) feels personal. Second person (you/your) speaks to someone. Third person (he/she/they) tells a story about someone else.">?</button></label>
+                <select id="advPov">
+                  <option value="First person (I / me / my)">First person — I / me / my</option>
+                  <option value="Second person (you / your)">Second person — you / your</option>
+                  <option value="Third person (he / she / they)">Third person</option>
+                  <option value="Shifting perspective">Shifting perspective</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label class="field-label">Words to Include <span>(optional)</span> <button class="field-tip" data-tip="Enter specific words, phrases, names, or lines you want in the song, separated by commas. The AI works them in naturally.">?</button></label>
+                <input type="text" id="advWords" placeholder="Phrases, names, lines — comma separated">
+              </div>
+
+              <div class="field">
+                <label class="field-label">Style Notes <span>(optional)</span> <button class="field-tip" data-tip="Describe the feel, imagery, or tone. Examples: 'gritty storytelling, dust and whiskey imagery' or 'hopeful, sunrise metaphors, earned emotion.'">?</button></label>
+                <textarea id="advTone" rows="2" placeholder="Raw and honest, poetic, conversational, storytelling..."></textarea>
+              </div>
+
+              <div class="field">
+                <label class="field-label">Write in the style of <span>(optional)</span> <button class="field-tip" data-tip="Enter any artist name. The AI matches their lyrical style and vocabulary. Examples: Chris Stapleton, Drake, Taylor Swift, Kendrick Lamar.">?</button></label>
+                <input type="text" id="advArtistStyleInput" placeholder="e.g. Morgan Wallen, Eminem, Taylor Swift...">
+              </div>
+
+              <div class="field">
+                <label class="field-label">Language <button class="field-tip" data-tip="The language your lyrics will be written in.">?</button></label>
+                <select id="advLanguageSel" onchange="onAdvLanguageChange()">
+                  <option value="English">English</option>
+                  <option value="Spanish">Spanish</option>
+                  <option value="French">French</option>
+                  <option value="Portuguese">Portuguese</option>
+                  <option value="German">German</option>
+                  <option value="Italian">Italian</option>
+                  <option value="Japanese">Japanese</option>
+                  <option value="Korean">Korean</option>
+                  <option value="Arabic">Arabic</option>
+                  <option value="Hindi">Hindi</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <button class="refine-toggle" id="advRhymeToggle" onclick="toggleAdvRhymeAssist()">
+                  <span class="refine-toggle-icon">▶</span>
+                  <span>Rhyme Assistant</span>
+                </button>
+                <div class="rhyme-body" id="advRhymeBody" style="display:none">
+                  <div class="rhyme-input-row">
+                    <input type="text" id="advRhymeWord" placeholder="Type a word..." onkeydown="if(event.key==='Enter')submitAdvRhyme()">
+                    <button class="rhyme-find-btn" id="advRhymeFindBtn" onclick="submitAdvRhyme()">Find</button>
+                  </div>
+                  <div id="advRhymeResults"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div><!-- /advancedModeFields -->
       </div>
 
@@ -3013,17 +3117,17 @@ async function generate() {
       topic: narrative,
       genre: APP.advGenres[0] || '',
       genres: APP.advGenres,
-      moods: [],
+      moods: APP.moods,
       structure: document.getElementById('advStructure').value,
-      tempo: 'Mid tempo',
-      rhyme: 'Mixed, rhyme where it feels natural',
-      pov: 'First person (I / me / my)',
-      words: '',
-      styleNotes: '',
+      tempo: APP.tempo,
+      rhyme: document.getElementById('advRhyme').value,
+      pov: document.getElementById('advPov').value,
+      words: document.getElementById('advWords').value,
+      styleNotes: document.getElementById('advTone').value,
       language: APP.language,
       mixLanguages: false,
       sectionLanguages: {},
-      artistStyle: '',
+      artistStyle: document.getElementById('advArtistStyleInput')?.value.trim() || '',
       narrative: true
     };
   } else {
@@ -3066,7 +3170,9 @@ async function generate() {
     APP.lyrics = result.lyrics;
     APP.originalLyrics = result.lyrics;
     APP.currentSongId = null;
-    APP.artistStyle = document.getElementById('artistStyleInput')?.value.trim() || '';
+    APP.artistStyle = (APP.advancedMode
+      ? document.getElementById('advArtistStyleInput')?.value.trim()
+      : document.getElementById('artistStyleInput')?.value.trim()) || '';
     APP.usage = result.usage;
     APP.totalSongs = (APP.totalSongs || 0) + 1;
     if (APP._firstSongPending) { APP._firstSongPending = false; setTimeout(launchConfetti, 400); }
@@ -3577,6 +3683,29 @@ function renderAdvGenreTags() {
   APP.genre = APP.advGenres[0] || '';
 }
 
+// Keep both Mood grids (Simple + Advanced) visually in sync with shared APP.moods state
+function syncMoodUI() {
+  document.querySelectorAll('#moodGrid .mood-chip, #advMoodGrid .mood-chip').forEach(b => {
+    b.classList.toggle('on', APP.moods.includes(b.dataset.v));
+  });
+}
+
+// Keep both Tempo grids (Simple + Advanced) visually in sync with shared APP.tempo state
+function syncTempoUI() {
+  document.querySelectorAll('#tempoGrid .pick-btn, #advTempoGrid .pick-btn').forEach(b => {
+    b.classList.toggle('on', b.dataset.v === APP.tempo);
+  });
+}
+
+function onAdvLanguageChange() {
+  APP.language = document.getElementById('advLanguageSel').value;
+}
+
+// Read a field's value from whichever mode is active (Simple vs Advanced copy of the same field)
+function activeVal(simpleId, advId) {
+  return document.getElementById(APP.advancedMode ? advId : simpleId)?.value || '';
+}
+
 function setStudioMode(mode) {
   if (mode === 'advanced' && APP.plan === 'free') {
     document.getElementById('featureUpgradeBg').classList.add('on');
@@ -3592,6 +3721,15 @@ function setStudioMode(mode) {
     if (APP.genre && !APP.advGenres.includes(APP.genre)) APP.advGenres = [APP.genre];
     renderAdvGenreTags();
     document.getElementById('advStructure').value = document.getElementById('structure').value;
+    // Sync fine-tune fields into Advanced's copies
+    document.getElementById('advRhyme').value = document.getElementById('rhyme').value;
+    document.getElementById('advPov').value = document.getElementById('pov').value;
+    document.getElementById('advWords').value = document.getElementById('words').value;
+    document.getElementById('advTone').value = document.getElementById('tone').value;
+    document.getElementById('advArtistStyleInput').value = document.getElementById('artistStyleInput').value;
+    document.getElementById('advLanguageSel').value = document.getElementById('languageSel').value;
+    syncMoodUI();
+    syncTempoUI();
     // Hide template button in advanced mode — it's simple-mode-oriented
     const tmpl = document.getElementById('tmplBtn');
     if (tmpl) tmpl.style.display = 'none';
@@ -3604,6 +3742,8 @@ function setStudioMode(mode) {
       x.classList.toggle('on', sel);
       x.classList.toggle('adv-maxed', atMax && !sel);
     });
+    syncMoodUI();
+    syncTempoUI();
   }
 }
 function showLogout() { document.getElementById('logoutBg').classList.add('on'); }
@@ -3853,7 +3993,7 @@ async function submitRhyme() {
   document.getElementById('rhymeResults').innerHTML = '<div class="rhyme-empty">Finding rhymes...</div>';
   try {
     const data = await authFetch('/api/rhyme', { method: 'POST', body: JSON.stringify({ word }) });
-    renderRhymes(data, word);
+    renderRhymes(data, word, 'rhymeResults');
   } catch (e) {
     document.getElementById('rhymeResults').innerHTML = `<div class="rhyme-empty">Error: ${escHtml(e.message)}</div>`;
   } finally {
@@ -3862,8 +4002,43 @@ async function submitRhyme() {
   }
 }
 
-function renderRhymes(data, word) {
-  const container = document.getElementById('rhymeResults');
+function toggleAdvFineTune() {
+  const toggle = document.getElementById('advFineTuneToggle');
+  const body   = document.getElementById('advFineTuneBody');
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  toggle.classList.toggle('open', !isOpen);
+}
+
+function toggleAdvRhymeAssist() {
+  const toggle = document.getElementById('advRhymeToggle');
+  const body   = document.getElementById('advRhymeBody');
+  const isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'block';
+  toggle.classList.toggle('open', !isOpen);
+  if (!isOpen) document.getElementById('advRhymeWord').focus();
+}
+
+async function submitAdvRhyme() {
+  const word = document.getElementById('advRhymeWord').value.trim();
+  if (!word) return;
+  const btn = document.getElementById('advRhymeFindBtn');
+  btn.disabled = true;
+  btn.textContent = '...';
+  document.getElementById('advRhymeResults').innerHTML = '<div class="rhyme-empty">Finding rhymes...</div>';
+  try {
+    const data = await authFetch('/api/rhyme', { method: 'POST', body: JSON.stringify({ word }) });
+    renderRhymes(data, word, 'advRhymeResults');
+  } catch (e) {
+    document.getElementById('advRhymeResults').innerHTML = `<div class="rhyme-empty">Error: ${escHtml(e.message)}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Find';
+  }
+}
+
+function renderRhymes(data, word, containerId) {
+  const container = document.getElementById(containerId || 'rhymeResults');
   container.innerHTML = '';
   const cats = [
     { key: 'perfect', label: 'Perfect Rhymes' },
@@ -4572,18 +4747,18 @@ async function saveSongToHistory(result) {
         title: result.titles?.[0] || null,
         lyrics: result.lyrics,
         genre: APP.advancedMode ? (APP.advGenres.join(', ') || null) : (APP.genre || null),
-        moods: APP.advancedMode ? [] : APP.moods,
-        tempo: APP.advancedMode ? null : (APP.tempo || null),
+        moods: APP.moods,
+        tempo: APP.tempo || null,
         structure: APP.advancedMode
           ? document.getElementById('advStructure').value
           : document.getElementById('structure').value,
-        rhyme: APP.advancedMode ? null : document.getElementById('rhyme').value,
-        pov: APP.advancedMode ? null : document.getElementById('pov').value,
+        rhyme: activeVal('rhyme', 'advRhyme') || null,
+        pov: activeVal('pov', 'advPov') || null,
         topic: topic || null,
-        style_notes: APP.advancedMode ? null : (document.getElementById('tone').value || null),
+        style_notes: activeVal('tone', 'advTone') || null,
         chords: result.chords || null,
         suno_prompt: sunoPrompt,
-        artist_style: APP.advancedMode ? null : (APP.artistStyle || null)
+        artist_style: APP.artistStyle || null
       })
     });
     APP.currentSongId = song.id;
@@ -4810,8 +4985,8 @@ async function submitQuickRefine() {
         lyrics: APP.lyrics,
         instructions,
         genre: APP.advancedMode ? (APP.advGenres[0] || '') : (APP.genre || ''),
-        moods: APP.advancedMode ? [] : APP.moods,
-        tempo: APP.advancedMode ? '' : (APP.tempo || ''),
+        moods: APP.moods,
+        tempo: APP.tempo || '',
         songId: APP.currentSongId || null,
         refineChords
       })
@@ -6584,17 +6759,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }));
 
-  // Mood chips
-  document.querySelectorAll('#moodGrid .mood-chip').forEach(b => b.addEventListener('click', () => {
-    b.classList.toggle('on');
-    APP.moods = [...document.querySelectorAll('#moodGrid .mood-chip.on')].map(x => x.dataset.v);
+  // Mood chips (Simple + Advanced share APP.moods)
+  document.querySelectorAll('#moodGrid .mood-chip, #advMoodGrid .mood-chip').forEach(b => b.addEventListener('click', () => {
+    const v = b.dataset.v;
+    const idx = APP.moods.indexOf(v);
+    if (idx > -1) APP.moods.splice(idx, 1); else APP.moods.push(v);
+    syncMoodUI();
   }));
 
-  // Tempo buttons
-  document.querySelectorAll('#tempoGrid .pick-btn').forEach(b => b.addEventListener('click', () => {
-    document.querySelectorAll('#tempoGrid .pick-btn').forEach(x => x.classList.remove('on'));
-    b.classList.add('on');
+  // Tempo buttons (Simple + Advanced share APP.tempo)
+  document.querySelectorAll('#tempoGrid .pick-btn, #advTempoGrid .pick-btn').forEach(b => b.addEventListener('click', () => {
     APP.tempo = b.dataset.v;
+    syncTempoUI();
   }));
 
   // Init quick refine mood chips
