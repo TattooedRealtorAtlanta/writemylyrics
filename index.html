@@ -77,6 +77,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .btn-primary:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,148,58,.3)}
 .btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:var(--r);padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;transition:all .2s}
 .btn-secondary:hover{border-color:var(--gold-border);color:var(--gold)}
+.hero-highlights{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:24px;animation:fadeUp .6s .35s ease both}
+.hero-highlight-pill{display:inline-flex;align-items:center;gap:6px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);font-weight:600}
 .hero-note{font-size:12px;color:var(--text3);margin-top:20px;animation:fadeUp .6s .4s ease both}
 
 /* Demo preview */
@@ -998,6 +1000,11 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
     <div class="hero-btns">
       <button class="btn-primary" onclick="showAuthTab('signup')">Write My First Song — Free</button>
       <button class="btn-secondary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+    </div>
+    <div class="hero-highlights">
+      <span class="hero-highlight-pill">🎖️ Built for Veterans</span>
+      <span class="hero-highlight-pill">🎧 One-Click Suno Export</span>
+      <span class="hero-highlight-pill">📱 TikTok Hook Generator</span>
     </div>
     <p class="hero-note">5 free songs per month. No credit card required.</p>
   </div>
