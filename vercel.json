@@ -23,6 +23,10 @@
       "dest": "/sitemap.xml"
     },
     {
+      "src": "/robots.txt",
+      "dest": "/robots.txt"
+    },
+    {
       "src": "/how-to",
       "dest": "/how-to.html"
     },
