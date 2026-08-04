@@ -85,6 +85,20 @@ module.exports = async function handler(req, res) {
 
   const lyricsSys = `You are an expert songwriter with deep knowledge of multiple genres and languages. You write authentic, emotionally resonant lyrics that sound like they came from a real artist. You understand meter, rhyme, imagery, and storytelling in any language. Always label each section clearly — VERSE 1, CHORUS, BRIDGE etc. Never add explanation or commentary — just the lyrics.`;
 
+  // Point of view — build a strong, explicit enforcement instruction, not just the raw value.
+  // Models default to first person very readily, especially when working from a first-person
+  // narrative brief, so a bare "Point of view: X" line is often not enough on its own.
+  const povValue = pov || 'First person (I / me / my)';
+  const povEmphasis = (() => {
+    if (/third/i.test(povValue)) return 'Refer to the subject using "he", "she", "they", or their name/role — never "I", "me", "my", or "we". Write about them, not as them.';
+    if (/second/i.test(povValue)) return 'Address the subject directly as "you" / "your" throughout — never "I", "me", or "my".';
+    if (/shifting/i.test(povValue)) return 'Deliberately shift perspective across sections (e.g. first person in the verses, second person in the chorus) rather than staying in one voice the whole song.';
+    return '';
+  })();
+  const povInstruction = povEmphasis
+    ? `\n\nPOINT OF VIEW — NON-NEGOTIABLE: This song must be written in ${povValue}. ${povEmphasis} Re-read every line before finishing and rewrite any line that slips into the wrong point of view.`
+    : '';
+
   let lyricsUsr;
   if (narrative) {
     // Advanced mode — treat the full input as a rich creative brief
@@ -100,10 +114,13 @@ ${topic}
 Use this narrative as your primary creative source. Pull specific details, emotions, images, and characters directly from it. If the narrative includes any lyric lines or partial verses, treat them as style and tone reference — match that voice. Let the story guide every word.
 
 ${genreLine}
-Structure: ${structure || 'Verse / Chorus / Verse / Chorus / Bridge / Chorus'}
-Rhyme scheme: Mixed, rhyme where it feels natural${langInstruction}
+${moods && moods.length ? `Mood: ${moodStr}\n` : ''}Structure: ${structure || 'Verse / Chorus / Verse / Chorus / Bridge / Chorus'}
+Tempo: ${tempo || 'Mid tempo'}
+Rhyme scheme: ${rhyme || 'Mixed, rhyme where it feels natural'}
+Point of view: ${povValue}
+${words ? `Words to include: ${words}\n` : ''}${styleNotes ? `Style notes: ${styleNotes}\n` : ''}${langInstruction}${povInstruction}
 
-Write the complete lyrics now. Label every section. Stay true to the narrative.${rapInstruction}`;
+Write the complete lyrics now. Label every section. Stay true to the narrative.${artistStyle ? `\n\nARTIST STYLE: Write in the distinct lyrical style of ${artistStyle} — their characteristic vocabulary, rhyme patterns, phrasing, themes, and flow. The lyrics should sound like they could genuinely be from that artist.` : ''}${rapInstruction}`;
   } else {
     lyricsUsr = `Write complete song lyrics:
 
@@ -113,9 +130,9 @@ Mood: ${moodStr}
 Structure: ${structure || 'Verse / Chorus / Verse / Chorus / Bridge / Chorus'}
 Tempo: ${tempo || 'Mid tempo'}
 Rhyme scheme: ${rhyme || 'Mixed, rhyme where it feels natural'}
-Point of view: ${pov || 'First person (I / me / my)'}
+Point of view: ${povValue}
 Words to include: ${words || 'None'}
-Style notes: ${styleNotes || 'None'}${langInstruction}
+Style notes: ${styleNotes || 'None'}${langInstruction}${povInstruction}
 
 Write the complete lyrics now. Label every section. Make it authentic.${artistStyle ? `\n\nARTIST STYLE: Write in the distinct lyrical style of ${artistStyle} — their characteristic vocabulary, rhyme patterns, phrasing, themes, and flow. The lyrics should sound like they could genuinely be from that artist.` : ''}${rapInstruction}`;
   }
