@@ -27,6 +27,10 @@
       "dest": "/robots.txt"
     },
     {
+      "src": "/studio.js",
+      "dest": "/studio.js"
+    },
+    {
       "src": "/how-to",
       "dest": "/how-to.html"
     },
