@@ -2308,10 +2308,13 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 
 <!-- jsPDF (client-side PDF generation) -->
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<!-- Supabase JS (CDN) -->
-<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<!-- Supabase JS (CDN) — NOT deferred: the inline script below reads
+     window.supabase synchronously at the top level, and `defer` has no
+     effect on scripts without a src, so the inline script was running
+     before this one finished loading. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
-<script defer>
+<script>
 // ── SUPABASE INIT ──
 const SUPABASE_URL = 'https://vlxjmkojunrmpomhuxyg.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_5XqQ-CLL9ggr62obfkAdwA_IWFMVLr1';
