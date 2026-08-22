@@ -1,5 +1,11 @@
 {
   "version": 2,
+  "crons": [
+    {
+      "path": "/api/user?action=nurture",
+      "schedule": "0 14 * * *"
+    }
+  ],
   "routes": [
     {
       "src": "/api/webhook",
