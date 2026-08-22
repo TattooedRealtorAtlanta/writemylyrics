@@ -1975,6 +1975,14 @@ function exportToSuno() {
   document.getElementById('sunoText').textContent = prompt;
   document.getElementById('sunoPanel').classList.add('on');
   setTimeout(() => document.getElementById('sunoPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+
+  // Do the actual export in the same click: copy the prompt, open Suno,
+  // and fire the tracking event here -- this button *is* the export action.
+  // The panel stays visible below so the prompt can be reviewed/re-copied.
+  navigator.clipboard.writeText(prompt);
+  gaEvent('export_to_suno', { source: 'studio' });
+  window.open('https://suno.com', '_blank');
+  toast('Lyrics copied — Suno is opening!');
 }
 
 function closeSunoPanel() {
@@ -1982,9 +1990,10 @@ function closeSunoPanel() {
 }
 
 function copySuno() {
+  // Re-copy from the panel (e.g. user closed the Suno tab and wants to paste again).
   const text = document.getElementById('sunoText').textContent;
   navigator.clipboard.writeText(text);
-  gaEvent('export_to_suno', { source: 'studio' });
+  gaEvent('export_to_suno', { source: 'studio_recopy' });
   window.open('https://suno.com', '_blank');
   toast('Lyrics copied — Suno is opening!');
 }
