@@ -1,7 +1,108 @@
 const { supabase, PLAN_LIMITS, getUser, getProfile } = require('./_lib/supabase');
-const { sendWelcomeEmail, scheduleNudgeEmail, scheduleFollowupEmail } = require('./_lib/resend');
+const { sendWelcomeEmail, scheduleNudgeEmail, sendDay3Email, sendDay7Email, sendDay14Email } = require('./_lib/resend');
+
+const NURTURE_BATCH = 50; // max users to email per cron run per tier
+
+async function handleNurtureCron(res) {
+  const now = new Date();
+  const sent = { day3: 0, day7: 0, day14: 0 };
+
+  // Cutoffs: send if signed up at least N days ago and flag not yet set.
+  // Using <= threshold (not a narrow window) so missed cron runs self-heal on next run.
+  // 60-day upper bound prevents emailing very old accounts if migration ran late.
+  const upper = new Date(now - 60 * 24 * 60 * 60 * 1000).toISOString();
+  const cut3  = new Date(now -  3 * 24 * 60 * 60 * 1000).toISOString();
+  const cut7  = new Date(now -  7 * 24 * 60 * 60 * 1000).toISOString();
+  const cut14 = new Date(now - 14 * 24 * 60 * 60 * 1000).toISOString();
+
+  // ── Day 3: zero-song users ────────────────────────────────────────────────
+  const { data: day3Users } = await supabase
+    .from('profiles')
+    .select('id, email, name')
+    .eq('warn3_sent', false)
+    .eq('usage_count', 0)
+    .lte('created_at', cut3)
+    .gte('created_at', upper)
+    .limit(NURTURE_BATCH);
+
+  for (const u of day3Users || []) {
+    const { data: claimed } = await supabase
+      .from('profiles')
+      .update({ warn3_sent: true })
+      .eq('id', u.id)
+      .eq('warn3_sent', false)
+      .select('id')
+      .single();
+    if (claimed) {
+      await sendDay3Email(u.email, u.name).catch(e => console.error('[nurture day3]', u.id, e.message));
+      sent.day3++;
+    }
+  }
+
+  // ── Day 7: all users ──────────────────────────────────────────────────────
+  const { data: day7Users } = await supabase
+    .from('profiles')
+    .select('id, email, name')
+    .eq('warn7_sent', false)
+    .lte('created_at', cut7)
+    .gte('created_at', upper)
+    .limit(NURTURE_BATCH);
+
+  for (const u of day7Users || []) {
+    const { data: claimed } = await supabase
+      .from('profiles')
+      .update({ warn7_sent: true })
+      .eq('id', u.id)
+      .eq('warn7_sent', false)
+      .select('id')
+      .single();
+    if (claimed) {
+      await sendDay7Email(u.email, u.name).catch(e => console.error('[nurture day7]', u.id, e.message));
+      sent.day7++;
+    }
+  }
+
+  // ── Day 14: free-plan users only (upgrade push) ───────────────────────────
+  const { data: day14Users } = await supabase
+    .from('profiles')
+    .select('id, email, name')
+    .eq('warn14_sent', false)
+    .eq('plan', 'free')
+    .lte('created_at', cut14)
+    .gte('created_at', upper)
+    .limit(NURTURE_BATCH);
+
+  for (const u of day14Users || []) {
+    const { data: claimed } = await supabase
+      .from('profiles')
+      .update({ warn14_sent: true })
+      .eq('id', u.id)
+      .eq('warn14_sent', false)
+      .select('id')
+      .single();
+    if (claimed) {
+      await sendDay14Email(u.email, u.name).catch(e => console.error('[nurture day14]', u.id, e.message));
+      sent.day14++;
+    }
+  }
+
+  console.log('[nurture cron] sent:', sent);
+  return res.status(200).json({ ok: true, sent });
+}
 
 module.exports = async function handler(req, res) {
+  // ── CRON: GET /api/user?action=nurture ──────────────────────────────────
+  // Invoked daily by Vercel Cron. Requires CRON_SECRET env var set in Vercel dashboard.
+  const urlObj = new URL(req.url, `http://${req.headers.host}`);
+  if (req.method === 'GET' && urlObj.searchParams.get('action') === 'nurture') {
+    const cronSecret = process.env.CRON_SECRET;
+    const authHeader = req.headers.authorization || '';
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    return handleNurtureCron(res);
+  }
+
   const user = await getUser(req);
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
@@ -57,9 +158,7 @@ module.exports = async function handler(req, res) {
               .update({ email_nudge_id: nudgeResult.id })
               .eq('id', user.id);
           }
-
-          // Email 3 — 7 day follow-up (no need to cancel; always send)
-          await scheduleFollowupEmail(toEmail, displayName, signupTime);
+          // Day 7 / Day 14 emails are handled by the daily nurture cron (/api/user?action=nurture)
 
         } catch (emailErr) {
           // Email failure must never break the login flow
@@ -93,6 +192,16 @@ module.exports = async function handler(req, res) {
       proCount = count || 0;
     } catch { /* non-critical */ }
 
+    // Lifetime song count — used client-side to distinguish true new users from monthly resets
+    let songsCount = 0;
+    try {
+      const { count } = await supabase
+        .from('songs')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id);
+      songsCount = count || 0;
+    } catch { /* non-critical */ }
+
     return res.status(200).json({
       id: profile.id,
       email: profile.email,
@@ -102,6 +211,7 @@ module.exports = async function handler(req, res) {
       limit: PLAN_LIMITS[profile.plan] ?? 5,
       reset_at: profile.usage_reset_at || null,
       pro_count: proCount,
+      songs_count: songsCount,
       // Settings defaults
       default_genre:     profile.default_genre     || null,
       default_moods:     profile.default_moods     || null,

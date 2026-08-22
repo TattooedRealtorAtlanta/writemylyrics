@@ -131,17 +131,61 @@ async function scheduleNudgeEmail(toEmail, name, signupTime) {
   });
 }
 
-// ── EMAIL 3 — 7 day check-in ──────────────────────────────────────────────────
-async function scheduleFollowupEmail(toEmail, name, signupTime) {
+// ── NURTURE DAY 3 — zero-song users only ─────────────────────────────────────
+async function sendDay3Email(toEmail, name) {
   const firstName = (name || '').split(' ')[0] || 'there';
-  const sendAt = new Date(signupTime.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
-
   const html = emailWrapper(`
     <p style="margin:0 0 16px;font-size:17px;font-weight:600;color:#f0edf8">Hey ${firstName},</p>
-    <p style="margin:0 0 16px">It's been a week since you joined WriteMyLyrics. How's it going?</p>
-    <p style="margin:0 0 16px">If you've been using it regularly, you might be bumping into the 5-song limit. <strong style="color:#f0edf8">Pro</strong> removes that limit entirely — unlimited songs, plus <strong style="color:#f0edf8">Tweak &amp; Refine</strong> (an AI editing layer where you tell it what to change and it rewrites just that part while keeping everything else intact), Karaoke Mode, full song history, and a commercial use license.</p>
-    <p style="margin:0 0 16px">Pro is $15/month. No contract, cancel anytime.</p>
-    <p style="margin:0 0 0">Keep writing.</p>
+    <p style="margin:0 0 16px">You signed up a few days ago. I noticed you haven't written anything yet.</p>
+    <p style="margin:0 0 16px">That's fine — it can feel like a bigger lift than it actually is. Here's something to paste into the Topic field right now:</p>
+    <p style="margin:0 0 16px;padding:16px 20px;background:#0d0c10;border-left:3px solid #c9943a;border-radius:4px;font-style:italic;color:#f0edf8">
+      "A song about leaving something behind"
+    </p>
+    <p style="margin:0 0 16px">Pick any genre, hit <strong style="color:#c9943a">Write This Song</strong>. Full lyrics in about 20 seconds. See how it feels.</p>
+    <p style="margin:0 0 0">You've still got your 5 free songs.</p>
+    ${ctaButton('Write Your First Song →', APP_URL)}
+    <p style="margin:32px 0 0;color:#a09ab8">— Scott<br><span style="font-size:13px;color:#6b6480">Founder, WriteMyLyrics</span></p>
+  `);
+
+  return resendRequest('/emails', {
+    from: FROM,
+    to: [toEmail],
+    subject: 'You haven\'t written a song yet',
+    html,
+  });
+}
+
+// ── NURTURE DAY 7 — Pro feature showcase ─────────────────────────────────────
+async function sendDay7Email(toEmail, name) {
+  const firstName = (name || '').split(' ')[0] || 'there';
+  const html = emailWrapper(`
+    <p style="margin:0 0 16px;font-size:17px;font-weight:600;color:#f0edf8">Hey ${firstName},</p>
+    <p style="margin:0 0 16px">A week in. If you've been on the free plan, here are three things you're missing:</p>
+    <p style="margin:0 0 8px"><strong style="color:#f0edf8">Karaoke Mode</strong> — sync your lyrics to your voice, word by word. Use it to practice performing before you hit record.</p>
+    <p style="margin:0 0 8px"><strong style="color:#f0edf8">Quick Refine</strong> — highlight any section, tell it what to change, and it rewrites just that part while leaving everything else intact.</p>
+    <p style="margin:0 0 16px"><strong style="color:#f0edf8">Shareable Links</strong> — send your song to anyone. No account required to view it.</p>
+    <p style="margin:0 0 0">All of that is $15/month. No contract, cancel anytime.</p>
+    ${ctaButton('See What Pro Unlocks →', `${APP_URL}/pricing`)}
+    <p style="margin:32px 0 0;color:#a09ab8">— Scott<br><span style="font-size:13px;color:#6b6480">Founder, WriteMyLyrics</span></p>
+  `);
+
+  return resendRequest('/emails', {
+    from: FROM,
+    to: [toEmail],
+    subject: '3 things Pro unlocks',
+    html,
+  });
+}
+
+// ── NURTURE DAY 14 — re-engagement + upgrade push ────────────────────────────
+async function sendDay14Email(toEmail, name) {
+  const firstName = (name || '').split(' ')[0] || 'there';
+  const html = emailWrapper(`
+    <p style="margin:0 0 16px;font-size:17px;font-weight:600;color:#f0edf8">Hey ${firstName},</p>
+    <p style="margin:0 0 16px">Two weeks since you signed up. Quick check-in.</p>
+    <p style="margin:0 0 16px">If you've been bumping into the 5-song limit, <strong style="color:#f0edf8">Pro</strong> removes it entirely — unlimited songs, full history, Karaoke Mode, Quick Refine, shareable links, and a commercial use license.</p>
+    <p style="margin:0 0 16px">If you haven't written much yet — no judgment. The tool is here whenever you're ready.</p>
+    <p style="margin:0 0 0">Pro is $15/month. No contract.</p>
     ${ctaButton('Upgrade to Pro →', `${APP_URL}/pricing`)}
     <p style="margin:32px 0 0;color:#a09ab8">— Scott<br><span style="font-size:13px;color:#6b6480">Founder, WriteMyLyrics</span></p>
   `);
@@ -149,10 +193,16 @@ async function scheduleFollowupEmail(toEmail, name, signupTime) {
   return resendRequest('/emails', {
     from: FROM,
     to: [toEmail],
-    subject: 'How\'s your songwriting going?',
+    subject: 'Still writing?',
     html,
-    scheduled_at: sendAt,
   });
 }
 
-module.exports = { sendWelcomeEmail, scheduleNudgeEmail, scheduleFollowupEmail, cancelEmail };
+module.exports = {
+  sendWelcomeEmail,
+  scheduleNudgeEmail,
+  sendDay3Email,
+  sendDay7Email,
+  sendDay14Email,
+  cancelEmail,
+};
