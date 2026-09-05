@@ -64,7 +64,11 @@ async function generate() {
   APP.busy = false;
 
   const token = await getToken();
-  if (!token) { showAuthTab('signin'); return; }
+  if (!token) {
+    toast('Create a free account to generate your song — it only takes a few seconds.');
+    showAuthTab('signup');
+    return;
+  }
 
   let topic, payload;
   if (APP.advancedMode) {

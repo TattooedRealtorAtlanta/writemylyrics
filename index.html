@@ -2877,9 +2877,12 @@ async function signUp() {
   if (!data.user) return showError('Account creation failed — please try again.');
   const token = data.session?.access_token || await getToken();
   if (token) {
+    toast('Welcome! Your account is ready.');
     await loadProfile(data.user, token);
   } else {
-    showError('Account created! Check your email to confirm your account, then sign in.');
+    hideError();
+    switchTab('signin');
+    toast('Account created! Check your email to confirm it, then sign in.');
   }
 }
 
