@@ -19,6 +19,14 @@ module.exports = async function handler(req, res) {
   const profile = await getProfile(user.id, user.email, name);
   if (!profile) return res.status(500).json({ error: 'Profile not found' });
 
+  // TEMP DIAGNOSTIC — remove once the free-tier email path is confirmed working.
+  console.log('[generate] profile check', {
+    userId: user.id,
+    email: user.email,
+    plan: profile.plan,
+    usage_count: profile.usage_count,
+  });
+
   // Monthly reset check
   const now = new Date();
   const resetAt = new Date(profile.usage_reset_at);
