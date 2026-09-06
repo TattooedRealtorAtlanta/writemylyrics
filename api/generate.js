@@ -1,7 +1,7 @@
 const Anthropic = require('@anthropic-ai/sdk');
 const { supabase, PLAN_LIMITS, getUser, getProfile } = require('./_lib/supabase');
 const { getJsonBody } = require('./_lib/body');
-const { cancelEmail } = require('./_lib/resend');
+const { cancelEmail, sendSongEmail } = require('./_lib/resend');
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const MODEL = 'claude-opus-4-8';
@@ -206,6 +206,14 @@ STRUMMING: [pattern]
       .from('profiles')
       .update(usageUpdate)
       .eq('id', user.id);
+
+    // Free plan has no in-app song history (Pro/Unlimited only), so without
+    // this the song is gone the moment the tab closes. Email a copy so every
+    // free user has something to come back to. Never blocks the response.
+    if (profile.plan === 'free') {
+      sendSongEmail(user.email, name, { title: titles?.[0] || null, lyrics, genre: genreDisplay })
+        .catch(e => console.warn('[generate] song email failed:', e.message));
+    }
 
     return res.status(200).json({
       lyrics,

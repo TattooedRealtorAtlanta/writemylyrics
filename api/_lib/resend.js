@@ -198,11 +198,51 @@ async function sendDay14Email(toEmail, name) {
   });
 }
 
+// Escape HTML special chars, then turn plain-text lyrics into <br>-separated HTML
+function lyricsToHtml(lyrics) {
+  const escaped = String(lyrics || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  return escaped.replace(/\n/g, '<br>');
+}
+
+// ── FREE-TIER SONG COPY — sent right after every generation ────────────────
+// Free plan has no in-app history (Pro/Unlimited only), so without this a
+// generated song is gone the moment the tab closes unless the user manually
+// copies or downloads it. This gives every free user a persisted copy and a
+// reason to come back, without touching the Pro history/save feature itself.
+async function sendSongEmail(toEmail, name, { title, lyrics, genre }) {
+  const firstName = (name || '').split(' ')[0] || 'there';
+  const subject = title ? `Your song: ${title}` : 'Your song is ready';
+  const html = emailWrapper(`
+    <p style="margin:0 0 16px;font-size:17px;font-weight:600;color:#f0edf8">Hey ${firstName},</p>
+    <p style="margin:0 0 16px">Here's the ${genre ? `${genre} ` : ''}song you just wrote, saved so you don't lose it:</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px">
+      <tr><td style="padding:18px 20px;background:#0d0c10;border:1px solid #2a2535;border-radius:8px;font-size:14px;line-height:1.7;color:#e4e0f0">
+        ${title ? `<p style="margin:0 0 12px;font-weight:700;color:#c9943a">${String(title).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>` : ''}
+        ${lyricsToHtml(lyrics)}
+      </td></tr>
+    </table>
+    <p style="margin:0 0 0">Free plan songs aren't saved in your account — this email is the only copy. Upgrade to Pro and every song saves automatically, plus you get shareable links and Karaoke Mode.</p>
+    ${ctaButton('Write Another Song →', APP_URL)}
+    <p style="margin:32px 0 0;color:#a09ab8">— Scott<br><span style="font-size:13px;color:#6b6480">Founder, WriteMyLyrics</span></p>
+  `);
+
+  return resendRequest('/emails', {
+    from: FROM,
+    to: [toEmail],
+    subject,
+    html,
+  });
+}
+
 module.exports = {
   sendWelcomeEmail,
   scheduleNudgeEmail,
   sendDay3Email,
   sendDay7Email,
   sendDay14Email,
+  sendSongEmail,
   cancelEmail,
 };
