@@ -209,10 +209,16 @@ STRUMMING: [pattern]
 
     // Free plan has no in-app song history (Pro/Unlimited only), so without
     // this the song is gone the moment the tab closes. Email a copy so every
-    // free user has something to come back to. Never blocks the response.
+    // free user has something to come back to. Awaited (not fire-and-forget):
+    // Vercel can freeze this function the instant the response is sent, which
+    // silently kills any request still in flight that isn't part of the
+    // awaited chain — a bare .catch() with no await here would drop the send.
     if (profile.plan === 'free') {
-      sendSongEmail(user.email, name, { title: titles?.[0] || null, lyrics, genre: genreDisplay })
-        .catch(e => console.warn('[generate] song email failed:', e.message));
+      try {
+        await sendSongEmail(user.email, name, { title: titles?.[0] || null, lyrics, genre: genreDisplay });
+      } catch (e) {
+        console.warn('[generate] song email failed:', e.message);
+      }
     }
 
     return res.status(200).json({
