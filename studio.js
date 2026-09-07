@@ -37,6 +37,39 @@ async function saveStudioAudioUrl() {
   }
 }
 
+// Saves the Suno link the user pastes after coming back from Suno. Keeps the
+// Notes-panel field in sync so the two inputs never disagree.
+async function saveMakeRealUrl() {
+  const input = document.getElementById('makeRealUrl');
+  const saved = document.getElementById('makeRealSaved');
+  if (!input) return;
+  const val = (input.value || '').trim();
+  if (!val) { toast('Paste your Suno link first.'); return; }
+
+  if (!APP.currentSongId) {
+    toast("This song isn't saved yet — generate or reload it, then paste the link.");
+    return;
+  }
+
+  try {
+    await authFetch('/api/songs', {
+      method: 'PATCH',
+      body: JSON.stringify({ id: APP.currentSongId, audio_url: val })
+    });
+
+    const studioInput = document.getElementById('studioAudioUrl');
+    if (studioInput) studioInput.value = val;
+    const idx = APP.songs ? APP.songs.findIndex(s => s.id === APP.currentSongId) : -1;
+    if (idx >= 0) APP.songs[idx].audio_url = val;
+
+    if (saved) saved.classList.add('on');
+    gaEvent('suno_link_saved', { source: 'make_real' });
+    toast('Saved — your song is attached to these lyrics.');
+  } catch (e) {
+    toast('Error saving link: ' + e.message);
+  }
+}
+
 async function saveHistoryAudioUrl(id, val) {
   val = (val || '').trim();
   try {
@@ -189,6 +222,20 @@ function renderLyrics(text) {
   document.getElementById('loadState').classList.remove('on');
   document.getElementById('outContent').style.display = 'block';
   document.getElementById('rpActions').style.display = 'flex';
+
+  // Surface the Suno step with the lyrics rather than burying it in the toolbar.
+  // Prefill from the loaded song — this also runs when opening one from history,
+  // where an audio_url may already exist.
+  const mr = document.getElementById('makeReal');
+  if (mr) {
+    mr.classList.add('on');
+    const mrUrl   = document.getElementById('makeRealUrl');
+    const mrSaved = document.getElementById('makeRealSaved');
+    const loaded  = (APP.songs || []).find(s => s.id === APP.currentSongId);
+    const existing = loaded && loaded.audio_url ? loaded.audio_url : '';
+    if (mrUrl)   mrUrl.value = existing;
+    if (mrSaved) mrSaved.classList.toggle('on', !!existing);
+  }
 
   // Always show the refine panel when lyrics are displayed — applyPlanUI handles lock state
   const rp = document.getElementById('refinePanel');
@@ -412,6 +459,7 @@ function setLoading(on) {
   document.getElementById('loadState').classList.toggle('on', on);
   document.getElementById('outContent').style.display = 'none';
   document.getElementById('rpActions').style.display = 'none';
+  { const mr = document.getElementById('makeReal'); if (mr) mr.classList.remove('on'); }
   const btn = document.getElementById('genBtn');
   // Only show spinner on the button if it's currently visible (pre-first-generation)
   if (btn && btn.style.display !== 'none') {
@@ -443,6 +491,7 @@ function startOver() {
   if (lbl) lbl.textContent = 'Copy Link';
   document.getElementById('outContent').style.display = 'none';
   document.getElementById('rpActions').style.display = 'none';
+  { const mr = document.getElementById('makeReal'); if (mr) mr.classList.remove('on'); }
   document.getElementById('emptyState').style.display = 'flex';
   const genBtn = document.getElementById('genBtn');
   if (genBtn) { genBtn.style.display = ''; genBtn.classList.remove('loading'); genBtn.disabled = false; }

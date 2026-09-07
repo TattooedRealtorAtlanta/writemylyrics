@@ -493,6 +493,26 @@ select option{background:var(--surface3)}
 .suno-copy{background:var(--gold);border:none;border-radius:6px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#07060a;cursor:pointer;transition:all .2s}
 .suno-copy:hover{background:var(--gold2)}
 
+/* ── MAKE IT REAL — the step from lyrics to an actual song ── */
+.make-real{background:linear-gradient(180deg,rgba(212,175,90,.10),rgba(212,175,90,.03));border:1px solid var(--gold-border,rgba(212,175,90,.35));border-radius:12px;padding:18px 20px;margin-top:20px;display:none}
+.make-real.on{display:block}
+.mr-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.mr-step{font-size:9px;text-transform:uppercase;letter-spacing:.18em;color:#07060a;background:var(--gold);border-radius:100px;padding:3px 9px;font-weight:700}
+.mr-title{font-size:16px;font-weight:600;color:var(--text)}
+.mr-p{font-size:13px;color:var(--text2);line-height:1.65;margin:0 0 14px;max-width:60ch}
+.mr-btn{background:var(--gold);border:none;border-radius:8px;padding:12px 22px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:#07060a;cursor:pointer;transition:all .2s}
+.mr-btn:hover{background:var(--gold2)}
+.mr-hint{font-size:12px;color:var(--text3);margin-top:10px}
+.mr-back{margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+.mr-back-l{display:block;font-size:12px;color:var(--text2);margin-bottom:8px}
+.mr-back-row{display:flex;gap:8px;flex-wrap:wrap}
+.mr-input{flex:1;min-width:200px;background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none}
+.mr-input:focus{border-color:var(--gold-border,rgba(212,175,90,.5))}
+.mr-save{background:transparent;border:1px solid var(--gold-border,rgba(212,175,90,.45));border-radius:6px;padding:9px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--gold);cursor:pointer;transition:all .2s}
+.mr-save:hover{background:rgba(212,175,90,.12)}
+.mr-saved{font-size:12px;color:var(--gold);margin-top:8px;display:none}
+.mr-saved.on{display:block}
+
 /* ── CO-WRITER & SUGGESTIONS MODALS ── */
 .cw-overlay{position:fixed;inset:0;background:rgba(7,6,10,.82);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
 .cw-overlay.on{display:flex}
@@ -1863,6 +1883,33 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
 
           <div class="notebook">
             <div class="lyrics-out" id="lyricsOut"></div>
+          </div>
+
+          <!-- The step people actually came for: lyrics -> a song they can play -->
+          <div class="make-real" id="makeReal">
+            <div class="mr-top">
+              <span class="mr-step">Next</span>
+              <span class="mr-title">Turn this into a song you can play</span>
+            </div>
+            <p class="mr-p">
+              Lyrics are half of it. We&apos;ll copy your words plus a style prompt
+              built from your genre, mood and tempo, then open Suno — paste it in
+              and you get real music and vocals back in about a minute. Suno&apos;s
+              free tier is enough to hear it.
+            </p>
+            <button class="mr-btn" onclick="exportToSuno()">⚡ Copy Lyrics &amp; Open Suno</button>
+            <div class="mr-hint">Your lyrics and the style prompt are copied to your clipboard automatically.</div>
+
+            <div class="mr-back">
+              <label class="mr-back-l" for="makeRealUrl">
+                Got it back from Suno? Paste the link here and it saves with these lyrics.
+              </label>
+              <div class="mr-back-row">
+                <input type="text" id="makeRealUrl" class="mr-input" placeholder="https://suno.com/song/..." />
+                <button class="mr-save" onclick="saveMakeRealUrl()">Save</button>
+              </div>
+              <div class="mr-saved" id="makeRealSaved">Saved — it&apos;s attached to this song now.</div>
+            </div>
           </div>
 
           <div class="stats-row">
