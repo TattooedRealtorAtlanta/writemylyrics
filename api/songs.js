@@ -25,13 +25,8 @@ module.exports = async function handler(req, res) {
   const user = await getUser(req);
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
-  // GET /api/songs — list songs (pro/unlimited only)
+  // GET /api/songs — list songs (all plans; song history is free)
   if (req.method === 'GET') {
-    const profile = await getProfile(user.id, user.email, user.user_metadata?.name);
-    if (profile.plan === 'free') {
-      return res.status(403).json({ error: 'Song history requires Pro or Unlimited plan' });
-    }
-
     const { data, error } = await supabase
       .from('songs')
       .select('*')
@@ -46,13 +41,8 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ songs: data });
   }
 
-  // POST /api/songs — save song (pro/unlimited only)
+  // POST /api/songs — save song (all plans; song history is free)
   if (req.method === 'POST') {
-    const profile = await getProfile(user.id, user.email, user.user_metadata?.name);
-    if (profile.plan === 'free') {
-      return res.status(403).json({ error: 'Song history requires Pro or Unlimited plan' });
-    }
-
     const body = await getJsonBody(req);
     const { title, lyrics, genre, moods, tempo, structure, rhyme, pov, topic, style_notes, chords, suno_prompt, artist_style } = body;
 

@@ -1417,24 +1417,6 @@ async function loadHistory() {
   const scroll = document.getElementById('hpScroll');
   scroll.innerHTML = '<div class="hi-loading">Loading songs...</div>';
 
-  if (APP.plan === 'free') {
-    scroll.innerHTML = `
-      <div class="plan-gate">
-        <div class="plan-gate-h">Song History</div>
-        <div class="plan-gate-p">Your songs aren't being saved. Upgrade to automatically save every song, publish to the gallery, and unlock these features:</div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:16px">
-          <button class="hi-btn locked" onclick="showFeatureUpgrade()">🎤 Karaoke</button>
-          <button class="hi-btn locked" onclick="showFeatureUpgrade()">📤 Publish</button>
-          <button class="hi-btn locked" onclick="showFeatureUpgrade()">👥 Co-writers</button>
-          <button class="hi-btn locked" onclick="showFeatureUpgrade()">💡 Suggestions</button>
-        </div>
-        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-          <button class="plan-gate-btn" onclick="showFeatureUpgrade()">Upgrade Now</button>
-        </div>
-      </div>`;
-    return;
-  }
-
   try {
     const { songs } = await authFetch('/api/songs');
     APP.songs = songs;
@@ -1608,7 +1590,6 @@ async function deleteSong(id, idx) {
 }
 
 async function saveSongToHistory(result) {
-  if (APP.plan === 'free') return;
   try {
     const topic = APP.advancedMode
       ? document.getElementById('advNarrative').value.trim()
@@ -1725,7 +1706,6 @@ async function submitUploadedLyrics(action) {
 }
 
 async function _saveUploadedToHistory({ lyrics, title, genre }) {
-  if (APP.plan === 'free') return;
   try {
     const sunoPrompt = buildSunoPrompt(lyrics, { genre: genre || '', language: APP.language, mixLanguages: APP.mixLanguages, moods: [], tempo: '' });
     const { song } = await authFetch('/api/songs', {
