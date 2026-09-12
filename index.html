@@ -2922,6 +2922,13 @@ async function signUp() {
 
   if (error) return showError(error.message);
   if (!data.user) return showError('Account creation failed — please try again.');
+
+  // The account exists by this point in both branches below — the one where
+  // Supabase hands back a session immediately, and the one where the user has
+  // to confirm by email first. Fire once here so neither path is missed and
+  // neither is counted twice.
+  gaEvent('sign_up', { method: 'password' });
+
   const token = data.session?.access_token || await getToken();
   if (token) {
     toast('Welcome! Your account is ready.');
@@ -3603,6 +3610,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Check for Stripe redirect
   const params = new URLSearchParams(window.location.search);
   if (params.get('checkout') === 'success') {
+    // The only revenue signal this portfolio has. value and currency come
+    // from Stripe via the success URL, and transaction_id is the real
+    // checkout session id so GA4 can dedupe. The replaceState below strips
+    // these params, which is also what stops a refresh double-counting.
+    const paid = Number(params.get('value')) || 0;
+    gaEvent('purchase', {
+      transaction_id: params.get('sid') || '',
+      value: paid,
+      currency: params.get('currency') || 'USD',
+      items: [{
+        item_id:   params.get('plan') || 'pro',
+        item_name: 'WriteMyLyrics ' + (params.get('plan') === 'pro' ? 'Pro' : 'Subscription'),
+        price:     paid,
+        quantity:  1
+      }]
+    });
     window.history.replaceState({}, '', '/');
     toast('Payment successful! Your plan has been upgraded.');
   }

@@ -52,12 +52,28 @@ module.exports = async function handler(req, res) {
       ? req.headers.origin
       : 'https://writemylyrics.ai';
 
+  // Look the amount up from Stripe rather than hard-coding it. The GA4
+  // purchase value then tracks whatever is actually charged, and can't drift
+  // the way the $9/$19 revenue multipliers in supabase-admin.sql did when the
+  // live price moved to $15.
+  let amount = 0;
+  let currency = 'USD';
+  try {
+    const price = await stripe.prices.retrieve(PRICE_IDS[plan]);
+    amount = (price.unit_amount || 0) / 100;
+    currency = (price.currency || 'usd').toUpperCase();
+  } catch (e) {
+    // Non-fatal: a failed lookup costs the revenue figure on one event, not
+    // the checkout itself. Never block a sale over analytics.
+    console.error('Stripe price lookup failed:', e.message);
+  }
+
   try {
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: 'subscription',
       line_items: [{ price: PRICE_IDS[plan], quantity: 1 }],
-      success_url: `${origin}/?checkout=success&plan=${plan}`,
+      success_url: `${origin}/?checkout=success&plan=${plan}&value=${amount}&currency=${currency}&sid={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/?checkout=cancel`,
       allow_promotion_codes: true,
       metadata: { supabase_id: user.id, plan }
