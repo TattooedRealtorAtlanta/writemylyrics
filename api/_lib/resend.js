@@ -28,17 +28,28 @@ async function resendRequest(path, body) {
   return data;
 }
 
-// Cancel a scheduled email by ID — called when user generates their first song
+// Cancel a scheduled email by ID — called when user generates their first song.
+// Returns true ONLY when Resend confirms the cancel. The caller uses that to
+// decide whether it's safe to forget the stored email ID, so never return true
+// on a path that didn't actually cancel anything.
 async function cancelEmail(emailId) {
   const key = getKey();
-  if (!key || !emailId) return;
-  const res = await fetch(`https://api.resend.com/emails/${emailId}/cancel`, {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${key}` },
-  });
-  if (!res.ok) {
-    const body = await res.text().catch(() => '');
-    console.warn(`[resend] cancel ${emailId} failed (${res.status}):`, body);
+  if (!key || !emailId) return false;
+  try {
+    const res = await fetch(`https://api.resend.com/emails/${emailId}/cancel`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${key}` },
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => '');
+      console.warn(`[resend] cancel ${emailId} failed (${res.status}):`, body);
+      return false;
+    }
+    console.log(`[resend] canceled scheduled email ${emailId}`);
+    return true;
+  } catch (e) {
+    console.warn(`[resend] cancel ${emailId} threw:`, e.message);
+    return false;
   }
 }
 
@@ -183,7 +194,7 @@ async function sendDay14Email(toEmail, name) {
   const html = emailWrapper(`
     <p style="margin:0 0 16px;font-size:17px;font-weight:600;color:#f0edf8">Hey ${firstName},</p>
     <p style="margin:0 0 16px">Two weeks since you signed up. Quick check-in.</p>
-    <p style="margin:0 0 16px">If you've been bumping into the 5-song limit, <strong style="color:#f0edf8">Pro</strong> removes it entirely — unlimited songs, full history, Karaoke Mode, Quick Refine, shareable links, and a commercial use license.</p>
+    <p style="margin:0 0 16px">If you've been bumping into the 5-song limit, <strong style="color:#f0edf8">Pro</strong> removes it entirely: unlimited songs, Karaoke Mode, Quick Refine, shareable links, and a commercial use license.</p>
     <p style="margin:0 0 16px">If you haven't written much yet — no judgment. The tool is here whenever you're ready.</p>
     <p style="margin:0 0 0">Pro is $15/month. No contract.</p>
     ${ctaButton('Upgrade to Pro →', `${APP_URL}/pricing`)}
@@ -224,7 +235,8 @@ async function sendSongEmail(toEmail, name, { title, lyrics, genre }) {
         ${lyricsToHtml(lyrics)}
       </td></tr>
     </table>
-    <p style="margin:0 0 0">Free plan songs aren't saved in your account — this email is the only copy. Upgrade to Pro and every song saves automatically, plus you get shareable links and Karaoke Mode.</p>
+    <p style="margin:0 0 12px">This one is saved in your account, so you can open it again whenever you want. The copy above is just so it is in your inbox too.</p>
+    <p style="margin:0 0 0">Pro adds a shareable link for every song, Karaoke Mode, Quick Refine for reworking one section without touching the rest, and co-writers who can leave suggestions.</p>
     ${ctaButton('Write Another Song →', APP_URL)}
     <p style="margin:32px 0 0;color:#a09ab8">— Scott<br><span style="font-size:13px;color:#6b6480">Founder, WriteMyLyrics</span></p>
   `);

@@ -181,10 +181,12 @@ async function generate() {
     if (result.titles?.length) renderTitles(result.titles);
     if (result.chords) renderChords(result.chords);
 
-    // Auto-save to history for pro/unlimited
-    if (APP.plan !== 'free') {
-      await saveSongToHistory(result);
-    }
+    // Auto-save to history — ALL plans. Song history is free (commit 6fbad48).
+    // That commit removed the free gate inside saveSongToHistory and in
+    // api/songs.js but missed this one, which decides whether the function is
+    // called at all — so for six more weeks every free user's song was still
+    // discarded after their credit had already been spent.
+    await saveSongToHistory(result);
 
     // Reset refine state for fresh generation (panel visibility handled by renderLyrics)
     const rrBtn = document.getElementById('refineRevertBtn');

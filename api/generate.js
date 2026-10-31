@@ -194,12 +194,19 @@ STRUMMING: [pattern]
     const newUsage = currentUsage + 1;
     const usageUpdate = { usage_count: newUsage };
 
-    // First-ever generation — cancel the 48h nudge email, it's no longer needed
+    // First-ever generation — cancel the 48h nudge email, it's no longer needed.
+    // AWAITED, for exactly the reason spelled out above the song email below:
+    // Vercel can freeze this function the moment the response is sent, and a
+    // bare .catch() with no await gets killed mid-flight. When that happened,
+    // the nudge shipped 48h later telling someone their "first song is waiting"
+    // two days after they'd already written one.
+    //
+    // Only clear email_nudge_id once Resend confirms the cancel. Nulling it on
+    // failure throws away the one handle we have, guaranteeing the nudge fires.
     if (currentUsage === 0 && profile.email_nudge_id) {
-      cancelEmail(profile.email_nudge_id).catch(e =>
-        console.warn('[generate] nudge cancel failed:', e.message)
-      );
-      usageUpdate.email_nudge_id = null;
+      const canceled = await cancelEmail(profile.email_nudge_id);
+      if (canceled) usageUpdate.email_nudge_id = null;
+      else console.warn('[generate] nudge cancel did not confirm — keeping id', profile.email_nudge_id);
     }
 
     await supabase
@@ -207,18 +214,36 @@ STRUMMING: [pattern]
       .update(usageUpdate)
       .eq('id', user.id);
 
-    // Free plan has no in-app song history (Pro/Unlimited only), so without
-    // this the song is gone the moment the tab closes. Email a copy so every
-    // free user has something to come back to. Awaited (not fire-and-forget):
+    // Email every free user a copy of their song. Song history itself is free
+    // (commit 6fbad48), so this is no longer the only copy — it is the thing
+    // that pulls them back to the site. Awaited (not fire-and-forget):
     // Vercel can freeze this function the instant the response is sent, which
     // silently kills any request still in flight that isn't part of the
     // awaited chain — a bare .catch() with no await here would drop the send.
     if (profile.plan === 'free') {
+      let sentId = null;
       try {
-        await sendSongEmail(user.email, name, { title: titles?.[0] || null, lyrics, genre: genreDisplay });
+        const sent = await sendSongEmail(user.email, name, { title: titles?.[0] || null, lyrics, genre: genreDisplay });
+        // resendRequest returns null on a non-2xx instead of throwing, so a
+        // missing id is a failure even though nothing was raised.
+        sentId = sent?.id || null;
+        if (!sentId) console.warn('[generate] song email returned no id — counting as a failure');
       } catch (e) {
         console.warn('[generate] song email failed:', e.message);
       }
+
+      // Record the outcome. This email is the main thing pulling a free user
+      // back to the site, and a silent failure used to leave no trace anywhere
+      // but a Vercel log line that ages out. These columns are the record.
+      const emailUpdate = sentId
+        ? { song_email_last_at: new Date().toISOString(), song_email_last_id: sentId, song_email_fail_count: 0 }
+        : { song_email_fail_count: (profile.song_email_fail_count || 0) + 1 };
+
+      const { error: emailLogErr } = await supabase
+        .from('profiles')
+        .update(emailUpdate)
+        .eq('id', user.id);
+      if (emailLogErr) console.warn('[generate] song email log write failed:', emailLogErr.message);
     }
 
     return res.status(200).json({
