@@ -579,6 +579,9 @@ function shareOnX() {
 
 
 
+// Genres a free account may write in. Must match FREE_GENRES in api/_lib/supabase.js.
+const FREE_GENRES = ['Country', 'Pop', 'Rock', 'Rap / Hip Hop'];
+
 // Apply locked/unlocked visual state to plan-gated UI elements
 function applyPlanUI() {
   const free = APP.plan === 'free';
@@ -588,9 +591,35 @@ function applyPlanUI() {
   const form = document.getElementById('refineForm');
   if (gate) gate.style.display = free ? 'block' : 'none';
   if (form) form.style.display = free ? 'none' : 'block';
+  applyGenreLocks();
+}
+
+// Mark Pro-only genres as locked for free accounts, in both the simple and
+// advanced pickers. The server rejects them too, so this is presentation only.
+function applyGenreLocks() {
+  const free = APP.plan === 'free';
+  document.querySelectorAll('#genreGrid .pick-btn, #advGenreGrid .pick-btn').forEach(b => {
+    const locked = free && !FREE_GENRES.includes(b.dataset.v);
+    b.classList.toggle('genre-locked', locked);
+    if (locked) {
+      b.classList.remove('on');
+      if (!b.dataset.label) b.dataset.label = b.textContent;
+      b.textContent = '\u{1F512} ' + b.dataset.label;
+    } else if (b.dataset.label) {
+      b.textContent = b.dataset.label;
+    }
+  });
+}
+
+// True when a free account clicked a Pro genre. Opens the upgrade modal.
+function genreBlocked(v) {
+  if (APP.plan !== 'free' || FREE_GENRES.includes(v)) return false;
+  showFeatureUpgrade();
+  return true;
 }
 
 function toggleAdvGenre(v) {
+  if (genreBlocked(v)) return;
   const idx = APP.advGenres.indexOf(v);
   if (idx > -1) {
     APP.advGenres.splice(idx, 1);

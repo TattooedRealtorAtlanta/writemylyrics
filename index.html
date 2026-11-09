@@ -268,6 +268,8 @@ select option{background:var(--surface3)}
 .pick-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 4px;font-size:11px;font-family:'DM Sans',sans-serif;color:var(--text2);cursor:pointer;text-align:center;transition:all .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pick-btn:hover{border-color:var(--gold-border);color:var(--text)}
 .pick-btn.on{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);font-weight:600}
+.pick-btn.genre-locked{opacity:.45;border-style:dashed}
+.pick-btn.genre-locked:hover{opacity:.7;border-color:var(--gold)}
 .mood-wrap{display:flex;flex-wrap:wrap;gap:6px}
 .mood-chip{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text2);cursor:pointer;transition:all .15s}
 .mood-chip:hover{border-color:var(--gold-border);color:var(--text)}
@@ -1182,7 +1184,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
       </div>
       <div class="feat-card">
         <div class="feat-icon">🎯</div>
-        <div class="feat-title">16+ Genres</div>
+        <div class="feat-title">17 Genres</div>
         <div class="feat-desc">Country, hip hop, pop, rock, R&amp;B, blues, folk, gospel, Americana, outlaw country, trap, military/patriotic, singer-songwriter, metal, alternative, EDM, and Latin.</div>
       </div>
       <div class="feat-card">
@@ -1257,8 +1259,8 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         <div class="price-amount">$0</div>
         <div class="price-period">forever</div>
         <ul class="price-features">
-          <li>5 songs per month</li>
-          <li>All 16 genres</li>
+          <li>3 songs per month</li>
+          <li>4 starter genres — Country, Pop, Rock, Hip Hop</li>
           <li>Chord progressions</li>
           <li>Song title suggestions</li>
           <li>TikTok hook generator</li>
@@ -1277,7 +1279,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         <div class="price-period">billed monthly</div>
         <ul class="price-features">
           <li>Unlimited songs</li>
-          <li>All 16 genres</li>
+          <li>All 17 genres</li>
           <li>Chord progressions</li>
           <li>Song title suggestions</li>
           <li>TikTok hook generator</li>
@@ -1385,8 +1387,8 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         <div class="price-amount">$0</div>
         <div class="price-period">forever</div>
         <ul class="price-features">
-          <li>5 songs per month</li>
-          <li>All 16 genres</li>
+          <li>3 songs per month</li>
+          <li>4 starter genres — Country, Pop, Rock, Hip Hop</li>
           <li>Chord progressions</li>
           <li>Song title suggestions</li>
           <li>TikTok hook generator</li>
@@ -1406,7 +1408,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         <div class="price-period">billed monthly</div>
         <ul class="price-features">
           <li>Unlimited songs</li>
-          <li>All 16 genres</li>
+          <li>All 17 genres</li>
           <li>Chord progressions</li>
           <li>Song title suggestions</li>
           <li>TikTok hook generator</li>
@@ -1507,7 +1509,7 @@ select.status-sel option{background:var(--surface3);color:var(--text);text-trans
         <button class="tmpl-btn" id="tmplBtn" onclick="openTemplates()" data-i18n="btn.template">📋 Start from a Template</button>
         <div class="usage-bar-wrap" id="usageWrap">
           <div class="usage-label">
-            <span id="usageLabel">0 / 5 songs used this month</span>
+            <span id="usageLabel">0 / 3 songs used this month</span>
             <span class="upgrade-prompt" onclick="showUpgrade()">Upgrade</span>
           </div>
           <div class="usage-bar"><div class="usage-fill" id="usageFill" style="width:0%"></div></div>
@@ -3654,6 +3656,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Genre buttons
   document.querySelectorAll('#genreGrid .pick-btn').forEach(b => b.addEventListener('click', () => {
+    if (typeof genreBlocked === 'function' && genreBlocked(b.dataset.v)) return;
     toggleAdvGenre(b.dataset.v);
     const atMax = APP.advGenres.length >= 3;
     document.querySelectorAll('#genreGrid .pick-btn').forEach(x => {

@@ -19,7 +19,11 @@ const supabase = createClient(
   { auth: { persistSession: false } }
 );
 
-const PLAN_LIMITS = { free: 5, pro: Infinity, unlimited: Infinity };
+const PLAN_LIMITS = { free: 3, pro: Infinity, unlimited: Infinity };
+
+// Genres a free account may write in. Everything else is Pro.
+// Values must match the data-v attributes on #genreGrid in index.html.
+const FREE_GENRES = ['Country', 'Pop', 'Rock', 'Rap / Hip Hop'];
 
 /**
  * Verify a Supabase JWT and return the authenticated user.
@@ -78,4 +82,4 @@ async function getProfile(userId, email, name) {
   return created;
 }
 
-module.exports = { supabase, PLAN_LIMITS, getUser, getProfile };
+module.exports = { supabase, PLAN_LIMITS, FREE_GENRES, getUser, getProfile };

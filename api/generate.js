@@ -1,5 +1,5 @@
 const Anthropic = require('@anthropic-ai/sdk');
-const { supabase, PLAN_LIMITS, getUser, getProfile } = require('./_lib/supabase');
+const { supabase, PLAN_LIMITS, FREE_GENRES, getUser, getProfile } = require('./_lib/supabase');
 const { getJsonBody } = require('./_lib/body');
 const { cancelEmail, sendSongEmail } = require('./_lib/resend');
 
@@ -34,7 +34,7 @@ module.exports = async function handler(req, res) {
   }
 
   // Enforce plan limit
-  const limit = PLAN_LIMITS[profile.plan] ?? 5;
+  const limit = PLAN_LIMITS[profile.plan] ?? 3;
   if (currentUsage >= limit) {
     return res.status(429).json({
       error: 'Monthly generation limit reached',
@@ -63,6 +63,20 @@ module.exports = async function handler(req, res) {
 
   // Detect if this is a rap/hip-hop track
   const allGenres = advGenres || (genre ? [genre] : []);
+
+  // Free accounts may only write in the starter genres. Checked server-side so
+  // unlocking the buttons in the browser gets you nothing.
+  if (profile.plan === 'free') {
+    const blocked = allGenres.filter(g => !FREE_GENRES.includes(g));
+    if (blocked.length > 0) {
+      return res.status(403).json({
+        error: 'This genre is available on Pro',
+        blockedGenres: blocked,
+        freeGenres: FREE_GENRES,
+        plan: profile.plan
+      });
+    }
+  }
   const isRapTrack = allGenres.some(g => /rap|hip.?hop|trap/i.test(g));
   const rapInstruction = isRapTrack
     ? '\nRAP STRUCTURE NOTE: This is a Rap / Hip Hop track. Write VERSE sections as rap bars — strong multi-syllable rhyme schemes, internal rhymes, rhythm and flow, wordplay. The CHORUS/HOOK may be sung or rapped. Prioritize cadence, punch lines, and lyrical density over standard song structure.'
